@@ -5,24 +5,6 @@ description: Use when creating Git commit messages.
 
 # Git Commit Messages
 
-## Critical Rule
-
-**YOUR FIRST WORD MUST BE THE COMMIT TITLE.** No preamble. No introduction. No explanation.
-
-If your response doesn't start with the actual commit title, you've violated this rule. Delete everything and start over with the title.
-
-## Output Format
-
-Do not write:
-
-- "Here's the commit message"
-- "Based on the guidelines..."
-- "The commit message is..."
-- Explanations of your choices
-- Multiple versions
-
-Just output the commit message, nothing else.
-
 ## Title
 
 Create a clear, succinct title that explains what the commit accomplishes. Brief - only the essentials.
@@ -54,6 +36,28 @@ Common patterns:
 - **Multiple sections:** Use headers to organize complex changes (e.g., "Changes:" and "Template-specific changes:")
 
 The title says "what" - the body explains "why" or provides specific details
+
+## Formatting
+
+**YOU MUST use the format script before outputting the final commit message.**
+
+Run the format script with your drafted title and body:
+
+```bash
+./format-commit-message --title "Your commit title" --body "Your commit body"
+```
+
+## Output
+
+Do not write:
+
+- "Here's the commit message"
+- "Based on the guidelines..."
+- "The commit message is..."
+- Explanations of your choices
+- Multiple versions
+
+Just output the commit message from the format script, nothing else.
 
 ## Rationalizations
 
