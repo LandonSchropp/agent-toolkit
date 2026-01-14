@@ -24,6 +24,8 @@ When testing with subagents, document every excuse agents make for violating the
 to a Rationalizations table in your skill.
 
 ```markdown
+## Rationalizations
+
 | Thought/Excuse                   | Reality                                                                 |
 | -------------------------------- | ----------------------------------------------------------------------- |
 | "Too simple to test"             | Simple code breaks. Tests take 30 seconds to run.                       |
