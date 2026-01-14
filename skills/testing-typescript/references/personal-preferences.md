@@ -1,8 +1,6 @@
----
-title: Test Preferences
-description: My preferences for writing tests that complement the Better Tests guidelines
-scope: typescript
----
+# Personal Preferences
+
+Personal preferences for writing tests that complement the Better Tests guidelines.
 
 ## Use `it` Instead of `test`
 
