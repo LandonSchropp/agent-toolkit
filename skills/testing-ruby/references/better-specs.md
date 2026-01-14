@@ -1,9 +1,6 @@
----
-title: Better Specs
-description: Testing best practices for RSpec, adapted from betterspecs.org
-url: https://www.betterspecs.org/
-scope: ruby
----
+# Better Specs
+
+Testing best practices for RSpec, adapted from [betterspecs.org](https://www.betterspecs.org/).
 
 ## Keep Descriptions Short
 

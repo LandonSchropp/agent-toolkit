@@ -1,8 +1,6 @@
----
-title: Spec Preferences
-description: My preferences for writing specs that complement the Better Specs guidelines
-scope: ruby
----
+# Personal Preferences
+
+Personal preferences for writing specs that complement the Better Specs guidelines.
 
 ## Articles and Linking Verbs
 
