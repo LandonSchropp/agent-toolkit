@@ -10,7 +10,4 @@ issue_id=$(echo "$branch" | grep -oE "^[A-Za-z]+-[0-9]+" || true)
 
 if [[ -n "$issue_id" ]]; then
   echo "$issue_id"
-  exit 0
-else
-  exit 1
 fi
