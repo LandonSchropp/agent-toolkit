@@ -1,0 +1,4 @@
+{
+  "*": "prettier --check --cache --ignore-unknown",
+  "*.{ts,d.ts}": "tsc-files --noEmit"
+}
