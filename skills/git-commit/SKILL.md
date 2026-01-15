@@ -29,13 +29,13 @@ Avoid overly detailed titles and phrases like "This commit..." or "Changes to...
 Bad example:
 
 ```
-Add writing-prose skill
+Add writing-markdown skill
 
 - Add SKILL.md with instructions
 - Add scripts/resource-paths script
 ```
 
-The body just restates "Add writing-prose skill" in more words. Delete the body.
+The body just restates "Add writing-markdown skill" in more words. Delete the body.
 
 **Only add a body when the title genuinely can't capture important context.** The body must contain non-redundant detail that adds real value.
 

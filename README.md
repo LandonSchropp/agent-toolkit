@@ -18,12 +18,7 @@ TODO: Add instructions for installing as a plugin.
 
 ## Environment
 
-The server requires three environment variables that contain paths to markdown files. These aren't
-included in this repository because they outline my unique writing style.
+The server requires environment variables that contain paths to markdown files:
 
-- `WRITING_FORMAT`: Formatting conventions.
-- `WRITING_VOICE`: Language and voice guidelines—how the writing should sound.
-- `WRITING_IMPROVEMENT`: Coaching and improvement suggestions.
-
-In addition, you'll need to provide a `PLANS_DIRECTORY` variable containing the relative path of a
-directory to store plan files in.
+- `WRITING_FORMAT`: Markdown formatting conventions (not included in this repository as it outlines my unique writing style).
+- `PLANS_DIRECTORY`: Relative path to a directory for storing plan files.
