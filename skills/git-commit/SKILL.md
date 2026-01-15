@@ -22,13 +22,26 @@ Avoid overly detailed titles and phrases like "This commit..." or "Changes to...
 
 ## Body
 
-**DO NOT ADD A BODY UNLESS ABSOLUTELY NECESSARY.** Most commits need only a title.
+**MOST COMMITS SHOULD HAVE NO BODY. DO NOT ADD A BODY UNLESS ABSOLUTELY NECESSARY.** A title-only commit is almost always better.
 
-Only add a body when the title can't capture important context. The body should contain non-redundant detail that adds value.
+**Before adding a body, ask yourself:** Does this body add information that isn't obvious from the title? If the body just expands on what the title already says, delete it.
+
+Bad example:
+
+```
+Add writing-prose skill
+
+- Add SKILL.md with instructions
+- Add scripts/resource-paths script
+```
+
+The body just restates "Add writing-prose skill" in more words. Delete the body.
+
+**Only add a body when the title genuinely can't capture important context.** The body must contain non-redundant detail that adds real value.
 
 **Write bodies in markdown.** Use markdown formatting for lists, emphasis, code, etc.
 
-Common patterns:
+Common patterns (only when a body is truly necessary):
 
 - **Simple context (1-2 sentences):** Explain the "why" or rationale when it's not obvious
 - **Bullet list:** List specific changes when there are multiple distinct items
