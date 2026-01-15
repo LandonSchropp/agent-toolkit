@@ -10,7 +10,10 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "liquidjs": "^10.24.0",
+    "prettier": "^3.8.0",
+    "prettier-plugin-jsdoc": "^1.8.0",
     "ts-dedent": "^2.2.0"
   },
   "devDependencies": {
