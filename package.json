@@ -1,39 +1,17 @@
 {
-  "name": "@landonschropp/mcp",
-  "description": "My personal collection of MCP servers",
+  "name": "@landonschropp/agent-toolkit",
+  "description": "My personal toolkit for working with AI agents",
   "author": "Landon Schropp <schroppl@gmail.com>",
-  "repository": "https://github.com/LandonSchropp/mcp",
-  "version": "0.1.4",
+  "repository": "https://github.com/LandonSchropp/agent-toolkit",
   "license": "MIT",
   "private": true,
   "type": "module",
-  "bin": {
-    "landon-schropp-mcp": "./bin/start"
-  },
   "scripts": {
-    "preinstall": "pnpm dlx only-allow pnpm",
-    "check-types": "tsc --noEmit",
-    "test": "vitest --run --hideSkippedTests",
-    "inspector": "mcp-inspector tsx src/index.ts",
-    "start": "bin/start"
+    "check-types": "tsc --noEmit"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.18.2",
-    "date-fns": "^4.1.0",
-    "liquidjs": "^10.24.0",
-    "nano-spawn": "^1.0.3",
-    "tsx": "^4.20.6",
-    "typescript": "^5.9.2",
-    "yaml": "^2.8.1",
-    "zod": "3.25.76"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@modelcontextprotocol/inspector": "^0.16.8",
-    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-    "@types/node": "^24.5.2",
-    "prettier": "^3.6.2",
-    "prettier-plugin-jsdoc": "^1.3.3",
-    "ts-dedent": "^2.2.0",
-    "vitest": "^3.2.4"
+    "@types/bun": "^1.3.6",
+    "typescript": "^5.9.3"
   }
 }
