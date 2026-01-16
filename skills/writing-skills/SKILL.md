@@ -44,6 +44,7 @@ Follow the TDD methodology when writing skills:
 
 - [Format Guide](references/format-guide.md)
 - [Getting Agents to Follow Instructions](references/getting-agents-to-follow-instructions.md)
+- [Script Conventions](references/scripts.md)
 - [Skill Specification](https://raw.githubusercontent.com/agentskills/agentskills/main/docs/specification.mdx)
 - [Skill Authoring Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices.md)
 - [Persuasion Principles](https://raw.githubusercontent.com/obra/superpowers/main/skills/writing-skills/persuasion-principles.md)
