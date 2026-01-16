@@ -57,7 +57,7 @@ The title says "what" - the body explains "why" or provides specific details
 Run the format script with your drafted title and body:
 
 ```bash
-./format-commit-message --title "Your commit title" --body "Your commit body"
+./format-commit-message.sh --title "Your commit title" --body "Your commit body"
 ```
 
 ## Output

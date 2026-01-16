@@ -11,7 +11,7 @@ description: Use when explicitly instructed to create an plan (feature, bug fix,
 
 2. Determine the feature branch. If the user has provided a Linear issue, the branch specified in the issue will be the feature branch. If the current branch is the default branch (main/master), ask the user: "What feature branch would you like to use?" Otherwise, ask the user: "Would you like to use `{current_branch}` as the feature branch?"
 
-3. If the current branch is the feature branch, move on to step 4. Otherwise, ask the user: "Would you like to use `{current_branch}` as the base branch?" Then call `scripts/create-feature-branch` with the feature branch and the base branch.
+3. If the current branch is the feature branch, move on to step 4. Otherwise, ask the user: "Would you like to use `{current_branch}` as the base branch?" Then call `scripts/create-feature-branch.sh` with the feature branch and the base branch.
 
 4. Create a plan file using `scripts/generate-plan-template.ts`. This will generate a pre-populated plan for you to fill out. Read the resulting file.
 

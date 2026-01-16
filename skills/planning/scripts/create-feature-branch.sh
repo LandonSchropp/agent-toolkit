@@ -6,46 +6,46 @@ FEATURE_BRANCH=""
 BASE_BRANCH=""
 
 while [[ $# -gt 0 ]]; do
-  case $1 in
-  --featureBranch)
-    FEATURE_BRANCH="$2"
-    shift 2
-    ;;
-  --baseBranch)
-    BASE_BRANCH="$2"
-    shift 2
-    ;;
-  *)
-    echo "Error: Unknown option: $1"
-    echo "Usage: create-feature-branch --featureBranch <branch> --baseBranch <branch>"
-    exit 1
-    ;;
-  esac
+	case $1 in
+	--featureBranch)
+		FEATURE_BRANCH="$2"
+		shift 2
+		;;
+	--baseBranch)
+		BASE_BRANCH="$2"
+		shift 2
+		;;
+	*)
+		echo "Error: Unknown option: $1"
+		echo "Usage: create-feature-branch.sh --featureBranch <branch> --baseBranch <branch>"
+		exit 1
+		;;
+	esac
 done
 
 # Validate required arguments
 if [ -z "$FEATURE_BRANCH" ] || [ -z "$BASE_BRANCH" ]; then
-  echo "Usage: create-feature-branch --featureBranch <branch> --baseBranch <branch>"
-  exit 1
+	echo "Usage: create-feature-branch.sh --featureBranch <branch> --baseBranch <branch>"
+	exit 1
 fi
 
 # Check if working directory is clean
 if ! git diff-index --quiet HEAD --; then
-  echo "Error: Working directory is not clean. Please commit or stash your changes before switching branches."
-  exit 1
+	echo "Error: Working directory is not clean. Please commit or stash your changes before switching branches."
+	exit 1
 fi
 
 # Check if branch already exists
 if git show-ref --verify --quiet "refs/heads/$FEATURE_BRANCH"; then
-  git switch "$FEATURE_BRANCH"
-  exit 0
+	git switch "$FEATURE_BRANCH"
+	exit 0
 fi
 
 # Check if repository is using Git Town
 if [ -f "git-town.toml" ] || [ -f ".git-town.toml" ] || [ -f ".git-branches.toml" ]; then
-  git switch "$BASE_BRANCH"
-  git town append "$FEATURE_BRANCH"
-  exit 0
+	git switch "$BASE_BRANCH"
+	git town append "$FEATURE_BRANCH"
+	exit 0
 fi
 
 # Use standard Git commands

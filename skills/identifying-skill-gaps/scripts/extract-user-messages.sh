@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function print_help() {
-	echo "Usage: extract-user-messages --after YYYY-MM-DD"
+	echo "Usage: extract-user-messages.sh --after YYYY-MM-DD"
 	echo
 	echo "Extract user messages from all Claude Code conversation logs."
 	echo
@@ -12,7 +12,7 @@ function print_help() {
 	echo "  --help                Show this help message and exit."
 	echo
 	echo "Example:"
-	echo "  extract-user-messages --after 2024-12-01"
+	echo "  extract-user-messages.sh --after 2024-12-01"
 }
 
 # Parse arguments

@@ -9,7 +9,7 @@ description: Use when creating a pull request.
 
 1. **Analyze changes:** Call the `fetch_feature_branch` tool to get the current branch's changes. If there are no changes, stop.
 
-2. **Check for Linear issue:** Run `./scripts/extract-issue-from-current-branch` to check if the current branch has a Linear issue ID. If it outputs an issue ID, fetch the Linear issue using the Linear MCP.
+2. **Check for Linear issue:** Run `./scripts/extract-issue-from-current-branch.sh` to check if the current branch has a Linear issue ID. If it outputs an issue ID, fetch the Linear issue using the Linear MCP.
 
 3. **Create PR title:** Write a clear, descriptive title that explains what the PR accomplishes. Often this will be a slightly reworked version of the Linear issue title. If there's a Linear issue, prepend the title with the issue ID in square brackets.
 
