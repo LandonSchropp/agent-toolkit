@@ -13,7 +13,7 @@ description: Use when explicitly instructed to create an plan (feature, bug fix,
 
 3. If the current branch is the feature branch, move on to step 4. Otherwise, ask the user: "Would you like to use `{current_branch}` as the base branch?" Then call `scripts/create-feature-branch` with the feature branch and the base branch.
 
-4. Create a plan file using `scripts/generate-plan-template`. This will generate a pre-populated plan for you to fill out. Read the resulting file.
+4. Create a plan file using `scripts/generate-plan-template.ts`. This will generate a pre-populated plan for you to fill out. Read the resulting file.
 
 5. Fill out each section of the plan one at a time. Follow the instructions in the template for each section.
    - If this is a new branch with no existing work, remove the Context section entirely. If resuming work on an existing branch, summarize what has already been done by running `git log` and `git diff` to see commits and changes.

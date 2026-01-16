@@ -38,7 +38,7 @@ const parseResult = argsSchema.safeParse(values);
 
 if (!parseResult.success) {
   console.error(dedent`
-    Usage: generate-plan-template \\
+    Usage: generate-plan-template.ts \\
       --title <title> \\
       --type <feature|bug-fix|refactor> \\
       --featureBranch <branch> \\
