@@ -20,8 +20,7 @@ Write code before test? Delete it. Start over. Don't keep it as a "reference". D
 
 ## Rationalization Table
 
-When testing with subagents, document every excuse agents make for violating the rule and add them
-to a Rationalizations table in your skill.
+Use a Rationalizations table to counter the reasons agents ignore instructions in your skill.
 
 ```markdown
 ## Rationalizations
@@ -33,7 +32,13 @@ to a Rationalizations table in your skill.
 | "Tests after achieve same goals" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
 ```
 
-The table directly counters each rationalization, and the closing directive makes the consequence clear.
+**When to add rationalizations:**
+
+Add a rationalization when an agent ignores an existing instruction. The agent may explicitly state why ("this is too simple") or just skip it silently—either way, infer the underlying rationalization from the behavior and counter it.
+
+**When NOT to add rationalizations:**
+
+Don't add rationalizations when the agent fails because the instruction doesn't exist yet. First add the instruction, then test to see if agents rationalize around it.
 
 ## Write Preventive Descriptions
 
