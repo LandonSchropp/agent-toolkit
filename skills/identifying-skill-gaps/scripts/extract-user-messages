@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+function print_help() {
+	echo "Usage: extract-user-messages --after YYYY-MM-DD"
+	echo
+	echo "Extract user messages from all Claude Code conversation logs."
+	echo
+	echo "Options:"
+	echo "  --after YYYY-MM-DD    Only include messages after this date (required)."
+	echo "  --help                Show this help message and exit."
+	echo
+	echo "Example:"
+	echo "  extract-user-messages --after 2024-12-01"
+}
+
+# Parse arguments
+after_date=""
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	--help)
+		print_help
+		exit 0
+		;;
+	--after)
+		after_date="$2"
+		shift 2
+		;;
+	*)
+		echo "Error: Unknown option: $1" >&2
+		echo >&2
+		print_help >&2
+		exit 1
+		;;
+	esac
+done
+
+if [[ -z "$after_date" ]]; then
+	echo "Error: --after is required." >&2
+	echo >&2
+	print_help >&2
+	exit 1
+fi
+
+# jq filter to extract user messages
+read -r -d '' jq_filter <<'JQ_FILTER' || true
+	select(.type == "user" and .message.role == "user") |
+	select(.timestamp >= $after) |
+	.timestamp as $ts |
+	(.message.content |
+		if type == "string" then .
+		elif type == "array" then map(select(.type == "text") | .text) | join("\n")
+		else empty
+		end
+	) as $content |
+	select($content != "") |
+	"[\($ts)]\n\($content)\n---\n"
+JQ_FILTER
+
+# Process all conversation logs
+for file in ~/.claude/projects/*/*.jsonl; do
+	[[ -f "$file" ]] || continue
+	jq -r --arg after "$after_date" "$jq_filter" "$file" 2>/dev/null
+done
