@@ -3,6 +3,28 @@ name: writing-skills
 description: Use when creating, editing, evaluating, testing, or verifying ANY skill or skill-related file (SKILL.md, skill resources, skill scripts, or skill assets). If you're asked to evaluate or test a skill's effectiveness, use this skill.
 ---
 
+## Understand Requirements First
+
+When asked to create or edit a skill:
+
+1. If helpful, **ask clarifying questions** about the skill's purpose:
+   - What specific problem does this skill solve?
+   - What should the output/outcome be?
+   - What context or inputs will the skill work with?
+   - What are the key behaviors or patterns it should enforce?
+
+2. **Summarize your understanding** and get user confirmation:
+   - "Let me confirm: this skill should [summary]. Is this correct?"
+   - Wait for user approval before proceeding
+
+3. **Get approval on your first test scenario** before running the full TDD cycle:
+   - Describe the test scenario you plan to run
+   - Explain what failure you expect to observe
+   - Ask: "Does this test scenario match what you want to address?"
+   - Wait for user approval before creating test files
+
+**You cannot create a good test without understanding what you're testing.**
+
 ## Test-Driven Development
 
 Follow the TDD methodology when writing skills:
