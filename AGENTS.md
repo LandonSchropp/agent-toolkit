@@ -28,3 +28,4 @@ Configured in `mise.toml`:
 - Prettier configuration with import sorting and JSDoc plugins
 - TypeScript strict mode enabled
 - Consistent file naming: kebab-case for files, camelCase for exports
+- **Always run `bun check-types` after updating any TypeScript file**
