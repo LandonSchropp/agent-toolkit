@@ -6,6 +6,25 @@ import dedent from "ts-dedent";
 import { parseArgs } from "util";
 import { z } from "zod";
 
+/** Prints the help message to the console. */
+function printHelp() {
+  console.log(dedent`
+    Usage: generate-plan-template.ts [options]
+
+    Generate a plan template from a Liquid template file.
+
+    Options:
+
+      --title <title>                 Title of the plan (required).
+      --type <type>                   Type of plan: feature, bug-fix, or refactor (required).
+      --featureBranch <branch>        Name of the feature branch (required).
+      --baseBranch <branch>           Name of the base branch (required).
+      --linearIssueId <id>            Linear issue ID in format ABC-123 (optional).
+      --sentryIssueUrl <url>          Sentry issue URL (optional).
+      --help                          Show this help message and exit.
+  `);
+}
+
 // Parse the command line arguments
 const { values } = parseArgs({
   args: process.argv.slice(2),
@@ -16,9 +35,16 @@ const { values } = parseArgs({
     baseBranch: { type: "string" },
     linearIssueId: { type: "string" },
     sentryIssueUrl: { type: "string" },
+    help: { type: "boolean" },
   },
   strict: true,
 });
+
+// Handle help flag
+if (values.help) {
+  printHelp();
+  process.exit(0);
+}
 
 // Define Zod schema for validation
 const argsSchema = z.object({
@@ -37,21 +63,12 @@ const argsSchema = z.object({
 const parseResult = argsSchema.safeParse(values);
 
 if (!parseResult.success) {
-  console.error(dedent`
-    Usage: generate-plan-template.ts \\
-      --title <title> \\
-      --type <feature|bug-fix|refactor> \\
-      --featureBranch <branch> \\
-      --baseBranch <branch> \\
-      [--linearIssueId <id>] \\
-      [--sentryIssueUrl <url>]
-  `);
-  console.error("\nValidation errors:");
-
   for (const issue of parseResult.error.issues) {
-    console.error(`- ${issue.path.join(".")}: ${issue.message}`);
+    console.error(`The --${issue.path.join(".")} parameter is not valid.`);
   }
 
+  console.error();
+  printHelp();
   process.exit(1);
 }
 

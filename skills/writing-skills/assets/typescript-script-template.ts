@@ -54,6 +54,7 @@ if (!parseResult.success) {
   process.exit(1);
 }
 
+// @ts-expect-error - Template variable that will be used when script is implemented
 const options = parseResult.data;
 
 // TODO: Implement script
