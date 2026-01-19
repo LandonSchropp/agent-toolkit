@@ -29,7 +29,7 @@ When asked to create or edit a skill:
 
 Follow the TDD methodology when writing skills:
 
-- **Red:** Design a scenario you expect to fail without the skill and run it with a subagent. Document the exact behavior of the agent, including what choices it made, what failed, what triggered those failures, and what rationalizations it made for not following instructions. This is equivalent to "watch the test fail"—you must see what agents naturally do before writing the skill.
+- **Red:** Design a scenario you expect to fail without the skill and run it with a subagent. Document the exact behavior of the agent, including what choices it made, what failed and what triggered those failures. This is equivalent to "watch the test fail"—you must see what agents naturally do before writing the skill.
 - **Green:** Write a skill that addresses the behaviors you documented. Only address what you observed. Don't add extra content for hypothetical cases.
 - **Refactor:** Continue to evaluate with subagents. Every time a failure or rationalization appears, add an explicit counter. Keep re-testing until the skill is bulletproof.
 
@@ -45,6 +45,7 @@ Follow the TDD methodology when writing skills:
 - [Format Guide](references/format-guide.md)
 - [Getting Agents to Follow Instructions](references/getting-agents-to-follow-instructions.md)
 - [Script Conventions](references/scripts.md)
+- [Agent Skills](https://code.claude.com/docs/en/skills.md)
 - [Skill Specification](https://raw.githubusercontent.com/agentskills/agentskills/main/docs/specification.mdx)
 - [Skill Authoring Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices.md)
 - [Persuasion Principles](https://raw.githubusercontent.com/obra/superpowers/main/skills/writing-skills/persuasion-principles.md)
