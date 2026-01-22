@@ -1,9 +1,13 @@
 ---
 name: git-commit
-description: Use when creating Git commit messages.
+description: Use when creating Git commits.
 ---
 
-# Git Commit Messages
+# Git Commit
+
+## Staged Changes
+
+Run `git status` to see what changes are staged for commit. If there are no staged changes, stage all modified files.
 
 ## Title
 
@@ -60,23 +64,24 @@ Run the format script with your drafted title and body:
 ./format-commit-message.sh --title "Your commit title" --body "Your commit body"
 ```
 
-## Output
+## Create Commit
 
-Do not write:
+After formatting, create the commit using the formatted message. Use a heredoc to preserve formatting:
 
-- "Here's the commit message"
-- "Based on the guidelines..."
-- "The commit message is..."
-- Explanations of your choices
-- Multiple versions
+```bash
+git commit -m "$(cat <<'EOF'
+Commit title here
 
-Just output the commit message from the format script, nothing else.
+Optional body here.
+EOF
+)"
+```
 
 ## Rationalizations
 
 | Thought                            | Reality                           |
 | ---------------------------------- | --------------------------------- |
-| "I'll provide multiple versions"   | Output ONE commit message only    |
+| "I'll provide multiple versions"   | Draft ONE commit message          |
 | "I should explain the format"      | Start with the title directly     |
 | "I'll introduce the message"       | NO introductory text whatsoever   |
 | "This simple change needs context" | Simple changes rarely need bodies |
