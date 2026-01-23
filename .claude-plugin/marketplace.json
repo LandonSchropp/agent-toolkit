@@ -1,0 +1,16 @@
+{
+  "name": "landonschropp",
+  "owner": {
+    "name": "Landon Schropp"
+  },
+  "metadata": {
+    "description": "Landon Schropp's personal agent toolkit"
+  },
+  "plugins": [
+    {
+      "name": "ls",
+      "source": "./.claude-plugin",
+      "description": "Landon Schropp's personal agent toolkit"
+    }
+  ]
+}
