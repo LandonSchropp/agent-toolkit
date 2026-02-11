@@ -12,9 +12,17 @@ although others are welcome to use it if they'd like.
 
 ### Claude Code
 
-To use this toolkit with Claude Code, simply install it as a plugin.
+To use this toolkit with Claude Code, first add the marketplace provided by this plugin.
 
-TODO: Add instructions for installing as a plugin.
+```sh
+claude plugin marketplace add ./.claude-plugin/marketplace.json
+```
+
+Then, you can install the `ls` plugin normally.
+
+```sh
+claude plugin install ls
+```
 
 ## Environment
 
