@@ -1,5 +1,4 @@
 ---
-name: testing-typescript
 description: Use when writing tests for TypeScript or JavaScript code in frameworks such as Jest, Vitest, Bun, etc.
 ---
 

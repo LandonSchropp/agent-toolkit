@@ -1,5 +1,4 @@
 ---
-name: testing-ruby
 description: Use when writing tests for Ruby code in frameworks such as RSpec or Minitest.
 ---
 

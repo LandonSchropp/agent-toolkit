@@ -1,5 +1,4 @@
 ---
-name: git-diff-feature-branch
 description: Use when asked to show fetch the context of the current branch
 disable-model-invocation: true
 ---

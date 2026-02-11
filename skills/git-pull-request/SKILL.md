@@ -1,5 +1,4 @@
 ---
-name: git-pull-request
 description: Use when creating or updating a pull request.
 ---
 

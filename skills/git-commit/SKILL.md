@@ -1,5 +1,4 @@
 ---
-name: git-commit
 description: Use when creating Git commits.
 ---
 
