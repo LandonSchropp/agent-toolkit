@@ -16,13 +16,6 @@ This is a personal toolkit for working with AI agents like Claude Code. The proj
 - **References**: Reusable documentation in `references/` directory
 - **Commands**: Command documentation in `commands/` directory
 
-### Environment Variables
-
-Configured in `mise.toml`:
-
-- `WRITING_FORMAT`: Path to markdown formatting guidelines document
-- `PLANS_DIRECTORY`: Relative path to directory for storing plan files
-
 ## Code Quality
 
 - Prettier configuration with import sorting and JSDoc plugins

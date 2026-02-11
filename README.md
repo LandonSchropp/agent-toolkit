@@ -23,10 +23,3 @@ Then, you can install the `ls` plugin normally.
 ```sh
 claude plugin install ls
 ```
-
-## Environment
-
-Environment variables that may be referenced:
-
-- `WRITING_FORMAT`: Markdown formatting conventions (not included in this repository as it outlines my unique writing style).
-- `PLANS_DIRECTORY`: Relative path to a directory for storing plan files.
