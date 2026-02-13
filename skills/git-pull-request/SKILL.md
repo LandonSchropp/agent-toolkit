@@ -20,7 +20,7 @@ description: Use when creating or updating a pull request.
    - [IAM-12] Resolve authentication timeout issues
    - [AI-345] Simplify database connection logic
 
-5. **Create PR description:** Write a concise description focused on essential information. Keep it brief and focused.
+5. **Create PR description:** The description should explain the core changes and context, not enumerate every modification that's present in the diff.
    - Check for a PR template at `.github/pull_request_template.md`
      - If it exists, use it:
        - If the PR contains a checklist, review each item and determine completion. Ask user if unsure. Remove the checklist section when done.
@@ -32,6 +32,12 @@ description: Use when creating or updating a pull request.
    - For simple changes, use a single paragraph summary only
    - Focus on what changed and why, not implementation details
    - Use backticks for code terms, file names, and technical references
+
+   **When writing the proposed solution/changes section:**
+   - State the essential changes concisely (e.g., "Replaced polling with WebSocket connections for real-time updates")
+   - Do NOT list obvious follow-on changes (updated tests, type definitions, imports, etc.)
+   - Do NOT create subsections like "Backend", "Frontend", "Testing"
+   - Do NOT add a separate "Testing" section
 
 6. **Present for review:** Show the proposed PR title and body to the user. Display them clearly formatted. Indicate whether this will create a new PR or update an existing one. Ask if they'd like to proceed or make changes.
 
