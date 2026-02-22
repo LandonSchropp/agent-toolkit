@@ -16,26 +16,18 @@ When asked to create or edit a skill:
    - "Let me confirm: this skill should [summary]. Is this correct?"
    - Wait for user approval before proceeding
 
-3. **Get approval on your first test scenario** before running the full TDD cycle:
-   - Describe the test scenario you plan to run
-   - Explain what failure you expect to observe
-   - Ask: "Does this test scenario match what you want to address?"
-   - Wait for user approval before creating test files
+**You cannot create a good skill without understanding what you're building.**
 
-**You cannot create a good test without understanding what you're testing.**
+## Testing
 
-## Test-Driven Development
+After writing a skill, ask the user: "Would you like me to test the skill?" (Skills are often manually tested by the user, or can't be tested in an automated way, so you should ask before proceeding.)
 
-Follow the TDD methodology when writing skills:
+If the user opts for the agent to test the skill:
 
-- **Red:** Design a scenario you expect to fail without the skill and run it with a subagent. Document the exact behavior of the agent, including what choices it made, what failed and what triggered those failures. This is equivalent to "watch the test fail"—you must see what agents naturally do before writing the skill.
-- **Green:** Write a skill that addresses the behaviors you documented. Only address what you observed. Don't add extra content for hypothetical cases.
-- **Refactor:** Continue to evaluate with subagents. Every time a failure or rationalization appears, add an explicit counter. Keep re-testing until the skill is bulletproof.
-
-**THE IRON LAW: DON'T WRITE A SKILL WITHOUT A FAILING EVALUATION FIRST.** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing. This applies to NEW skills AND EDITS to existing skills.
-
-- Did you write the skill before testing it? Delete it. Start over.
-- Did you edit the skill without testing it? Delete it. Start over.
+1. **Design a scenario** that exercises the skill's core purpose. Describe it to the user and get approval before running it.
+2. **Run the scenario** with a subagent. Document exactly what the agent did—what choices it made, what worked, what didn't.
+3. **If the agent failed or rationalized away the skill's intent**, identify the gap, add an explicit counter to the skill, and re-test.
+4. **Repeat** until the skill reliably produces the intended behavior.
 
 ## Required Reading
 
