@@ -6,20 +6,21 @@ When writing scripts for skills, you MUST use the templates provided in this doc
 
 Choose the script type that makes the task simpler:
 
-- **Bash:** Use when chaining together external commands (git, grep, jq, etc.). Bash excels at piping commands and simple command orchestration.
-- **TypeScript:** Use when you need actual logic or external libraries. TypeScript excels at complex validation, data transformation, and leveraging npm packages.
+- **Bash:** Best for orchestrating CLI tools (`git`, `grep`, `jq`, `curl`) and piping commands together. Avoid when logic grows complex or you need data structures.
+- **Ruby:** Best for file parsing and text manipulation, especially with regular expressions. Rich standard library with no dependencies. Good middle ground between Bash simplicity and TypeScript structure.
+- **TypeScript:** Best when you need external NPM packages, complex data transformation, or type safety. Use when correctness matters and a type system helps catch bugs.
 
 The best choice is the one that's simplest for the job.
 
 ## Universal Conventions
 
-- **File extensions:** Bash scripts use `.sh` extension, TypeScript scripts use `.ts` extension
+- **File extensions:** Bash scripts use `.sh`, Ruby scripts use `.rb`, TypeScript scripts use `.ts`
 - **kebab-case names:** Use hyphens between words (e.g., `extract-pr-number.sh`)
 - **Shebang required:** First line must specify interpreter
 - **Executable permissions:** Scripts must be executable
-- **Flag-based arguments:** Use the `--flagName` format. Only use position arguments if they're very
+- **Flag-based arguments:** Use the `--flagName` (camel case) format. Only use position arguments if they're very
   simple or there's only one.
-- **Full variable names:** Use `directory` not `dir`, `message` not `msg`, `timestamp` not `ts`
+- **Full variable names:** E.g. use `directory` not `dir`, `message` not `msg`, `timestamp` not `ts`
 - **Exit codes:** 0 for success, 1 for errors
 - **Help flag mandatory:** Every script must support `--help` with dedicated help function
 
@@ -39,6 +40,24 @@ Use the template at `assets/bash-script-template.sh`. Copy it exactly and fill i
 - Quote variables: Always quote variable expansions (`"$variable"`)
 - Validate required flags: Check after parsing loop completes
 - Unknown options: Must print error with "Error: Unknown option:" prefix
+
+## Ruby Scripts
+
+### Template
+
+Use the template at `assets/ruby-script-template.rb`. Copy it exactly and fill in your specific logic.
+
+### Requirements
+
+- `#!/usr/bin/env ruby`: Required shebang
+- `# frozen_string_literal: true`: Required magic comment, immediately after the shebang
+- `print_help()` method: Mandatory dedicated method for help output
+- `--help` flag: Must be handled inside the `OptionParser` block
+- `OptionParser`: Standard library for argument parsing
+- Error prefix: All error messages must start with "Error: " and go to stderr via `warn`
+- Help on error: Always call `print_help` when validation fails or unknown options are encountered
+- Validate required flags: Check after parsing completes
+- Unknown options: Rescued from `OptionParser::InvalidOption` with "Error: " prefix
 
 ## TypeScript Scripts
 
