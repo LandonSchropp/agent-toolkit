@@ -12,7 +12,7 @@ This is a personal toolkit for working with AI agents like Claude Code. The proj
 ### Project Structure
 
 - **TypeScript Config**: `tsconfig.json` at root validates the entire project
-- **Skills**: Individual skills in `skills/` directory following Agent Skills specification
+- **Skills**: Individual skills in `skills/` directory following Agent Skills specification. When asked to edit a skill in this repository, always edit the skill under `skills/` here—not the installed copy in `~/.claude/skills/`.
 - **References**: Reusable documentation in `references/` directory
 - **Commands**: Command documentation in `commands/` directory
 
