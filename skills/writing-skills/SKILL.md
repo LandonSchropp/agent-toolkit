@@ -29,6 +29,10 @@ If the user opts for the agent to test the skill:
 3. **If the agent failed or rationalized away the skill's intent**, identify the gap, add an explicit counter to the skill, and re-test.
 4. **Repeat** until the skill reliably produces the intended behavior.
 
+## Interactive File Editing
+
+If a script you're writing would benefit from the user interactively editing and saving a file, add to the SKILL.md: **REQUIRED:** Invoke the `neovim` skill. Have the script call `edit-and-wait.sh`.
+
 ## Required Reading
 
 **STOP. Read these documents NOW. Not later. Not "as you go." Right now.**
