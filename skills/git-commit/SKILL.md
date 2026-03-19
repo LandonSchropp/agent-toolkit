@@ -53,19 +53,9 @@ Common patterns (only when a body is truly necessary):
 
 The title says "what" - the body explains "why" or provides specific details
 
-## Formatting
-
-**YOU MUST use the format script before outputting the final commit message.**
-
-Run the format script with your drafted title and body:
-
-```bash
-./format-commit-message.sh --title "Your commit title" --body "Your commit body"
-```
-
 ## Create Commit
 
-After formatting, create the commit using the formatted message. Use a heredoc to preserve formatting:
+Create the commit using a heredoc to preserve formatting:
 
 ```bash
 git commit -m "$(cat <<'EOF'
