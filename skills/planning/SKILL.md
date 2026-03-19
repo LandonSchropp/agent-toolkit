@@ -16,7 +16,9 @@ agent: Plan
 
 4. Create a plan file using `scripts/generate-plan-template.ts`. This will generate a pre-populated plan for you to fill out. Read the resulting file.
 
-5. Fill out each section of the plan one at a time. Follow the instructions in the template for each section.
+5. Identify relevant skills for executing the plan. Review the available skills and determine which apply to the work (e.g., `git-commit`, `git-pull-request`, `testing-typescript`). Replace `example` in the Skills section with each applicable skill on its own list item.
+
+6. Fill out each section of the plan one at a time. Follow the instructions in the template for each section.
    - CRITICAL: DO NOT edit a Claude plan file in `.claude/plans`. Only edit the plan template file that was generated.
    - If this is a new branch with no existing work, remove the Context section entirely. If resuming work on an existing branch, summarize what has already been done by running `git log` and `git diff` to see commits and changes.
    - For the Scope and Plan sections, research the plan and its implementation. Ask the user clarifying questions if needed to understand the task and what's required to implement it.
