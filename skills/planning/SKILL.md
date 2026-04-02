@@ -24,4 +24,6 @@ agent: Plan
    - For the Scope and Plan sections, research the plan and its implementation. Ask the user clarifying questions if needed to understand the task and what's required to implement it.
    - Do not modify sections that contain the comment "Copy this section exactly as written, without modification", but do delete the comment.
 
+7. After the plan is complete, invoke the `neovim` skill and open the plan file in Neovim so the user can review it.
+
 ultrathink
