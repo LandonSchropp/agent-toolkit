@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "ls",
-      "source": "./.claude-plugin",
+      "source": "./",
       "description": "Landon Schropp's personal agent toolkit"
     }
   ]
