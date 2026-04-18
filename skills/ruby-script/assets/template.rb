@@ -32,7 +32,7 @@ end
 begin
   parser.parse!
 rescue OptionParser::InvalidOption => e
-  warn "Error: #{e.message}"
+  warn "Error: The option #{e.args.first} is invalid."
   warn
   print_help
   exit 1
@@ -40,7 +40,7 @@ end
 
 # Validate required arguments
 if required_flag.nil? || required_flag.empty?
-  warn "Error: --required is required"
+  warn "Error: The --required flag is required."
   warn
   print_help
   exit 1
