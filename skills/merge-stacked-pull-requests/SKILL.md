@@ -10,7 +10,7 @@ Pass `--pull-request-url <url>` to each script. Use a 5-minute tool timeout on p
 
 ## Process
 
-1. **Discover the stack:** Run `scripts/list-stack-pull-requests.rb` from the repository. Pass `--branch <name>` to start from a specific branch; defaults to the current branch.
+1. **Discover the tree:** Run `scripts/list-pull-request-tree.rb --branch <name>` from the repository. Pass any branch in the tree — the script walks up to the oldest ancestor and down through all descendants.
 
 2. **Confirm with the user:** Show the ordered list and ask: "These pull requests will be merged in this order. Would you like to proceed?" Wait for approval before merging anything.
 
