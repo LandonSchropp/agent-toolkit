@@ -10,7 +10,7 @@ Pass `--pull-request-url <url>` to each script. Use a 5-minute tool timeout on p
 
 ## Process
 
-1. **Discover the stack:** Run `git town branch` to see the full branch hierarchy. Identify all branches in the current stack, then look up the open pull request for each with `gh pr list --head <branch> --state open`. Build the ordered list from oldest ancestor to newest descendant.
+1. **Discover the stack:** Run `scripts/list-stack-pull-requests.rb` from the repository. Pass `--branch <name>` to start from a specific branch; defaults to the current branch.
 
 2. **Confirm with the user:** Show the ordered list and ask: "These pull requests will be merged in this order. Would you like to proceed?" Wait for approval before merging anything.
 
