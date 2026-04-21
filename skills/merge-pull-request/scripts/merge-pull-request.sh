@@ -49,11 +49,12 @@ if [[ -z "$pull_request_url" ]]; then
 	exit 1
 fi
 
-# Fetch the repository owner, name, and base branch needed for API calls below.
-pull_request_json=$(gh pr view "$pull_request_url" --json headRepositoryOwner,headRepository,baseRefName)
+# Fetch the repository owner, name, base branch, and head branch needed below.
+pull_request_json=$(gh pr view "$pull_request_url" --json headRepositoryOwner,headRepository,baseRefName,headRefName)
 owner=$(echo "$pull_request_json" | jq -r '.headRepositoryOwner.login')
 repository_name=$(echo "$pull_request_json" | jq -r '.headRepository.name')
 base_branch=$(echo "$pull_request_json" | jq -r '.baseRefName')
+head_branch=$(echo "$pull_request_json" | jq -r '.headRefName')
 
 # If the target branch requires a merge queue, add the pull request to the queue
 # without a strategy flag and let the queue use its configured strategy.
@@ -61,6 +62,7 @@ if [[ "$(gh api "repos/${owner}/${repository_name}/rules/branches/${base_branch}
 	--jq '[.[] | select(.type == "merge_queue")] | length > 0' 2>/dev/null || echo "false")" == "true" ]]; then
 	echo "Merge queue detected for '${base_branch}'. Adding to queue..." >&2
 	gh pr merge "$pull_request_url" --delete-branch
+	git branch -d "$head_branch" 2>/dev/null || true
 	exit 0
 fi
 
@@ -84,3 +86,4 @@ fi
 
 echo "Merging with ${method_name} strategy..." >&2
 gh pr merge "$pull_request_url" "$method_flag" --delete-branch
+git branch -d "$head_branch" 2>/dev/null || true
