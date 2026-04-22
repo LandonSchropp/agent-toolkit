@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "cleye": "^2.6.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "liquidjs": "^10.24.0",
