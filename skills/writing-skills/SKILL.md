@@ -29,6 +29,10 @@ If the user opts for the agent to test the skill:
 3. **If the agent failed or rationalized away the skill's intent**, identify the gap, add an explicit counter to the skill, and re-test.
 4. **Repeat** until the skill reliably produces the intended behavior.
 
+## Scripts
+
+When a skill includes executable scripts, **REQUIRED:** Use the `script` skill for language selection and conventions.
+
 ## Interactive File Editing
 
 If a script you're writing would benefit from the user interactively editing and saving a file, add to the SKILL.md: **REQUIRED:** Invoke the `neovim` skill. Have the script call `edit-and-wait.sh`.
@@ -39,7 +43,6 @@ If a script you're writing would benefit from the user interactively editing and
 
 - [Format Guide](references/format-guide.md)
 - [Getting Agents to Follow Instructions](references/getting-agents-to-follow-instructions.md)
-- [Script Conventions](references/scripts.md)
 - [Agent Skills](https://code.claude.com/docs/en/skills.md)
 - [Skill Specification](https://raw.githubusercontent.com/agentskills/agentskills/main/docs/specification.mdx)
 - [Skill Authoring Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices.md)
