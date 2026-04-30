@@ -34,9 +34,9 @@ Exception: if the message itself IS the content (e.g. a GitHub PR comment thread
 Good examples:
 
 ```
-- [ ] Review [Herbert's updated engineering assessment](slack://DM-thread)
-- [ ] Watch [Viktor's Loom](slack://DM-thread) about AI agents
-- [ ] Review Erik's [4 remaining stacked PRs](slack://thread) for the release pipeline
+- [ ] Review Alex's [engineering assessment](slack://DM-thread)
+- [ ] Watch Sam's [Loom](slack://DM-thread) about AI agents
+- [ ] Review Jordan's [4 remaining stacked PRs](slack://thread) for the release pipeline
 ```
 
 Avoid trailing `-- [thread]` or `-- [message]` links. Embed the link in the task description itself.
