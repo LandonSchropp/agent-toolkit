@@ -14,8 +14,8 @@ Wrap the entire message in a **four-backtick** fenced code block. Four (not thre
 ````
 Hey team — quick update on the migration:
 
-• *Staging* is done
-• Prod rolls out tomorrow at _9am PT_
+*Staging* is done
+Prod rolls out tomorrow at _9am PT_
 
 Run this to check status:
 
@@ -35,10 +35,11 @@ Output nothing else — no preamble ("Here's the message:"), no trailing comment
 
 ## Rationalizations
 
-| Thought                                                 | Reality                                                                                                |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| "I'll skip the code block — the user can read markdown" | Without the fence, the harness renders the formatting. The user loses the raw text they need to paste. |
-| "Three backticks on the outer fence is enough"          | If the message ever contains a code block, three outer backticks break. Always use four.               |
-| "I'll use `**bold**` — that's standard markdown"        | Slack requires single asterisks. Double asterisks render literally in Slack.                           |
-| "I'll add a `# Header` for structure"                   | Cmd+Shift+F doesn't convert headers. Use a `*bold line*` instead.                                      |
-| "I'll add a short intro before the code block"          | The code block IS the response. Any text outside it is noise the user has to skip past.                |
+| Thought                                                 | Reality                                                                                                                                                             |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "I'll skip the code block — the user can read markdown" | Without the fence, the harness renders the formatting. The user loses the raw text they need to paste.                                                              |
+| "Three backticks on the outer fence is enough"          | If the message ever contains a code block, three outer backticks break. Always use four.                                                                            |
+| "I'll use `**bold**` — that's standard markdown"        | Slack requires single asterisks. Double asterisks render literally in Slack.                                                                                        |
+| "I'll add a `# Header` for structure"                   | Cmd+Shift+F doesn't convert headers. Use a `*bold line*` instead.                                                                                                   |
+| "I'll add a short intro before the code block"          | The code block IS the response. Any text outside it is noise the user has to skip past.                                                                             |
+| "I'll use `•` bullets for list items"                   | Bullets can't be copy-pasted into Slack's list format. Write list items as plain lines separated by a single newline — the user will apply the list style manually. |

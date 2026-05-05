@@ -24,7 +24,7 @@ These pass through as-is — Slack resolves them automatically when the target e
 
 ## Not Supported
 
-- **Bulleted and numbered lists.** Cmd+Shift+F does NOT convert `- item`, `* item`, or `1. item` into Slack's native list formatting. Slack's real list style (with hanging indentation on wrapped lines) is only applied when the user types `- ` or `* ` directly in the composer — there is no way to trigger it from pasted text. Best approximation: put a unicode bullet (`•`) at the start of each line. Wrapped lines will still align to column 1, not indent under the text, so keep list items short enough to fit on one line, or write as prose instead.
+- **Bulleted and numbered lists.** Cmd+Shift+F does NOT convert `- item`, `* item`, or `1. item` into Slack's native list formatting, and pasting unicode bullets (`•`) doesn't produce Slack's native list style either. Write list items as plain lines separated by a single newline — the user will apply the list style manually in the composer after pasting.
 - **Double-asterisk bold (`**bold**`).** Slack only bolds with single asterisks. Double asterisks render as literal `*` characters around the word.
 - **Headers (`#`, `##`, `###`).** Not converted. They appear as literal `#` characters. Use a `*bold line*` for emphasis on a standalone line.
 - **HTML tags.** Render as literal text.
