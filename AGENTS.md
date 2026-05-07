@@ -11,10 +11,13 @@ This is a personal toolkit for working with AI agents like Claude Code. The proj
 
 ### Project Structure
 
+This is a monorepo. Each plugin lives under `plugins/` as its own subdirectory. To see all plugins and their descriptions, read `.claude-plugin/marketplace.json`.
+
 - **TypeScript Config**: `tsconfig.json` at root validates the entire project
-- **Skills**: Individual skills in `skills/` directory following Agent Skills specification. When asked to edit a skill in this repository, always edit the skill under `skills/` here—not the installed copy in `~/.claude/skills/`.
+- **Plugins**: Individual plugins under `plugins/`, each with a `.claude-plugin/plugin.json`, `skills/`, and optionally `commands/`
 - **References**: Reusable documentation in `references/` directory
-- **Commands**: Command documentation in `commands/` directory
+
+When asked to edit a skill in this repository, always edit the skill under `plugins/<plugin-name>/skills/` here—not the installed copy in `~/.claude/skills/`.
 
 ## Code Quality
 
