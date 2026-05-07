@@ -2,7 +2,7 @@
 description: Use when analyzing Claude Code conversation logs to find patterns in repeated user instructions that could become skills. Ask for date range first.
 ---
 
-# Identifying Skill Gaps
+# Identify Skill Gaps
 
 Analyze Claude Code conversation logs to identify areas where the user repeatedly gives similar instructions that could be turned into skills.
 
