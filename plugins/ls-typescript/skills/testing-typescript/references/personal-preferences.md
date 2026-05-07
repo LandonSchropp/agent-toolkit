@@ -47,12 +47,12 @@ Use mocks sparingly, typically only when simulating external APIs or when callin
 ```typescript
 // Good (mocking external API)
 beforeEach(() => {
-  jest.spyOn(weatherService, "getCurrentTemperature").mockResolvedValue(72);
+  vi.spyOn(weatherService, "getCurrentTemperature").mockResolvedValue(72);
 });
 
 // Good (mocking side effects)
 beforeEach(() => {
-  jest.spyOn(fs, "unlinkSync").mockImplementation(() => {});
+  vi.spyOn(fs, "unlinkSync").mockImplementation(() => {});
 });
 ```
 
