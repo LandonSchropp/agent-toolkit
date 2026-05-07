@@ -8,9 +8,44 @@
   },
   "plugins": [
     {
-      "name": "ls",
-      "source": "./",
-      "description": "Landon Schropp's personal agent toolkit"
+      "name": "ls-git",
+      "source": "./plugins/ls-git",
+      "description": "Git workflow skills"
+    },
+    {
+      "name": "ls-scripting",
+      "source": "./plugins/ls-scripting",
+      "description": "Script authoring templates"
+    },
+    {
+      "name": "ls-typescript",
+      "source": "./plugins/ls-typescript",
+      "description": "TypeScript and JavaScript skills"
+    },
+    {
+      "name": "ls-ruby",
+      "source": "./plugins/ls-ruby",
+      "description": "Ruby skills"
+    },
+    {
+      "name": "ls-slack",
+      "source": "./plugins/ls-slack",
+      "description": "Slack skills"
+    },
+    {
+      "name": "ls-development-environment",
+      "source": "./plugins/ls-development-environment",
+      "description": "Development environment skills"
+    },
+    {
+      "name": "ls-planning",
+      "source": "./plugins/ls-planning",
+      "description": "Planning skills"
+    },
+    {
+      "name": "ls-agent-toolkit",
+      "source": "./plugins/ls-agent-toolkit",
+      "description": "Agent toolkit meta-skills"
     }
   ]
 }
