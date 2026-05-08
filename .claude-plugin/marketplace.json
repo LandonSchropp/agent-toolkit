@@ -46,6 +46,11 @@
       "name": "ls-agent-toolkit",
       "source": "./plugins/ls-agent-toolkit",
       "description": "Agent toolkit meta-skills"
+    },
+    {
+      "name": "ls-notes",
+      "source": "./plugins/ls-notes",
+      "description": "Notes repository skills"
     }
   ]
 }
