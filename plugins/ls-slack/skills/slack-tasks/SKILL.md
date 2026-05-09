@@ -4,7 +4,9 @@ description: Use when building or updating the Work tasks section of today's dai
 
 # Slack Tasks
 
-Build a task list from the user's Slack activity and write it into the Work section of today's daily note at `~/Notes/Daily Notes/YYYY-MM/YYYY-MM-DD - Daily Note.md`.
+Build a task list from the user's Slack activity and append it to the Work section of today's daily note.
+
+**REQUIRED:** Invoke the `ls-notes:daily-note` skill first. It ensures today's note exists and documents its section structure.
 
 ## Step 1: Gather Messages
 
@@ -43,7 +45,7 @@ Avoid trailing `-- [thread]` or `-- [message]` links. Embed the link in the task
 
 ## Step 4: Write to Daily Note
 
-Find the `### Work` section and append the tasks after any existing ones. Do not remove or reorder existing tasks.
+Append the tasks to the Work subsection of Tasks in today's daily note. Do not remove or reorder existing tasks.
 
 ## Rationalizations
 
