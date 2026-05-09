@@ -18,3 +18,4 @@ Landon's Obsidian vault is at `~/Notes`.
 ## Related Skills
 
 - `daily-note`: Invoke when the user mentions a daily note or daily todos, or when reading or writing any file under `Daily Notes/`.
+- `plan-morning`: Invoke when the user says "plan my morning" or wants to walk through morning journaling and tasks for today's daily note.
