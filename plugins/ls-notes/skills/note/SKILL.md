@@ -1,5 +1,5 @@
 ---
-description: Use when working with files in ~/Notes (Landon's Obsidian vault). Covers vault structure (PARA), file naming, frontmatter, icons, templates, and the obsidian CLI.
+description: Use when working with files in ~/Notes (Landon's Obsidian vault). Covers vault structure (PARA), file naming, frontmatter, icons, templates, kanban boards, and the obsidian CLI.
 ---
 
 # Note
@@ -12,4 +12,5 @@ Landon's Obsidian vault is at `~/Notes`.
 - [Conventions](references/conventions.md) — file naming, frontmatter, triage.
 - [Icons](references/icons.md)
 - [Templates](references/templates.md)
+- [Kanban Boards](references/kanban.md) — formatting rules for files with `kanban-plugin: board`.
 - [Obsidian CLI](references/obsidian-cli.md)
