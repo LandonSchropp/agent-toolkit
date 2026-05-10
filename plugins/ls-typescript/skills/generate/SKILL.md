@@ -1,6 +1,6 @@
 ---
 name: generate
-description: Use when the user wants to run one or more generators from `@landonschropp/generate` (initialize, prettier, only-allow, eslint, typescript, jest, husky).
+description: Use when the user wants to run one or more generators from `@landonschropp/generate` (initialize, prettier, only-allow, eslint, typescript, vitest, bun-test, husky).
 disable-model-invocation: true
 ---
 
@@ -26,7 +26,7 @@ disable-model-invocation: true
 
    ```
    pnpx @landonschropp/generate typescript --type=node --outDir=
-   pnpx @landonschropp/generate jest --typescript=true --react=false
+   pnpx @landonschropp/generate vitest --react=false
    ```
 
 ## Rationalizations
