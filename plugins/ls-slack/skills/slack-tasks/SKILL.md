@@ -17,35 +17,47 @@ Run these two searches in parallel using the Slack MCP. The logged-in user's ID 
 
 For every message the user _replied to_ (not just sent), read the full thread. Replies often contain context or commitments that become tasks — the parent message, not the reply, holds that context.
 
-## Step 2: Identify Actionable Items
+## Step 2: Identify Candidate Items
 
-An item is actionable if it requires the user to do something: review a PR, respond to a question, watch a video, follow up on a ticket, etc. Skip:
+An item is a candidate if it represents something the user did, is doing, or needs to do: review a PR, respond to a question, watch a video, follow up on a ticket, ship a change, etc. Skip only purely informational messages (reactions, acknowledgments, FYIs).
 
-- Reactions, acknowledgments, or messages that are purely informational
-- Later items already marked complete
-- GitHub PRs that are merged OR have a review submitted by the user
+Include items the user has already completed (merged PR, submitted review, Slack Later item marked complete) — these belong in the daily note as `[x]`, not omitted.
 
-To check PR status: `gh pr view <number> --repo <owner>/<repo> --json state,reviews,mergedAt`
+**Consolidate open PR review requests** into a single `- [ ] Review pull requests` candidate. The user reviews all of them at once in one channel and does not want each PR listed individually. This applies only to PRs the user has yet to review; PRs the user has already merged or reviewed should still be listed individually as `[x]` so they appear as a record of done work.
 
-## Step 3: Format Tasks
+To check PR status: `gh pr view <number> --repo <owner>/<repo> --json state,reviews,mergedAt`.
 
-Each task gets one link embedded naturally in the prose — link to the **Slack conversation** where the item came from, not directly to the content (PR, doc, Loom, etc.). The conversation provides context; the content is one click away from there.
+## Step 3: Format Tasks With Suggested Markers
 
-Exception: if the message itself IS the content (e.g. a GitHub PR comment thread), link directly to it.
+Format each candidate as a markdown task line. Pick the suggested marker based on the item's current state:
 
-Good examples:
+- `[ ]`: Open / not yet started.
+- `[/]`: In progress (e.g., a PR you've commented on but not yet reviewed).
+- `[x]`: Already complete (e.g., a PR you've merged or a review you've submitted).
+
+Each task gets one link embedded naturally in the prose — link to the **Slack conversation** where the item came from, not directly to the content (PR, doc, Loom, etc.). The conversation provides context; the content is one click away from there. Exception: if the message itself IS the content (e.g. a GitHub PR comment thread), link directly to it. Avoid trailing `-- [thread]` or `-- [message]` links — embed the link in the task description itself.
+
+Example formatting:
 
 ```
 - [ ] Review Alex's [engineering assessment](slack://DM-thread)
-- [ ] Watch Sam's [Loom](slack://DM-thread) about AI agents
-- [ ] Review Jordan's [4 remaining stacked PRs](slack://thread) for the release pipeline
+- [/] Follow up on Jordan's [4 remaining stacked PRs](slack://thread) for the release pipeline
+- [x] Merged the [release pipeline PR](slack://thread)
 ```
 
-Avoid trailing `-- [thread]` or `-- [message]` links. Embed the link in the task description itself.
+## Step 4: Confirm Each Task
 
-## Step 4: Write to Daily Note
+Present the formatted candidates to the user in a single message:
 
-Append the tasks to the Work subsection of Tasks in today's daily note. Do not remove or reorder existing tasks.
+- Use `## Slack Tasks` as the header.
+- Number each candidate, preserving its suggested marker in the line (e.g., ``1. `[x]` Merged the release pipeline PR``).
+- End with this legend: ``Legend: `y` add as shown, `n` skip, ` ` open, `/` in-progress, `x` complete.``
+
+Wait for the user's response. They will give one answer per number (e.g., `1. y, 2. n, 3. x`). `y` adds the task with the suggested marker; `n` skips it; any other marker character overrides the suggested marker and adds the task with that marker.
+
+## Step 5: Write Approved Tasks to Daily Note
+
+Append the approved tasks (with their final markers) to the Work subsection of Tasks in today's daily note. Do not remove or reorder existing tasks.
 
 ## Rationalizations
 
