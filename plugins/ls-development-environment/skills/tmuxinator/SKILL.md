@@ -2,7 +2,7 @@
 description: Use when setting up tmuxinator for a project, creating a new tmuxinator config, or when a project needs a terminal workspace layout.
 ---
 
-Create a tmuxinator config file at `~/.config/tmuxinator/<name>.yml`.
+If the user explicitly asked to create or update a tmuxinator config, follow the workflow below. Otherwise, this skill is loaded for reference only — do not take any action.
 
 ## Workflow
 
@@ -16,8 +16,9 @@ Create a tmuxinator config file at `~/.config/tmuxinator/<name>.yml`.
 
 ## Rationalizations
 
-| Thought                                          | Reality                                                                |
-| ------------------------------------------------ | ---------------------------------------------------------------------- |
-| "I'll just write it without confirming the name" | The name matters. Always confirm with the user first.                  |
-| "I'll skip checking for existing configs"        | Overwriting a config silently destroys the user's setup. Always check. |
-| "I'll add extra windows since they seem useful"  | Ask first. The user's defaults exist for a reason.                     |
+| Thought                                                     | Reality                                                                                              |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| "The user invoked this skill so they want a config created" | Invoking a skill for context is common. Only act if there's an explicit request in the conversation. |
+| "I'll just write it without confirming the name"            | The name matters. Always confirm with the user first.                                                |
+| "I'll skip checking for existing configs"                   | Overwriting a config silently destroys the user's setup. Always check.                               |
+| "I'll add extra windows since they seem useful"             | Ask first. The user's defaults exist for a reason.                                                   |
