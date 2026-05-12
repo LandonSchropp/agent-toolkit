@@ -59,22 +59,6 @@ git rebase --continue
 scripts/reword-commit.sh --sha <sha> --message "New commit message"
 ```
 
-## Todo Commands
-
-| Command  | Effect                                       |
-| -------- | -------------------------------------------- |
-| `pick`   | Keep the commit as-is                        |
-| `squash` | Merge into previous commit, combine messages |
-| `fixup`  | Merge into previous commit, discard message  |
-| `drop`   | Remove the commit from history               |
-| `reword` | Keep changes, edit the commit message        |
-| `edit`   | Pause rebase to amend the commit             |
-
-## Conflicts and Recovery
-
-- Resolve conflicts, stage files, then: `git rebase --continue`
-- Abandon and restore original state: `git rebase --abort`
-
 ## Rationalizations
 
 | Thought                                           | Reality                                                          |
