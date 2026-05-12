@@ -10,10 +10,9 @@ Build a task list from the user's Slack activity and append it to the Work secti
 
 ## Step 1: Gather Messages
 
-Run these two searches in parallel using the Slack MCP. The logged-in user's ID is shown in the `slack_search_public_and_private` tool description.
+Run this search using the Slack MCP. The logged-in user's ID is shown in the `slack_search_public_and_private` tool description.
 
 - **Today's messages:** `from:<@USER_ID> after:YESTERDAY` — finds messages the user sent today
-- **Open Later items:** `is:saved` and `is:saved is:complete` — diff the two sets to get items that are saved but not yet marked complete
 
 For every message the user _replied to_ (not just sent), read the full thread. Replies often contain context or commitments that become tasks — the parent message, not the reply, holds that context.
 
@@ -21,7 +20,7 @@ For every message the user _replied to_ (not just sent), read the full thread. R
 
 An item is a candidate if it represents something the user did, is doing, or needs to do: review a PR, respond to a question, watch a video, follow up on a ticket, ship a change, etc. Skip only purely informational messages (reactions, acknowledgments, FYIs).
 
-Include items the user has already completed (merged PR, submitted review, Slack Later item marked complete) — these belong in the daily note as `[x]`, not omitted.
+Include items the user has already completed (merged PR, submitted review) — these belong in the daily note as `[x]`, not omitted.
 
 **Consolidate open PR review requests** into a single `- [ ] Review pull requests` candidate. The user reviews all of them at once in one channel and does not want each PR listed individually. This applies only to PRs the user has yet to review; PRs the user has already merged or reviewed should still be listed individually as `[x]` so they appear as a record of done work.
 
@@ -51,7 +50,6 @@ For candidates that involve writing, shipping, or reviewing code (not PR reviews
 
 For each match found, ask the user for confirmation in the Step 5 batch — don't interrupt for each one individually:
 
-- **Task has no Slack link** (e.g., item came from a Slack Later item title with no thread context): ask whether to use the Linear issue URL as the task link.
 - **Task has a Slack link and the Slack thread does not reference the Linear issue**: ask whether the Slack conversation should be linked to the Linear issue.
 
 If no match is found for a coding task, leave it as-is.
