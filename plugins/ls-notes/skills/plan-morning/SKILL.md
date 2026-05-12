@@ -55,3 +55,5 @@ Ask: "What personal tasks do you have today?" Append each item the user names as
 ## Step 7: Additional Work Tasks
 
 After `slack-tasks` finishes, ask: "Anything else you're planning to work on today outside of Slack?" Append each item the user names as a `- [ ]` line under the existing Work tasks. If they have nothing to add, leave the section as-is.
+
+For each task the user adds, search Linear for matching issues in the user's teams (use `list_issues` with team and project filters). If a matching issue is found, link the task to that Linear issue URL directly (since this task has no Slack conversation). If multiple candidates exist, ask the user which one matches.
