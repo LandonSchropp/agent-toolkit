@@ -6,7 +6,7 @@ description: Use when the user says "plan my morning" or wants to fill out morni
 
 Interactive walkthrough of the morning sections of today's daily note. Resolves any leftover tasks from the previous daily note, creates today's note (triggering task-forwarder), captures Gratitude (3 items), Better Day (3 items), Personal tasks, then triggers `ls-slack:slack-tasks` to populate the Work subsection.
 
-**REQUIRED:** Invoke the `ls-notes:note` skill first for vault context.
+**REQUIRED:** Invoke the `ls-notes:daily-note` skill first. It creates today's note and provides vault context.
 
 ## Step 1: Resolve Incomplete Tasks From Recent Daily Notes
 
@@ -30,29 +30,23 @@ Marker semantics:
 
 Wait for the user's response — they will give a marker per numbered item (e.g., `1. x, 2. >, 3. -`). Apply each choice by rewriting the marker in the source file. Then move on to the next day.
 
-**All `- [ ]` items must be resolved before Step 2**, otherwise task-forwarder produces a cleanup warning instead of forwarding.
-
-## Step 2: Create Today's Note
-
-**REQUIRED:** Invoke the `ls-notes:daily-note` skill. It creates today's note from the template; task-forwarder then automatically forwards any `[>]` items from the previous note.
-
-## Step 3: Gratitude
+## Step 2: Gratitude
 
 If the Gratitude slots are empty, ask: "What are three things you're grateful for this morning?" Wait for the response, then write the three items in place of the empty `1. `, `2. `, `3. ` slots.
 
-## Step 4: Better Day
+## Step 3: Better Day
 
 If the Better Day slots are empty, ask: "What three things would make today great?" Wait, then write the three items into the empty slots.
 
-## Step 5: Personal Tasks
+## Step 4: Personal Tasks
 
 Ask: "What personal tasks do you have today?" Append each item the user names as a `- [ ]` line under any existing Personal tasks. If they have nothing to add, leave the section as-is.
 
-## Step 6: Work Tasks From Slack
+## Step 5: Work Tasks From Slack
 
 **REQUIRED:** Invoke the `ls-slack:slack-tasks` skill to populate the Work subsection.
 
-## Step 7: Additional Work Tasks
+## Step 6: Additional Work Tasks
 
 After `slack-tasks` finishes, ask: "Anything else you're planning to work on today outside of Slack?" Append each item the user names as a `- [ ]` line under the existing Work tasks. If they have nothing to add, leave the section as-is.
 
