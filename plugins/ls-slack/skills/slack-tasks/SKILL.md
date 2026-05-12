@@ -20,7 +20,7 @@ For every message the user _replied to_ (not just sent), read the full thread. R
 
 An item is a candidate if it represents something the user did, is doing, or needs to do: review a PR, respond to a question, watch a video, follow up on a ticket, ship a change, etc. Skip only purely informational messages (reactions, acknowledgments, FYIs).
 
-Include items the user has already completed (merged PR, submitted review) — these belong in the daily note as `[x]`, not omitted.
+Include items the user has already completed **today** (merged PR, submitted review) — these belong in the daily note as `[x]`, not omitted. Skip completed items from previous days.
 
 **Consolidate open PR review requests** into a single `- [ ] Review pull requests` candidate. The user reviews all of them at once in one channel and does not want each PR listed individually. This applies only to PRs the user has yet to review; PRs the user has already merged or reviewed should still be listed individually as `[x]` so they appear as a record of done work.
 
