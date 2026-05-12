@@ -2,11 +2,11 @@
 description: Use when needing to fixup, squash, drop, reword, reorder, or edit commits in a branch's history. Handles the non-interactive approach agents need since `git rebase -i` requires a TTY.
 ---
 
-# Git Rebase
+# Git Edit Commit
 
-Agents can't use `git rebase -i` directly — it requires a TTY. Use the helper scripts instead.
+This skill outlines how agents can edit previous commits. Agents can't use `git rebase -i` directly, which requires a TTY. This skill provides helper scripts instead.
 
-Always reference commits by SHA, not by HEAD-relative notation like `HEAD~3`.
+REQUIRED: Always reference commits by SHA, not by HEAD-relative notation like `HEAD~3`.
 
 ## Inspect Commits First
 

@@ -29,9 +29,9 @@ Present the plan to the user as a table and wait for confirmation before executi
 
 ## Step 2: Edits to Prior Commits
 
-Stage only the hunks belonging to the edit using the techniques in Step 3 and Step 4. **REQUIRED:** Invoke the `git-rebase` skill and follow its instructions to edit existing commits.
+Stage only the hunks belonging to the edit using the techniques in Step 3 and Step 4. **REQUIRED:** Invoke the `git-edit-commit` skill and follow its instructions to edit existing commits.
 
-If the target commit lives on a different branch in the stack, stash the staged hunks (`git stash push --staged`), check out that branch, restore the stash, then invoke the `git-rebase` skill there. After editing, return to the original branch and run `git town sync` so downstream branches pick up the change.
+If the target commit lives on a different branch in the stack, stash the staged hunks (`git stash push --staged`), check out that branch, restore the stash, then invoke the `git-edit-commit` skill there. After editing, return to the original branch and run `git town sync` so downstream branches pick up the change.
 
 ## Step 3: Split Within a Single File
 
