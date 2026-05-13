@@ -18,14 +18,15 @@ Walk through these daily notes oldest-first, **one day per message**. For each d
 - For each daily-note subsection that has `- [ ]` items, write the subsection name as an `###` header (e.g., `### Personal`, `### Work`).
 - List the `- [ ]` items under each `###` header as a numbered list. **Numbering is continuous across all `###` subsections** for the day — do not restart at 1 in each subsection.
 - Strip Obsidian wikilink syntax when presenting tasks: `[[Target|Display]]` → `Display`, `[[Target]]` → `Target`. Leave standard markdown links (`[text](url)`) intact.
-- End the message with this single legend line: ``Legend: `x` complete, `>` forward, `<` schedule, `-` cancel, `/` in-progress.``
+- End the message with this single legend line: ``Legend: `x` complete, `>` forward, `<` schedule, `-` cancel, `d` delete, `/` in-progress.``
 
 Marker semantics:
 
 - `x`: Mark complete.
 - `>`: Forwarded. The task should have been done that day but wasn't. Task-forwarder will bring it into today's note and leave it on the prior note as a historical record.
 - `<`: Scheduled. Rolling task. Task-forwarder will remove it from the prior note and bring it into today's note. Continues to roll forward each day until completed.
-- `-`: Cancel.
+- `-`: Cancel. Rewrites `- [ ]` to `- [-]`, keeping a record.
+- `d`: Delete. Removes the task line entirely from the file.
 - `/`: In progress. Stays on the prior note; does not block task-forwarder.
 
 Wait for the user's response — they will give a marker per numbered item (e.g., `1. x, 2. >, 3. -`). Apply each choice by rewriting the marker in the source file. Then move on to the next day.
