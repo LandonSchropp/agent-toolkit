@@ -72,10 +72,7 @@ If today's note contains a `- [ ] Daily improvement` task, ask: "What's your foc
 
 ## Step 9: Standup
 
-If the `oyster-team-ai:standup` skill is installed, invoke it. Pass:
-
-- **Today:** all tasks in today's Work section as today's todos.
-- **Yesterday:** completed (`[x]`) tasks from the previous workday's note as what was done yesterday.
+If the `oyster-team-ai:standup` skill is installed, invoke it. Before doing so, read the previous workday's note and note the completed (`[x]`) Work tasks — these inform yesterday's section. Today's Work tasks inform the today section.
 
 ## Step 9: Standup
 
