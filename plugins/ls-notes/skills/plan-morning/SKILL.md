@@ -69,3 +69,14 @@ For each task the user adds, search Linear for matching issues in the user's tea
 ## Step 8: Daily Improvement Focus
 
 If today's note contains a `- [ ] Daily improvement` task, ask: "What's your focus for daily improvement today?" Rewrite that task line as `- [ ] Daily improvement: <their answer>`. If the task is absent or already filled in, skip this step.
+
+## Step 9: Standup
+
+If the `oyster-team-ai:standup` skill is installed, invoke it. Pass:
+
+- **Today:** all tasks in today's Work section as today's todos.
+- **Yesterday:** completed (`[x]`) tasks from the previous workday's note as what was done yesterday.
+
+## Step 9: Standup
+
+If the `oyster-team-ai:standup` skill is installed, invoke it. Treat all tasks in today's Work section as today's todos.
