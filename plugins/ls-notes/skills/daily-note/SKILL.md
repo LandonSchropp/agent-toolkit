@@ -8,7 +8,7 @@ description: Use when the user mentions a daily note, asks to add a task to toda
 
 ## Location
 
-`Daily Notes/YYYY-MM/YYYY-MM-DD - Daily Note.md` (e.g., `Daily Notes/2026-05/2026-05-09 - Daily Note.md`).
+`Daily Notes/YYYY/YYYY-MM/YYYY-MM-DD - Daily Note.md` (e.g., `Daily Notes/2026/2026-05/2026-05-09 - Daily Note.md`).
 
 For reading or appending to today's note, use `obsidian daily:read`, `obsidian daily:append`, and `obsidian daily:prepend` — these resolve today's date automatically.
 
