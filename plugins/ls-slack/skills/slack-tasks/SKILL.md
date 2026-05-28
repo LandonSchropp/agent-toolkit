@@ -36,6 +36,8 @@ Format each candidate as a markdown task line. Pick the suggested marker based o
 
 Each task gets one link embedded naturally in the prose — link to the **Slack conversation** where the item came from, not directly to the content (PR, doc, Loom, etc.). The conversation provides context; the content is one click away from there. Exception: if the message itself IS the content (e.g. a GitHub PR comment thread), link directly to it. Avoid trailing `-- [thread]` or `-- [message]` links — embed the link in the task description itself.
 
+Keep descriptions short — one tight phrase per task. Do not append explanations, context, or notes after the task (e.g. no `— additional detail here`).
+
 Example formatting:
 
 ```
@@ -77,3 +79,4 @@ Append the approved tasks (with their final markers) to the Work subsection of T
 | "I only need to check messages the user sent"    | Replies to others often carry the real commitment. Read those threads.        |
 | "A merged PR is done"                            | Check for a review by the user too — they may have only approved, not merged. |
 | "I'll add a trailing `(thread)` link"            | Embed it in the prose. Trailing links are noise.                              |
+| "The task needs context to be useful"            | The Slack link is the context. Keep the description to one tight phrase.      |
