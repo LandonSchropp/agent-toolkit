@@ -8,28 +8,48 @@ Interactive walkthrough of the morning sections of today's daily note. Resolves 
 
 **REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
 
+## Task Review Format
+
+Use this format whenever presenting tasks for user review:
+
+- Number each task sequentially in a flat numbered list, showing its current status marker inline: `1. [<] Task description`
+- Strip wikilinks: `[[Target|Display]]` → `Display`, `[[Target]]` → `Target`. Leave standard markdown links intact.
+- End with this legend line: ``Legend: `x` complete, `>` forward, `<` schedule, `-` cancel, `d` delete, `/` partial.``
+
+Markers:
+
+- `>` (Forward): A task that was intended to be completed but was not. It should carry over to the next day.
+- `<` (Schedule): A rolling task that keeps moving forward each day until it's completed.
+- `/` (Partial): A task that was started but not finished. It should be carried to the next day.
+- `x` (Complete): A task that was completed.
+- `-` (Cancel): A task that was cancelled and will not be completed.
+- `d` (Delete): A task that should be completely removed.
+
+Example:
+
+```
+1. [ ] Update the README.md
+2. [<] Read Chapter 3 of The Pragmatic Programmer
+3. [ ] Post a [status update](https://example.com) for my current project
+
+Legend: `x` complete, `>` forward, `<` schedule, `-` cancel, `d` delete, `/` partial.
+```
+
+Wait for the user's response (e.g., `1. x, 3. -`), then apply markers per the instructions in the current step.
+
 ## Step 1: Resolve Incomplete Tasks From Recent Daily Notes
 
 Find recent daily notes before today that still contain `- [ ]` items (filenames in `Daily Notes/YYYY-MM/` sort by `YYYY-MM-DD` prefix). On a Monday this is typically the prior Friday; after a longer gap it may span several days.
 
 Walk through these daily notes oldest-first, **one day per message**. For each day:
 
-- Open the message with the full weekday and date as an `##` header: `## Thursday, May 7 2026`.
-- For each daily-note subsection that has `- [ ]` items, write the subsection name as an `###` header (e.g., `### Personal`, `### Work`).
-- List the `- [ ]` items under each `###` header as a numbered list. **Numbering is continuous across all `###` subsections** for the day — do not restart at 1 in each subsection.
-- Strip Obsidian wikilink syntax when presenting tasks: `[[Target|Display]]` → `Display`, `[[Target]]` → `Target`. Leave standard markdown links (`[text](url)`) intact.
-- End the message with this single legend line: ``Legend: `x` complete, `>` forward, `<` schedule, `-` cancel, `d` delete, `/` partial.``
+- Open with `## [Weekday, Day Month Year]` as the header (e.g., `## Thursday, May 7 2026`).
+- Write each subsection that has `- [ ]` items as a `###` header (e.g., `### Personal`, `### Work`). Numbering is continuous across subsections — do not restart at 1.
+- Present items using the **Task Review Format** above.
 
-Marker semantics:
+Just set the marker in the file. The forward-tasks script in Step 2 handles `>`, `<`, and `/` automatically.
 
-- `x`: Mark complete.
-- `>`: Forwarded. The task should have been done that day but wasn't. The forward-tasks script will bring it into today's note as a fresh to-do and leave the `>` record on the prior note.
-- `<`: Scheduled. Rolling task. The script will remove it from the prior note and bring it into today's note keeping its `<` marker, so it keeps rolling each day until completed.
-- `-`: Cancel. Rewrites `- [ ]` to `- [-]`, keeping a record.
-- `d`: Delete. Removes the task line entirely from the file.
-- `/`: Partially completed. The script will bring it into today's note as a fresh to-do, leaving the `/` record on the prior note.
-
-Wait for the user's response — they will give a marker per numbered item (e.g., `1. x, 2. >, 3. -`). Apply each choice by rewriting the marker in the source file. Then move on to the next day.
+Then move on to the next day.
 
 ## Step 2: Forward Tasks
 
