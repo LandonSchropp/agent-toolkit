@@ -1,12 +1,4 @@
----
-description: Use when building or updating the Work tasks section of today's daily note from Slack activity.
----
-
-# Slack Tasks
-
-Build a task list from the user's Slack activity and append it to the Work section of today's daily note.
-
-**REQUIRED:** Invoke the `ls-notes:daily-note` skill first. It ensures today's note exists and documents its section structure.
+# Fetching Slack Tasks
 
 ## Step 1: Gather Messages
 
@@ -50,26 +42,11 @@ Example formatting:
 
 For candidates that involve writing, shipping, or reviewing code (not PR reviews already handled as consolidated items), search Linear for matching issues in the user's teams (use `list_issues` with team and project filters). Use the task description as keywords to find relevant open issues.
 
-For each match found, ask the user for confirmation in the Step 5 batch — don't interrupt for each one individually:
+For each match found, note it alongside the candidate — it will be surfaced to the user during review.
 
-- **Task has a Slack link and the Slack thread does not reference the Linear issue**: ask whether the Slack conversation should be linked to the Linear issue.
+- **Task has a Slack link and the Slack thread does not reference the Linear issue**: flag it so the user can be asked whether the Slack conversation should be linked to the Linear issue.
 
 If no match is found for a coding task, leave it as-is.
-
-## Step 5: Confirm Each Task
-
-Present the formatted candidates to the user in a single message:
-
-- Use `## Slack Tasks` as the header.
-- Number each candidate, preserving its suggested marker in the line (e.g., ``1. `[x]` Merged the release pipeline PR``).
-- If any tasks from Step 4 need a yes/no on linking to a Linear issue, include those questions after the numbered list, clearly labeled.
-- End with this legend: ``Legend: `y` add as shown, `n` skip, ` ` open, `/` in-progress, `x` complete.``
-
-Wait for the user's response. They will give one answer per number (e.g., `1. y, 2. n, 3. x`). `y` adds the task with the suggested marker; `n` skips it; any other marker character overrides the suggested marker and adds the task with that marker.
-
-## Step 6: Write Approved Tasks to Daily Note
-
-Append the approved tasks (with their final markers) to the Work subsection of Tasks in today's daily note. Do not remove or reorder existing tasks.
 
 ## Rationalizations
 

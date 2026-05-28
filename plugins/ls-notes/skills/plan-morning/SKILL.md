@@ -79,7 +79,7 @@ Present all Work tasks currently in today's note using the **Task Review Format*
 
 ## Step 8: Work Tasks From Slack
 
-**REQUIRED:** Invoke the `ls-slack:slack-tasks` skill to fetch candidates. Then present them using the **Task Review Format**, adding `n` as an option to skip a task entirely. If any candidates were flagged with a potential Linear issue link, include those as yes/no questions after the numbered list. Write approved tasks to the Work subsection.
+**REQUIRED:** Read [Slack Tasks](references/slack-tasks.md) and follow its steps to fetch candidates. Then present them using the **Task Review Format**, adding `n` as an option to skip a task entirely. If any candidates were flagged with a potential Linear issue link, include those as yes/no questions after the numbered list. Write approved tasks to the Work subsection.
 
 ## Step 9: Additional Work Tasks
 
