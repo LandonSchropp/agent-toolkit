@@ -64,6 +64,57 @@ RSpec.describe TaskForwarder do
       end
     end
 
+    context "when a task is completed in a later previous note" do
+      let(:previous) do
+        [
+          daily_note("2026-05-24 - Daily Note.md", personal: ["- [/] Finish the report"]),
+          daily_note("2026-05-26 - Daily Note.md", personal: ["- [x] Finish the report"])
+        ]
+      end
+
+      it "does not forward the task" do
+        expect(today_result.content).not_to include("Finish the report")
+      end
+    end
+
+    context "when the same task appears as forwardable in multiple previous notes" do
+      let(:previous) do
+        [
+          daily_note("2026-05-24 - Daily Note.md", personal: ["- [>] Write the docs"]),
+          daily_note("2026-05-26 - Daily Note.md", personal: ["- [/] Write the docs"])
+        ]
+      end
+
+      it "forwards the task only once" do
+        expect(today_result.content.scan("Write the docs").length).to eq(1)
+      end
+
+      it "uses the latest marker when forwarding" do
+        expect(todays_personal).to include("- [ ] Write the docs")
+      end
+    end
+
+    context "when a scheduled task appears in multiple previous notes" do
+      let(:previous) do
+        [
+          daily_note("2026-05-24 - Daily Note.md", personal: ["- [<] Roll me forward"]),
+          daily_note("2026-05-26 - Daily Note.md", personal: ["- [<] Roll me forward"])
+        ]
+      end
+
+      it "removes the scheduled task from all source notes" do
+        results = forwarder.forward
+        previous.each do |note|
+          result = results.find { _1.path == note.path }
+          expect(result&.content).not_to include("Roll me forward")
+        end
+      end
+
+      it "forwards the task only once" do
+        expect(today_result.content.scan("Roll me forward").length).to eq(1)
+      end
+    end
+
     context "when a previous note has an incomplete task" do
       let(:previous) do
         [

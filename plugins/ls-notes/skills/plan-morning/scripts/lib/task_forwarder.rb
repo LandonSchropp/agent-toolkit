@@ -48,7 +48,12 @@ class TaskForwarder
   end
 
   def forwarded_tasks
-    @previous_daily_notes.flat_map(&:tasks).select(&:forwardable?).map { carry_forward(_1) }
+    @previous_daily_notes
+      .flat_map(&:tasks)
+      .reduce({}) { |registry, task| registry.merge([task.subheader, task.first_line] => task) }
+      .values
+      .select(&:forwardable?)
+      .map { carry_forward(_1) }
   end
 
   def sources_without_scheduled_tasks
