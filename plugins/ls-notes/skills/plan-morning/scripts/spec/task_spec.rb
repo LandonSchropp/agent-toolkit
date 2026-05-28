@@ -113,6 +113,40 @@ RSpec.describe Task do
 
       it { is_expected.to be_nil }
     end
+
+    context "when the task has indented body lines" do
+      subject(:task) { Task.parse("- [/] Main task\n  - [<] Sub-task", "Personal") }
+
+      it "includes the body in the text" do
+        expect(task.text).to eq("Main task\n  - [<] Sub-task")
+      end
+    end
+
+    context "when the task body contains blank lines between items" do
+      subject(:task) { Task.parse("- [/] Main task\n  - [<] First\n\n  - [<] Second", "Personal") }
+
+      it "includes all body lines in the text" do
+        expect(task.text).to eq("Main task\n  - [<] First\n\n  - [<] Second")
+      end
+    end
+  end
+
+  describe "#first_line" do
+    context "when the task has a single line" do
+      subject(:task) { Task.new(type: ">", text: "Write the docs", subheader: "Personal") }
+
+      it "returns the text" do
+        expect(task.first_line).to eq("Write the docs")
+      end
+    end
+
+    context "when the task has multiple lines" do
+      subject(:task) { Task.new(type: ">", text: "Write the docs\n  - Sub item", subheader: "Personal") }
+
+      it "returns only the first line" do
+        expect(task.first_line).to eq("Write the docs")
+      end
+    end
   end
 
   describe "#forwarded?" do
@@ -258,6 +292,10 @@ RSpec.describe Task do
       it { is_expected.to be_matches(Task.new(type: "x", text: "Write the docs", subheader: "Personal")) }
     end
 
+    context "when the texts differ only in body lines" do
+      it { is_expected.to be_matches(Task.new(type: ">", text: "Write the docs\n  - different body", subheader: "Personal")) }
+    end
+
     context "when the text differs" do
       it { is_expected.not_to be_matches(Task.new(type: ">", text: "Something else", subheader: "Personal")) }
     end
@@ -276,10 +314,20 @@ RSpec.describe Task do
   end
 
   describe "#to_markdown" do
-    subject(:task) { Task.new(type: ">", text: "Write the docs", subheader: "Personal") }
+    context "when the task has a single line" do
+      subject(:task) { Task.new(type: ">", text: "Write the docs", subheader: "Personal") }
 
-    it "renders the task as a list item" do
-      expect(task.to_markdown).to eq("- [>] Write the docs")
+      it "renders the task as a list item" do
+        expect(task.to_markdown).to eq("- [>] Write the docs")
+      end
+    end
+
+    context "when the task has body lines" do
+      subject(:task) { Task.new(type: "/", text: "Main task\n  - [<] Sub-task", subheader: "Personal") }
+
+      it "renders the full block" do
+        expect(task.to_markdown).to eq("- [/] Main task\n  - [<] Sub-task")
+      end
     end
   end
 end

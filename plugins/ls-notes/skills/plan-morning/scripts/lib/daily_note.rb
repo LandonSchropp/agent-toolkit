@@ -18,6 +18,11 @@ DailyNote = Data.define(:path, :content) do
   # The header level of the subheaders (Personal, Work) within the Tasks section.
   SUBHEADER_LEVEL = 3
 
+  # Matches a complete task block: a top-level task line followed by any body
+  # content (indented lines and blank separators between them) up to but not
+  # including the next top-level task line.
+  TASK_BLOCK_REGEX = /^(?:[-+*]|\d+\.) \[.\] [^\n]+(?:\n(?!(?:[-+*]|\d+\.) \[)[^\n]*)*/
+
   # @return [Date, nil] the date parsed from the filename, or nil when the file
   #   is not a daily note
   def date
@@ -33,7 +38,7 @@ DailyNote = Data.define(:path, :content) do
 
     Markdown.header_names(body).flat_map do |subheader|
       Markdown.section(body, subheader, SUBHEADER_LEVEL)
-        .lines(chomp: true)
+        .scan(TASK_BLOCK_REGEX)
         .filter_map { Task.parse(_1, subheader) }
     end
   end
@@ -63,8 +68,9 @@ DailyNote = Data.define(:path, :content) do
     with(content: updated_content)
   end
 
-  # Removes the given tasks from the Tasks section, matching on their rendered
-  # Markdown so a task's subheader does not affect the match.
+  # Removes the given tasks from the Tasks section, matching each task's full
+  # rendered block (including any indented body lines) so that sub-task content
+  # is removed together with its parent.
   #
   # @param tasks [Array<Task>] the tasks to remove
   # @return [DailyNote] a new note with the tasks removed
@@ -72,8 +78,10 @@ DailyNote = Data.define(:path, :content) do
     section = tasks_section
     return self if tasks.empty? || section.nil?
 
-    removable = tasks.map(&:to_markdown)
-    remaining = section.lines.reject { removable.include?(_1.chomp) }.join
+    remaining = tasks.reduce(section) do |current, task|
+      current.sub(/#{Regexp.escape(task.to_markdown)}\n?/, "")
+    end
+
     with(content: Markdown.replace_section(content, TASKS_SECTION, TASKS_LEVEL, remaining))
   end
 

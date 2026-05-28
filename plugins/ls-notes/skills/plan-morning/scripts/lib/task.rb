@@ -10,16 +10,21 @@ Task = Data.define(:type, :text, :subheader) do
   # space after the checkbox, so a bare "- [ ]" is not treated as a task.
   TASK_REGEX = /\A[ \t]*(?:[-+*]|\d+\.) \[(.)\] (.*)\z/
 
-  # Parses a line into a {Task} belonging to the given subheader.
+  # Parses a task block into a {Task} belonging to the given subheader. The
+  # text is a string whose first line is the task line; any following indented
+  # lines (including blank separators between them) are the body and are stored
+  # as part of {#text}.
   #
-  # @param line [String] the line to parse
+  # @param text [String] the full task block, including any indented body lines
   # @param subheader [String] the Tasks subheader the task falls under
-  # @return [Task, nil] the parsed task, or nil when the line is not a task
-  def self.parse(line, subheader)
-    match = TASK_REGEX.match(line)
+  # @return [Task, nil] the parsed task, or nil when the first line is not a task
+  def self.parse(text, subheader)
+    first_line, *body_lines = text.lines(chomp: true)
+    match = TASK_REGEX.match(first_line)
     return nil unless match
 
-    new(type: match[1], text: match[2], subheader:)
+    text = [match[2], *body_lines].join("\n").rstrip
+    new(type: match[1], text:, subheader:)
   end
 
   # @return [Boolean] whether the task is marked to be forwarded (">")
@@ -57,10 +62,19 @@ Task = Data.define(:type, :text, :subheader) do
     forwarded? || scheduled? || partial?
   end
 
+  # The first line of {#text}, used to identify the task across days regardless
+  # of how body lines may have changed.
+  #
+  # @return [String]
+  def first_line
+    text.lines.first&.chomp || text
+  end
+
   # @param other [Task] the task to compare against
   # @return [Boolean] whether both refer to the same task, ignoring their markers
+  #   and any differences in body lines
   def matches?(other)
-    text == other.text && subheader == other.subheader
+    first_line == other.first_line && subheader == other.subheader
   end
 
   # @return [String] the task rendered as a Markdown list item

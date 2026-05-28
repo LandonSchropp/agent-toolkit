@@ -56,6 +56,58 @@ RSpec.describe DailyNote do
     it "ignores tasks outside the Tasks section" do
       expect(note.tasks.map(&:text)).not_to include("Not a task to forward")
     end
+
+    context "when a task has indented body lines" do
+      let(:content) do
+        <<~MARKDOWN
+          ## :LiCheckCircle2: Tasks
+
+          ### Personal
+
+          - [/] Main task
+            - [<] Sub-task
+          - [ ] Other task
+
+          ### Work
+        MARKDOWN
+      end
+
+      it "includes the body lines in the task text" do
+        main = note.tasks.find { _1.first_line == "Main task" }
+        expect(main.text).to eq("Main task\n  - [<] Sub-task")
+      end
+
+      it "does not create a separate task for the body line" do
+        expect(note.tasks.length).to eq(2)
+      end
+    end
+
+    context "when a task body has blank lines between items" do
+      let(:content) do
+        <<~MARKDOWN
+          ## :LiCheckCircle2: Tasks
+
+          ### Personal
+
+          - [/] Main task
+            - [<] First
+
+            - [<] Second
+          - [ ] Other task
+
+          ### Work
+        MARKDOWN
+      end
+
+      it "includes all body lines including the blank line" do
+        main = note.tasks.find { _1.first_line == "Main task" }
+        expect(main.text).to eq("Main task\n  - [<] First\n\n  - [<] Second")
+      end
+
+      it "does not create a separate task for the body lines" do
+        expect(note.tasks.length).to eq(2)
+      end
+    end
   end
 
   describe "#incomplete?" do
@@ -150,6 +202,37 @@ RSpec.describe DailyNote do
 
     it "keeps the other tasks" do
       expect(updated.content).to include("- [ ] Do me")
+    end
+
+    context "when the task has indented body lines" do
+      let(:content) do
+        <<~MARKDOWN
+          ---
+          date: 2026-05-22
+          ---
+
+          ## :LiCheckCircle2: Tasks
+
+          ### Personal
+
+          - [<] Scheduled task
+            - [<] Sub-item
+          - [ ] Keep me
+
+          ### Work
+        MARKDOWN
+      end
+
+      let(:forward) { note.tasks.find { _1.first_line == "Scheduled task" } }
+
+      it "removes the task and its body" do
+        expect(updated.content).not_to include("Scheduled task")
+        expect(updated.content).not_to include("Sub-item")
+      end
+
+      it "keeps other tasks" do
+        expect(updated.content).to include("- [ ] Keep me")
+      end
     end
   end
 end
