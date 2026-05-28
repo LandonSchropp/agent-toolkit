@@ -71,26 +71,26 @@ If the Better Day slots are empty, ask: "What three things would make today grea
 
 ## Step 6: Personal Tasks
 
-Ask: "What personal tasks do you have today?" Append each item the user names as a `- [ ]` line under any existing Personal tasks. If they have nothing to add, leave the section as-is.
+Present all Personal tasks from today's note using the **Task Review Format**, and ask if there's anything else to add in the same message. Apply any marker changes and append new items as `- [ ]` lines.
 
-## Step 7: Work Tasks From Slack
+## Step 7: Forwarded Work Tasks
 
-**REQUIRED:** Invoke the `ls-slack:slack-tasks` skill to populate the Work subsection.
+Present all Work tasks currently in today's note using the **Task Review Format**.
 
-## Step 8: Additional Work Tasks
+## Step 8: Work Tasks From Slack
 
-After `slack-tasks` finishes, ask: "Anything else you're planning to work on today outside of Slack?" Append each item the user names as a `- [ ]` line under the existing Work tasks. If they have nothing to add, leave the section as-is.
+**REQUIRED:** Invoke the `ls-slack:slack-tasks` skill to fetch candidates. Then present them using the **Task Review Format**, adding `n` as an option to skip a task entirely. If any candidates were flagged with a potential Linear issue link, include those as yes/no questions after the numbered list. Write approved tasks to the Work subsection.
 
-For each task the user adds, search Linear for matching issues in the user's teams (use `list_issues` with team and project filters). If a matching issue is found, link the task to that Linear issue URL directly (since this task has no Slack conversation). If multiple candidates exist, ask the user which one matches.
+## Step 9: Additional Work Tasks
 
-## Step 9: Daily Improvement Focus
+Ask: "Anything else to add?" Append new items as `- [ ]` lines.
+
+For each new task added, search Linear for matching issues in the user's teams. If a match is found, link to the Linear issue URL. If multiple candidates exist, ask which one matches.
+
+## Step 10: Daily Improvement Focus
 
 If today's note contains a `- [ ] Daily improvement` task, ask: "What's your focus for daily improvement today?" Rewrite that task line as `- [ ] Daily improvement: <their answer>`. If the task is absent or already filled in, skip this step.
 
-## Step 10: Standup
+## Step 11: Standup
 
-If the `oyster-team-ai:standup` skill is installed, invoke it. Before doing so, read the previous workday's note and note the completed (`[x]`) Work tasks — these inform yesterday's section. Today's Work tasks inform the today section.
-
-## Step 10: Standup
-
-If the `oyster-team-ai:standup` skill is installed, invoke it. Treat all tasks in today's Work section as today's todos.
+If the `oyster-team-ai:standup` skill is installed, read the previous workday's daily note and collect its completed (`[x]`) Work tasks — these become the basis for the standup's "yesterday" section. Ask: "Do you want to include yesterday in your standup?" If the user says no, pass that to the standup skill so it can skip the Yesterday section. Then invoke the skill, treating today's Work tasks as today's todos.
