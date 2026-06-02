@@ -93,4 +93,6 @@ If today's note contains a `- [ ] Daily improvement` task, ask: "What's your foc
 
 ## Step 11: Standup
 
-If the `oyster-team-ai:standup` skill is installed, read the previous workday's daily note and collect its completed (`[x]`) Work tasks — these become the basis for the standup's "yesterday" section. Ask: "Do you want to include yesterday in your standup?" If the user says no, pass that to the standup skill so it can skip the Yesterday section. Then invoke the skill, treating today's Work tasks as today's todos.
+If the `oyster-team-ai:standup` skill is installed, read the previous workday's daily note and collect its completed (`[x]`) Work tasks — these become the basis for the standup's "yesterday" section. Ask: "Do you want to include yesterday in your standup?" If the user says no, pass that to the standup skill so it can skip the Yesterday section.
+
+When invoking the standup skill, filter today's Work tasks down to primary focus areas only. Skip trivial tasks: PR reviews, sending messages, responding to threads, quick admin actions, or anything short-lived that doesn't represent meaningful progress to share with the team. Pass only the filtered list as today's todos.
