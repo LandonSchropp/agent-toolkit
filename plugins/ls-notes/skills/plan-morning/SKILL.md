@@ -39,13 +39,13 @@ Wait for the user's response (e.g., `1. x, 3. -`), then apply markers per the in
 
 ## Step 1: Resolve Incomplete Tasks From Recent Daily Notes
 
-Find recent daily notes before today that still contain `- [ ]` items (filenames in `Daily Notes/YYYY-MM/` sort by `YYYY-MM-DD` prefix). On a Monday this is typically the prior Friday; after a longer gap it may span several days.
+Find recent daily notes before today that still contain `- [ ]` or `- [/]` items (filenames in `Daily Notes/YYYY-MM/` sort by `YYYY-MM-DD` prefix). On a Monday this is typically the prior Friday; after a longer gap it may span several days.
 
 Walk through these daily notes oldest-first, **one day per message**. For each day:
 
 - Open with `## [Weekday, Day Month Year]` as the header (e.g., `## Thursday, May 7 2026`).
-- Write each subsection that has `- [ ]` items as a `###` header (e.g., `### Personal`, `### Work`). Numbering is continuous across subsections — do not restart at 1.
-- Present items using the **Task Review Format** above.
+- Write each subsection that has `- [ ]` or `- [/]` items as a `###` header (e.g., `### Personal`, `### Work`). Numbering is continuous across subsections — do not restart at 1.
+- Present items using the **Task Review Format** above. Include `[/]` (in-progress) tasks — the user may have finished them and should mark them `x` before the forwarder runs.
 
 Just set the marker in the file. The forward-tasks script in Step 2 handles `>`, `<`, and `/` automatically.
 
