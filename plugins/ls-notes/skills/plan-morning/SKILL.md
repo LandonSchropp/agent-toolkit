@@ -14,16 +14,22 @@ Use this format whenever presenting tasks for user review:
 
 - Number each task sequentially in a flat numbered list, showing its current status marker inline: `1. [<] Task description`
 - Strip wikilinks: `[[Target|Display]]` → `Display`, `[[Target]]` → `Target`. Leave standard markdown links intact.
-- End with this legend line: ``Legend: `x` complete, `>` forward, `<` schedule, `-` cancel, `d` delete, `/` partial.``
+- End with this legend line: ``Legend: `x` complete, `i`/`t` incomplete, `>` forward, `<` schedule, `-` cancel, `/` partial, `d` delete``
 
 Markers:
 
+- `x` (Complete): A task that was completed.
+- `i`/`t` (Incomplete): A task that should be reset to unchecked.
 - `>` (Forward): A task that was intended to be completed but was not. It should carry over to the next day.
 - `<` (Schedule): A rolling task that keeps moving forward each day until it's completed.
-- `/` (Partial): A task that was started but not finished. It should be carried to the next day.
-- `x` (Complete): A task that was completed.
 - `-` (Cancel): A task that was cancelled and will not be completed.
+- `/` (Partial): A task that was started but not finished. It should be carried to the next day.
 - `d` (Delete): A task that should be completely removed.
+
+**CRITICAL — `i`/`t` and `d` are structural operations, not marker characters.** Do NOT write `- [d]`, `- [i]`, or `- [t]` in the file. Instead:
+
+- `i` or `t`: Replace the entire marker with `- [ ]` (resets the task to unchecked).
+- `d`: Remove the line entirely from the file.
 
 Example:
 
