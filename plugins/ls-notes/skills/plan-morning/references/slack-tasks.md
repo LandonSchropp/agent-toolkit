@@ -30,12 +30,14 @@ Each task gets one link embedded naturally in the prose — link to the **Slack 
 
 Keep descriptions short — one tight phrase per task. Do not append explanations, context, or notes after the task (e.g. no `— additional detail here`).
 
+**Always use imperative (present) tense** regardless of completion status. A completed task reads the same as an open one — the checkbox conveys state, not the verb. Write "Merge the PR", not "Merged the PR".
+
 Example formatting:
 
 ```
 - [ ] Review Alex's [engineering assessment](slack://DM-thread)
 - [/] Follow up on Jordan's [4 remaining stacked PRs](slack://thread) for the release pipeline
-- [x] Merged the [release pipeline PR](slack://thread)
+- [x] Merge the [release pipeline PR](slack://thread)
 ```
 
 ## Step 4: Match Linear Issues for Coding Tasks
