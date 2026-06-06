@@ -16,7 +16,7 @@ agent: Plan
 
 4. Create a plan file using `scripts/generate-plan-template.ts`. This will generate a pre-populated plan for you to fill out. Read the resulting file.
 
-5. Identify relevant skills for executing the plan. Review the available skills and determine which apply to the work (e.g., `git-commit`, `git-edit-commit`, `testing-typescript`). Replace `example` in the Skills section with each applicable skill on its own list item.
+5. The Skills section comes pre-filled with the always-required skills. Review the available skills and add any additional ones that apply to the work (e.g., `testing-typescript`, `rspec`), each on its own list item.
 
 6. Fill out each section of the plan one at a time. Follow the instructions in the template for each section.
    - CRITICAL: DO NOT edit a Claude plan file in `.claude/plans`. Only edit the plan template file that was generated.
