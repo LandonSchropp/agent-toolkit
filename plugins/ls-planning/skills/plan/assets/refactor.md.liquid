@@ -25,21 +25,15 @@ Examples of what could be included:
 - What's explicitly NOT changing (only if it clarifies scope)
 -->
 
-## Plan
+## Commits
 
 <!--
-Break down the refactoring into logical phases. Phases are partitions of work that do not require user input or review while running.
-
-For simple refactoring, a single phase will suffice. For each phase, break down the refactoring into specific steps with enough detail for independent implementation.
+Break the refactor into atomic commits using the `ls-git:git-atomic-commit` principles: one logical change per commit, ordered so the tree stays green at every step. Each list item is one commit, in order: bold the commit title, then a colon and what it contains. Delete the placeholder item.
 -->
 
-### Phase 1: [Title]
+Each item is one atomic commit, in order.
 
-<!-- ... -->
-
-### Phase 2: [Title]
-
-<!-- ... -->
+1. **[Commit title]:** [Contents].
 
 ## Skills
 
@@ -58,19 +52,16 @@ To ensure safe refactoring:
 1. **Preserve existing tests:** Run tests related to the refactored code.
 2. **Maintain test coverage:** Keep tests passing throughout the refactoring process
 3. **Small incremental changes:** Make small, focused changes that can be easily reviewed and reverted
-4. **Validate after each phase:** Run tests for affected units and verify functionality after completing each phase
+4. **Validate after each commit:** Run tests for affected units and verify functionality after completing each commit
 5. **Document breaking changes:** If any API changes are needed, document them clearly
 
 ## Process
 
 <!-- Copy this Process section exactly as written, without modification: -->
 
-For each phase above (in order) do the following:
+Work through the commits in order. For each one:
 
-1. Run existing tests to ensure they pass before making changes (establish baseline).
-2. Make incremental refactoring changes while keeping tests green.
-3. Add new tests if the refactoring introduces new functionality or improves testability.
-4. Validate that the refactored code maintains the same external behavior.
-5. If refactoring becomes blocked or tests start failing, STOP and seek guidance from the user.
-6. Once the phase is complete, STOP and wait for user feedback.
-7. Once the user has finished giving feedback, append "(✅ Complete)" to the phase's header.
+1. Refactoring preserves behavior, so keep the existing tests green throughout: run them before and after the change. Add tests only if the refactor improves testability or exposes untested behavior.
+2. Present the unstaged diff for review, then commit on approval using the `ls-git:git-commit` skill.
+3. If refactoring becomes blocked or tests start failing, STOP and seek guidance from the user.
+4. STOP and wait for user feedback before moving to the next commit.

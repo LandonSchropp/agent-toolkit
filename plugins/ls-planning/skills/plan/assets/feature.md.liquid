@@ -40,21 +40,15 @@ Examples of what could be included:
 - Database schema changes (tables, columns, indexes)
 -->
 
-## Plan
+## Commits
 
 <!--
-Break down the implementation into logical phases. Phases are partitions of work that do not require user input or review while running.
-
-For simple features, a single phase will suffice. For each phase, break down the requirements into specific steps with enough detail for independent implementation.
+Break the implementation into atomic commits using the `ls-git:git-atomic-commit` principles: one logical change per commit, refactors separated from behavior changes. Order the commits so the tree stays green at every step (pure refactors first, behavior on top). Each list item is one commit, in order: bold the commit title, then a colon and what it contains. Delete the placeholder item.
 -->
 
-### Phase 1: [Title]
+Each item is one atomic commit, in order.
 
-<!-- ... -->
-
-### Phase 2: [Title]
-
-<!-- ... -->
+1. **[Commit title]:** [Contents].
 
 ## Skills
 
@@ -68,11 +62,9 @@ Invoke the following skills:
 
 <!-- Copy this Process section exactly as written, without modification: -->
 
-For each phase above (in order) do the following using TDD (red, green, refactor):
+Work through the commits in order. For each one:
 
-1. Write tests for the functionality you're about to implement and run them. They should fail initially (red).
-2. Implement each task with appropriate error handling and validation to make tests pass (green).
-3. Refactor the code for clarity and maintainability while keeping tests green.
-4. If implementation becomes blocked, STOP and seek guidance from the user.
-5. Once the phase is complete, STOP and wait for user feedback.
-6. Once the user has finished giving feedback, append "(✅ Complete)" to the phase's header.
+1. For a behavior change, write tests first and watch them fail (red), implement the simplest code to pass (green), then refactor while keeping tests green. Pure refactor commits add no behavior, so just keep the existing tests green.
+2. Present the unstaged diff for review, then commit on approval using the `ls-git:git-commit` skill.
+3. If implementation becomes blocked, STOP and seek guidance from the user.
+4. STOP and wait for user feedback before moving to the next commit.

@@ -21,7 +21,8 @@ agent: Plan
 6. Fill out each section of the plan one at a time. Follow the instructions in the template for each section.
    - CRITICAL: DO NOT edit a Claude plan file in `.claude/plans`. Only edit the plan template file that was generated.
    - If this is a new branch with no existing work, remove the Context section entirely. If resuming work on an existing branch, summarize what has already been done by running `git log` and `git diff` to see commits and changes.
-   - For the Scope and Plan sections, research the plan and its implementation. Ask the user clarifying questions if needed to understand the task and what's required to implement it.
+   - Research the plan and its implementation before filling in the descriptive sections (e.g. Requirements, Reproduction Steps, Scope, Implementation). Ask the user clarifying questions if needed to understand the task and what's required to implement it.
+   - For the Commits section, invoke the `ls-git:git-atomic-commit` skill and apply its principles to decompose the implementation into ordered atomic commits, then fill in the list. Order the commits so the tree stays green at each step (pure refactors first, behavior changes on top). The plan file stores the commits as an ordered list, but when presenting the breakdown to the user in the conversation, render it as a table (columns: #, Commit, Contents).
    - Do not modify sections that contain the comment "Copy this section exactly as written, without modification", but do delete the comment.
 
 7. After the plan is complete, invoke the `neovim` skill and open the plan file in Neovim so the user can review it.
