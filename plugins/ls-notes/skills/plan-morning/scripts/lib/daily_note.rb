@@ -59,8 +59,10 @@ DailyNote = Data.define(:path, :content) do
     return self if tasks.empty?
 
     updated_content = tasks.group_by(&:subheader).reduce(content) do |current, (subheader, group)|
-      addition = group.map(&:to_markdown).join("\n")
       subsection = Markdown.section(current, subheader, SUBHEADER_LEVEL)
+      next current if subsection.nil?
+
+      addition = group.map(&:to_markdown).join("\n")
       appended = subsection.sub(/\n*\z/) { "\n#{addition}#{_1}" }
       Markdown.replace_section(current, subheader, SUBHEADER_LEVEL, appended)
     end

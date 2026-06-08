@@ -189,6 +189,18 @@ RSpec.describe DailyNote do
         expect(updated.content).to start_with("---\ndate: 2026-05-22\n---\n\n## Tasks")
       end
     end
+
+    context "when the task's subheader does not exist in the note" do
+      let(:tasks) { [Task.new(type: "<", text: "Weekly chore", subheader: "Weekly Digital")] }
+
+      it "does not raise an error" do
+        expect { updated }.not_to raise_error
+      end
+
+      it "leaves the note content unchanged" do
+        expect(updated.content).to eq(note.content)
+      end
+    end
   end
 
   describe "#remove_tasks" do
