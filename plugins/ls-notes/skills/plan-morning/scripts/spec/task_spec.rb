@@ -303,6 +303,26 @@ RSpec.describe Task do
     context "when the subheader differs" do
       it { is_expected.not_to be_matches(Task.new(type: ">", text: "Write the docs", subheader: "Work")) }
     end
+
+    context "when the texts differ only by trailing emoji" do
+      it { is_expected.to be_matches(Task.new(type: ">", text: "Write the docs 🎉", subheader: "Personal")) }
+    end
+
+    context "when the texts differ only by a leading emoji" do
+      it { is_expected.to be_matches(Task.new(type: ">", text: "✅ Write the docs", subheader: "Personal")) }
+    end
+
+    context "when the texts differ only by punctuation" do
+      it { is_expected.to be_matches(Task.new(type: ">", text: "Write the docs!", subheader: "Personal")) }
+    end
+
+    context "when the texts differ only by case" do
+      it { is_expected.to be_matches(Task.new(type: ">", text: "Write The Docs", subheader: "Personal")) }
+    end
+
+    context "when the texts differ only by whitespace" do
+      it { is_expected.to be_matches(Task.new(type: ">", text: "Write  the  docs", subheader: "Personal")) }
+    end
   end
 
   describe "#with" do

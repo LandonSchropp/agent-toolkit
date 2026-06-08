@@ -71,14 +71,20 @@ Task = Data.define(:type, :text, :subheader) do
   end
 
   # @param other [Task] the task to compare against
-  # @return [Boolean] whether both refer to the same task, ignoring their markers
-  #   and any differences in body lines
+  # @return [Boolean] whether both refer to the same task, ignoring their markers,
+  #   any differences in body lines, and any emoji decoration
   def matches?(other)
-    first_line == other.first_line && subheader == other.subheader
+    match_key == other.match_key && subheader == other.subheader
   end
 
   # @return [String] the task rendered as a Markdown list item
   def to_markdown
     "- [#{type}] #{text}"
+  end
+
+  protected
+
+  def match_key
+    first_line.gsub(/[^[:alnum:]]/, "").downcase
   end
 end
