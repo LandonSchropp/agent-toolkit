@@ -33,6 +33,7 @@ The daily note is filled in from `Templates/Periodic/Daily Note.md`. Each note h
 - **Morning:** Morning journaling, broken into:
   - **Gratitude:** Three things Landon is grateful for.
   - **Better Day:** Three things that would make today great.
+  - **Daily Affirmation:** A short, encouraging affirmation for the day, written as prose.
 - **Evening:** Evening reflection, broken into:
   - **Highlights of the Day:** Notable moments from the day.
 - **Journal:** Free-form journal prose for the day.

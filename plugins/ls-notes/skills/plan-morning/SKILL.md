@@ -1,10 +1,10 @@
 ---
-description: Use when the user says "plan my morning" or wants to fill out morning journaling (Gratitude, Better Day) and personal/work tasks for today's daily note.
+description: Use when the user says "plan my morning" or wants to fill out morning journaling (Gratitude, Better Day, Daily Affirmation) and personal/work tasks for today's daily note.
 ---
 
 # Plan Morning
 
-Interactive walkthrough of the morning sections of today's daily note. Resolves any leftover tasks on recent daily notes, forwards the recent notes' forwardable tasks into today's note, captures Gratitude (3 items), Better Day (3 items), Personal tasks, and Work tasks.
+Interactive walkthrough of the morning sections of today's daily note. Resolves any leftover tasks on recent daily notes, forwards the recent notes' forwardable tasks into today's note, captures Gratitude (3 items), Better Day (3 items), a Daily Affirmation, Personal tasks, and Work tasks.
 
 **REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
 
@@ -75,25 +75,29 @@ If the Gratitude slots are empty, ask: "What are three things you're grateful fo
 
 If the Better Day slots are empty, ask: "What three things would make today great?" Wait, then write the three items into the empty slots.
 
-## Step 6: Personal Tasks
+## Step 6: Daily Affirmation
+
+If the Daily Affirmation section is empty, ask: "What's your affirmation for today?" Wait, then write the response as prose under the Daily Affirmation header.
+
+## Step 7: Personal Tasks
 
 Present all Personal tasks from today's note using the **Task Review Format**, and ask if there's anything else to add in the same message. Apply any marker changes and append new items as `- [ ]` lines.
 
-## Step 7: Forwarded Work Tasks
+## Step 8: Forwarded Work Tasks
 
 Present all Work tasks currently in today's note using the **Task Review Format**.
 
-## Step 8: Additional Work Tasks
+## Step 9: Additional Work Tasks
 
 Ask: "Anything else to add?" Append new items as `- [ ]` lines.
 
 For each new task added, search Linear for matching issues in the user's teams. If a match is found, link to the Linear issue URL. If multiple candidates exist, ask which one matches.
 
-## Step 9: Daily Improvement Focus
+## Step 10: Daily Improvement Focus
 
 If today's note contains a `- [ ] Daily improvement` task, ask: "What's your focus for daily improvement today?" Rewrite that task line as `- [ ] Daily improvement: <their answer>`. If the task is absent or already filled in, skip this step.
 
-## Step 10: Standup
+## Step 11: Standup
 
 If the `oyster-team-ai:standup` skill is installed, read the previous workday's daily note and collect its completed (`[x]`) Work tasks — these become the basis for the standup's "yesterday" section. Ask: "Do you want to include yesterday in your standup?" If the user says no, pass that to the standup skill so it can skip the Yesterday section.
 
