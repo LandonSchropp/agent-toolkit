@@ -16,10 +16,10 @@ Open a file in the user's running Neovim instance:
 
 ## Edit and Wait
 
-Open a file in Neovim and block until the user saves it. Useful when the agent needs the user to review or modify a file before continuing. Exits non-zero if the file is not saved within 15 minutes.
+Open a file in Neovim and block until the user saves it. Useful when the agent needs the user to review or modify a file before continuing. Exits non-zero if the file is not saved within 10 minutes.
 
 ```bash
 ./skills/neovim/scripts/edit-and-wait.sh --file <path>
 ```
 
-Set the Bash tool timeout to 15 minutes (900000ms) when running this script.
+Set the Bash tool timeout to 10 minutes (600000ms) when running this script.

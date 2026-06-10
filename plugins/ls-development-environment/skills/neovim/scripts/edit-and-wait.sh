@@ -6,7 +6,7 @@ function print_help() {
   echo "Usage: edit-and-wait.sh [options]"
   echo
   echo "Opens a file in Neovim and waits for it to be saved, then exits. Exits"
-  echo "non-zero if the file is not saved within 15 minutes."
+  echo "non-zero if the file is not saved within 10 minutes."
   echo
   echo "Options:"
   echo
@@ -55,7 +55,7 @@ if [[ -z "$file" ]]; then
   exit 1
 fi
 
-max_wait=900
+max_wait=600
 initial_mtime="$(get_mtime "$file")"
 
 "$(dirname "$0")/edit.sh" --file "$file"
