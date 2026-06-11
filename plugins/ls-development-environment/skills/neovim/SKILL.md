@@ -18,6 +18,12 @@ Open a file in the user's running Neovim instance:
 
 Open a file in Neovim and block until the user saves it. Useful when the agent needs the user to review or modify a file before continuing. Exits non-zero if the file is not saved within 10 minutes.
 
+Before running the script, print a message to the user so they know what's happening. For example:
+
+> ✏️ Opening `<path>` in Neovim for review. Save the file when you're done.
+
+Then run the script:
+
 ```bash
 ./skills/neovim/scripts/edit-and-wait.sh --file <path>
 ```
