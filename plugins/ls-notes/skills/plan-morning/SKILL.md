@@ -100,7 +100,40 @@ If nothing is empty, skip this step. After the save, write the highlights into y
 
 ## Step 5: Today's Tasks
 
-Build a scratch file with today's Personal and Work tasks in the **Task List Format** (no day header — just the `###` subsections), open it in Neovim, and wait. Add one line to the file's instructions: fill in the daily improvement focus by extending its line to `- [ ] Daily improvement: <focus>`.
+Before building the scratch file, fetch the user's open non-draft pull requests from the `oysterhr` GitHub organization:
+
+```bash
+gh search prs --author=@me --owner=oysterhr --state=open --draft=false --json title,url,number,repository
+```
+
+For each PR, fetch its review and CI status:
+
+```bash
+gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeable
+```
+
+Assign each PR a status emoji using this priority order:
+
+- 💬: `reviewDecision` is `CHANGES_REQUESTED`
+- ❌: Any entry in `statusCheckRollup` has `state` of `FAILURE` or `ERROR`
+- ⏱️: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
+- ❓: `mergeable` is `CONFLICTING`, or any other merge-blocking condition not already covered (e.g., branch protection rules unmet)
+- ✅: All CI checks pass, PR is approved, and no pending review requests
+
+Format each PR title:
+
+1. Strip any conventional commit type prefix (e.g., `feat: `, `fix(scope): `)
+2. Strip any Linear ticket ID (e.g., `[EX-123] `, `AI-456: `)
+3. Title case the remaining text
+4. Prepend the repository name followed by a colon
+
+Build a scratch file with today's Personal and Work tasks in the **Task List Format** (no day header — just the `###` subsections), open it in Neovim, and wait. Add one line to the file's instructions: fill in the daily improvement focus by extending its line to `- [ ] Daily improvement: <focus>`. Include the fetched PRs as indented subtasks under `- [ ] Update/merge open pull requests`:
+
+```markdown
+- [ ] Update/merge open pull requests
+  - [ ] [WIDGETS: Add Pagination to Widget List](https://github.com/example-org/widget-service/pull/42) 💬
+  - [ ] [webapp: Fix Login Redirect on Expired Session](https://github.com/example-org/webapp/pull/1234) ❌
+```
 
 After the save, apply the changes to today's note. For each newly added Work task, search Linear for matching issues in the user's teams. If a match is found, link to the Linear issue URL. If multiple candidates exist, ask which one matches.
 
