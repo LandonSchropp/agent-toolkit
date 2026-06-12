@@ -116,8 +116,9 @@ Assign each PR a status emoji using this priority order:
 
 - 💬: `reviewDecision` is `CHANGES_REQUESTED`
 - ❌: Any entry in `statusCheckRollup` has `state` of `FAILURE` or `ERROR`
+- 💔: `mergeable` is `CONFLICTING` (merge conflicts)
 - ⏱️: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
-- ❓: `mergeable` is `CONFLICTING`, or any other merge-blocking condition not already covered (e.g., branch protection rules unmet)
+- ❓: Any other merge-blocking condition not already covered (e.g., branch protection rules unmet)
 - ✅: All CI checks pass, PR is approved, and no pending review requests
 
 Format each PR title:
