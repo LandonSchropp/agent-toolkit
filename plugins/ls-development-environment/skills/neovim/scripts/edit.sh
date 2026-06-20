@@ -41,7 +41,10 @@ if [[ -z "$file" ]]; then
   exit 1
 fi
 
-socket="$("$(dirname "$0")/socket.sh")"
+"$(dirname "$0")/start-neovim.sh"
+
+git_root="$(git rev-parse --show-toplevel 2>/dev/null)" || true
+socket="$(realpath "${git_root:-$PWD}")/.agents/neovim.sock"
 absolute_file="$(realpath "$file")"
 
 nvim --server "$socket" --remote "$absolute_file"
