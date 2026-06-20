@@ -25,3 +25,4 @@ When asked to edit a skill in this repository, always edit the skill under `plug
 - TypeScript strict mode enabled
 - Consistent file naming: kebab-case for files, camelCase for exports
 - **Always run `bun check-types` after updating any TypeScript file**
+- **Never write test files for Bash scripts** (e.g. `*.test.sh`). Verify Bash scripts manually instead.
