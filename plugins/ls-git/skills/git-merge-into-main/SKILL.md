@@ -16,20 +16,26 @@ This skill does no reviewing and creates no commits. It does not manage worktree
 
 3. **Fast-forward and push:** Advance the default branch to the rebased branch with a fast-forward only (no merge commit), then push. If the default branch is checked out in another worktree, run the update from that worktree's directory — Git refuses to move a branch that is checked out elsewhere.
 
+4. **Delete the merged branch:** Once the default branch has the commits, delete the branch with `git branch -d <branch>` (the `-d` refuses if it isn't fully merged, so it's a safety check). Run it from the default-branch worktree. If the branch is still checked out in its own worktree, detach that worktree first with `git -C <branch-worktree> checkout --detach` — Git won't delete a branch that is checked out anywhere. If the branch was pushed, also delete the remote with `git push origin --delete <branch>`.
+
 ```bash
 default_branch=$(git default-branch)
 
 git rebase "$default_branch"
 git -C <default-branch-worktree> merge --ff-only <branch>
 git -C <default-branch-worktree> push origin "$default_branch"
+
+git -C <branch-worktree> checkout --detach   # only if <branch> is checked out in a worktree
+git -C <default-branch-worktree> branch -d <branch>
 ```
 
 ## Rationalizations
 
-| Thought                                            | Reality                                                                    |
-| -------------------------------------------------- | -------------------------------------------------------------------------- |
-| "The branch is simple, I'll skip the rebase"       | Always rebase onto the default branch first, so the fast-forward is clean. |
-| "The rebase conflicted, I'll `--skip` or force"    | Resolve the conflict properly. Never discard commits to get past it.       |
-| "I'll just merge it, a merge commit is fine"       | Fast-forward only. This skill keeps history linear.                        |
-| "`main` won't move, I'll update it from here"      | If it's checked out in another worktree, update it from that worktree.     |
-| "There are uncommitted changes, I'll merge anyway" | The branch must be committed and reviewed first. Stop.                     |
+| Thought                                            | Reality                                                                     |
+| -------------------------------------------------- | --------------------------------------------------------------------------- |
+| "The branch is simple, I'll skip the rebase"       | Always rebase onto the default branch first, so the fast-forward is clean.  |
+| "The rebase conflicted, I'll `--skip` or force"    | Resolve the conflict properly. Never discard commits to get past it.        |
+| "I'll just merge it, a merge commit is fine"       | Fast-forward only. This skill keeps history linear.                         |
+| "`main` won't move, I'll update it from here"      | If it's checked out in another worktree, update it from that worktree.      |
+| "There are uncommitted changes, I'll merge anyway" | The branch must be committed and reviewed first. Stop.                      |
+| "I'll leave the merged branch lying around"        | Delete it after the push; `-d` keeps it safe by refusing unmerged branches. |
