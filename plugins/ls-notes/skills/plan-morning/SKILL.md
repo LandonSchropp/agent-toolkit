@@ -8,16 +8,13 @@ Walkthrough of the morning sections of today's daily note in at most four stops:
 
 **REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
 
-**REQUIRED:** Invoke the `ls-development-environment:neovim` skill before first opening the scratch file.
+## Editing
 
-## Editing in Neovim
+Each interactive stop presents a single scratch file at `/tmp/plan-morning.md`:
 
-1. Write the content to the scratch file `/tmp/plan-morning.md`.
-2. Open the scratch file with the `ls-development-environment:neovim` skill's `edit-and-wait.sh` script. It blocks until the user saves, up to 10 minutes, so set the Bash tool timeout to 10 minutes (600000ms).
-3. Tell the user the file is open in Neovim and summarize what to fill in.
-4. When the script exits, read the scratch file and apply the responses per the current step.
-
-**Precondition:** The Neovim socket at `.agents/neovim.sock` must exist. If it doesn't, stop and ask the user to start Neovim — do not fall back to a chat-based walkthrough.
+1. Write the content to the scratch file.
+2. **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill to open it, passing a window name for the current step (e.g. "Today's Tasks"). Summarize for the user what to fill in.
+3. When the window closes, read the scratch file and apply the responses per the current step.
 
 ## Task List Format
 
