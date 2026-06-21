@@ -27,8 +27,9 @@ The daily note is filled in from `Templates/Periodic/Daily Note.md`. Each note h
 - **Tasks:** Checklist of things to do today, broken into:
   - **Personal:** Personal tasks for the day.
   - **Work** (weekdays only)**:** Work tasks for the day.
-  - **Weekly Digital** (Sundays only)**:** Recurring weekly digital chores: triage, reviewing the past week, planning the next week, clearing inbox/reminders, browsing local events, YNAB.
-  - **Weekly Physical** (Sundays only)**:** Recurring weekly physical chores: office cleanup, pill container, plant care.
+  - **Weekly Chores** (Sundays only)**:** Recurring weekly chores, broken into:
+    - **Online:** Triage, reviewing the past week, clearing inbox/reminders, browsing local events, YNAB.
+    - **Offline:** Office cleanup, pill container, plant care.
   - **Quarterly** (first Sunday of the quarter)**:** Recurring quarterly chores: toothbrush heads, air filter.
 - **Morning:** Morning journaling, broken into:
   - **Gratitude:** Three things Landon is grateful for.
