@@ -38,6 +38,11 @@
       "description": "Development environment skills"
     },
     {
+      "name": "ls-interactivity",
+      "source": "./plugins/ls-interactivity",
+      "description": "Skills that let the user interact with the agent in a more user-friendly, intuitive way"
+    },
+    {
       "name": "ls-planning",
       "source": "./plugins/ls-planning",
       "description": "Planning skills"

@@ -1,0 +1,8 @@
+{
+  "name": "ls-interactivity",
+  "description": "Skills that let the user interact with the agent in a more user-friendly, intuitive way",
+  "version": "0.0.0",
+  "author": {
+    "name": "Landon Schropp"
+  }
+}
