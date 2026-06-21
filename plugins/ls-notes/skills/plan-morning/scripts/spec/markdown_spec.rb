@@ -75,6 +75,16 @@ RSpec.describe Markdown do
     subject { described_class.header_names(content) }
 
     it { is_expected.to eq(["Tasks", "Personal", "Morning"]) }
+
+    context "when a level is given" do
+      subject { described_class.header_names(content, level: 3) }
+
+      let(:content) { "## Tasks\n\n### Personal\n\n#### Online\n\n### Weekly Chores\n" }
+
+      it "returns only the headers at that level" do
+        is_expected.to eq(["Personal", "Weekly Chores"])
+      end
+    end
   end
 
   describe ".replace_section" do

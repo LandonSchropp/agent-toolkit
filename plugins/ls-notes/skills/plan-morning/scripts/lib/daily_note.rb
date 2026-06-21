@@ -20,8 +20,9 @@ DailyNote = Data.define(:path, :content) do
 
   # Matches a complete task block: a top-level task line followed by any body
   # content (indented lines and blank separators between them) up to but not
-  # including the next top-level task line.
-  TASK_BLOCK_REGEX = /^(?:[-+*]|\d+\.) \[.\] [^\n]+(?:\n(?!(?:[-+*]|\d+\.) \[)[^\n]*)*/
+  # including the next top-level task line or a header line (so nested
+  # sub-subheaders are not absorbed into the preceding task's body).
+  TASK_BLOCK_REGEX = /^(?:[-+*]|\d+\.) \[.\] [^\n]+(?:\n(?!(?:[-+*]|\d+\.) \[|#)[^\n]*)*/
 
   # @return [Date, nil] the date parsed from the filename, or nil when the file
   #   is not a daily note
@@ -36,7 +37,7 @@ DailyNote = Data.define(:path, :content) do
     body = tasks_section
     return [] unless body
 
-    Markdown.header_names(body).flat_map do |subheader|
+    Markdown.header_names(body, level: SUBHEADER_LEVEL).flat_map do |subheader|
       Markdown.section(body, subheader, SUBHEADER_LEVEL)
         .scan(TASK_BLOCK_REGEX)
         .filter_map { Task.parse(_1, subheader) }

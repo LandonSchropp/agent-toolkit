@@ -27,12 +27,18 @@ module Markdown
     end
 
     # Returns the names of every header in the content, in order, ignoring
-    # leading Obsidian icon tokens.
+    # leading Obsidian icon tokens. Pass a level to restrict the results to
+    # headers at exactly that level, skipping deeper or shallower ones.
     #
     # @param content [String] the Markdown content to scan
+    # @param level [Integer, nil] the header level to keep, or nil for all
     # @return [Array<String>] the header names
-    def header_names(content)
-      content.lines(chomp: true).filter_map { header_name(_1) }
+    def header_names(content, level: nil)
+      content.lines(chomp: true).filter_map do |line|
+        next if level && !line.match?(/\A#{"#" * level} /)
+
+        header_name(line)
+      end
     end
 
     # Replaces a section's body, keeping its header. The match is anchored on the

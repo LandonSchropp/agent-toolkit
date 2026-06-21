@@ -108,6 +108,34 @@ RSpec.describe DailyNote do
         expect(note.tasks.length).to eq(2)
       end
     end
+
+    context "when a subheader has sub-subheaders" do
+      let(:content) do
+        <<~MARKDOWN
+          ## :LiCheckCircle2: Tasks
+
+          ### Weekly Chores
+
+          #### Online
+
+          - [ ] Triage my notes
+
+          #### Offline
+
+          - [ ] Water the plants
+
+          ## :LiSun: Morning
+        MARKDOWN
+      end
+
+      it "finds the tasks nested under the sub-subheaders" do
+        expect(note.tasks.map(&:text)).to eq(["Triage my notes", "Water the plants"])
+      end
+
+      it "tags each task with the enclosing subheader" do
+        expect(note.tasks.map(&:subheader)).to eq(["Weekly Chores", "Weekly Chores"])
+      end
+    end
   end
 
   describe "#incomplete?" do
