@@ -20,6 +20,15 @@ Skip this step only if the user is asking about a past or future daily note rath
 
 **Precondition:** Obsidian must be running. CLI commands dispatch to the running app via IPC; with no app open, they hang. Check via `pgrep -fl 'Obsidian.app/Contents/MacOS/Obsidian'` and ask the user to launch Obsidian if needed.
 
+## Task Item Formatting
+
+When adding or reviewing tasks in the daily note, follow these link conventions:
+
+- **Inline links:** Embed links directly in the item text by linking the relevant noun or phrase. Never use a standalone `([link](url))` tag — the link should flow naturally with the sentence. For example: `- [ ] Update my [Providing Context doc](https://...) based on the comments` not `- [ ] Update my Providing Context doc ([link](https://...)) based on comments`.
+- **Slack threads:** If a task has an associated Slack thread, append `([thread](url))` at the end of the item. For example: `- [ ] Draft the vibe code policy ([thread](https://example.slack.com/archives/...))`.
+
+If you notice existing items that don't follow these conventions, proactively suggest corrections.
+
 ## Sections
 
 The daily note is filled in from `Templates/Periodic/Daily Note.md`. Each note has the following top-level sections, in order:
