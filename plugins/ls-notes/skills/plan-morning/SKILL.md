@@ -20,21 +20,15 @@ Each interactive stop presents a single scratch file at `/tmp/plan-morning.md`:
 
 Use this format whenever presenting tasks for editing:
 
-- Start the file with instructions and the legend:
-
-  ```markdown
-  Edit the markers in place, delete a line to remove that task entirely, and add
-  new tasks as `- [ ]` lines.
-
-  Legend: `x` complete, `>` forward, `<` schedule, `-` cancel, `/` partial.
-  ```
-
+- Start the file with a `#` header appropriate to the step (e.g., `# Today's Tasks`).
 - Give each subsection that has tasks a `###` header. Day headers are step-specific — include them only when the step calls for them.
 - Copy task lines verbatim (keep wikilinks and current markers) so they round-trip cleanly.
 
 Example:
 
 ```markdown
+# Today's Tasks
+
 ### Personal
 
 - [ ] Update the README.md
