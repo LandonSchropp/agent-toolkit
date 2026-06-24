@@ -140,6 +140,32 @@ After the save, apply the changes to today's note. For each newly added Work tas
 
 ## Step 6: Standup
 
-If the `oyster-team-ai:standup` skill is installed, read the previous workday's daily note and collect its completed (`[x]`) Work tasks — these become the basis for the standup's "yesterday" section. Ask: "Do you want to include yesterday in your standup?" If the user says no, pass that to the standup skill so it can skip the Yesterday section.
+If the `oyster-team-ai:standup` skill is installed, build and open a pre-filled scratch file rather than asking standup questions in chat.
 
-When invoking the standup skill, filter today's Work tasks down to primary focus areas only. Skip trivial tasks: PR reviews, sending messages, responding to threads, quick admin actions, or anything short-lived that doesn't represent meaningful progress to share with the team. Pass only the filtered list as today's todos.
+1. **Fetch yesterday:** Search `#team-ai-standups` with `slack_search_public_and_private` (query: `from:@<user> in:#team-ai-standups`) to find the user's most recent post. Extract its **Today** section bullets — these pre-fill Yesterday.
+
+2. **Build scratch file:** Write `/tmp/plan-morning.md` using this template. Fill in the Yesterday bullets from the previous standup and the Work tasks comment from today's daily note. Include all Work tasks in the comment — the user will decide what to carry into Today.
+
+   ```markdown
+   # Daily Standup
+
+   ## Yesterday
+
+   • Previous standup Today item 1
+   • Previous standup Today item 2
+
+   ## Today
+
+   <!-- Work tasks from today's daily note (reference only — not included in standup):
+   - [ ] Task A
+   - [ ] Task B
+   -->
+
+   ## Blockers
+
+   ## Feeling
+   ```
+
+3. **Open for editing:** **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill with window name "Standup".
+
+4. **Hand off:** After the window closes, read the file and parse each section. Invoke `oyster-team-ai:standup` and tell it: "The user has already filled in their standup answers via an interactive editor — skip all context-gathering and question steps and go directly to composing and confirming the message. Here are the answers: Yesterday: [bullets from file], Today: [bullets from file], Blockers: [content or none], Feeling: [content or none]."
