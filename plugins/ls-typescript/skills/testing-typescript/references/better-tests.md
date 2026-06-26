@@ -24,7 +24,7 @@ describe("formatCurrency");
 
 ## Use Contexts (With `describe`)
 
-Use contexts to organize related tests. Start context descriptions with 'when', 'with', or 'without'. JavaScript frameworks lack a dedicated `context` function, so use `describe` for contexts instead.
+Use contexts to organize related tests. JavaScript frameworks lack a dedicated `context` function, so use `describe` for contexts instead.
 
 ```typescript
 // Bad
@@ -48,6 +48,20 @@ describe("when logged out", () => {
     expect(response.status).toEqual(401);
   });
 });
+```
+
+Context `describe` blocks should almost always start with `when` — they name the state, input, or condition the assertions apply to, not the outcome. The top-level `describe` names the unit under test (function, class, command) and does not start with `when`.
+
+```typescript
+// Bad
+describe("with --no-worktree"); // a fragment, not a condition
+describe("but the project is missing"); // "but" continues; it isn't a condition
+describe("happy path"); // names the outcome, not the condition
+
+// Good
+describe("when the --no-worktree flag is provided");
+describe("when the project is missing");
+describe("when the resource is found");
 ```
 
 ## Keep `it` Descriptions Short
