@@ -19,6 +19,7 @@ After reading the references above, invoke the skill matching the project's test
 
 These apply on top of the framework skill above, based on what you're testing.
 
-| What you're testing | Skill to invoke |
-| ------------------- | --------------- |
-| A React hook        | `testing-react` |
+| What you're testing            | Skill to invoke |
+| ------------------------------ | --------------- |
+| A React hook                   | `testing-react` |
+| An Ink (terminal UI) component | `testing-ink`   |
