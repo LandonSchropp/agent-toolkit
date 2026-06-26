@@ -1,0 +1,16 @@
+{
+  "description": "Blocks git commit until the pending changes have been reviewed.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/require-review.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
