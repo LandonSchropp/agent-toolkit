@@ -122,6 +122,11 @@ Format each PR title:
 3. Title case the remaining text
 4. Prepend the repository name followed by a colon
 
+**Resolve auto-titled links:** Obsidian automatically converts pasted URLs into markdown links, but its title-fetch often lacks permissions, leaving a generic site name as the label (`Slack`, `GitHub`, `Linear`, `Notion`, etc.). Before building the scratch file, scan for tasks with these placeholder labels and handle each based on context:
+
+- **Link-only task:** The task has no description beyond the link. Fetch the resource and derive a full, actionable task title following the daily-note formatting conventions. For Slack links, read the thread carefully — the body often references another resource that is the actual focus of the task, and the title should reflect that.
+- **Link within a task:** The task has descriptive text but one of its links has a generic label. Use the appropriate MCP server to look up the resource and replace only the link label with its real title.
+
 Build a scratch file with today's Personal and Work tasks in the **Task List Format** (no day header — just the `###` subsections), open it in Neovim, and wait. Add one line to the file's instructions: fill in the daily improvement focus by extending its line to `- [ ] Daily improvement: <focus>`. Include the fetched PRs as indented subtasks under `- [ ] Update/merge open pull requests`:
 
 ```markdown
