@@ -2,10 +2,6 @@
 
 set -euo pipefail
 
-# The empty tree object, used as the base when reviewing a root commit that has
-# no parent.
-EMPTY_TREE="4b825dc642cb6eb9a060e54bf8d69288fbee4904"
-
 function print_help() {
   echo "Usage: review.sh <mode> [<sha>] --output <file>"
   echo
@@ -111,12 +107,11 @@ commit)
     exit 1
   fi
 
-  # Diff the commit against its parent. A root commit has no parent, so fall
-  # back to the empty tree.
+  # Diff the commit against its parent. A root commit has no parent, so fall back to the empty tree.
   if git rev-parse --verify --quiet "$sha^" >/dev/null 2>&1; then
     base="$sha^"
   else
-    base="$EMPTY_TREE"
+    base="$(git hash-object -t tree /dev/null)"
   fi
 
   revdiff "$base" "$sha" --output "$output"
