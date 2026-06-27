@@ -56,6 +56,11 @@
       "name": "ls-notes",
       "source": "./plugins/ls-notes",
       "description": "Notes repository skills"
+    },
+    {
+      "name": "ls-orc",
+      "source": "./plugins/ls-orc",
+      "description": "Orc workflow skills"
     }
   ]
 }

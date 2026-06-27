@@ -1,0 +1,8 @@
+{
+  "name": "ls-orc",
+  "description": "Orc workflow skills",
+  "version": "0.0.0",
+  "author": {
+    "name": "Landon Schropp"
+  }
+}
