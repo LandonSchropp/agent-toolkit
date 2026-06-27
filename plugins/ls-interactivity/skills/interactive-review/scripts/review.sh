@@ -41,6 +41,53 @@ function record_review() {
   echo "$head" >>"$REVIEWS_FILE"
 }
 
+# Review working changes. revdiff diffs untracked files against /dev/null, so a rename whose new
+# file is untracked shows as delete + add. Intent-to-adding the untracked files in a throwaway
+# index copy lets git's -M detection pair them, without touching the real index.
+#
+# TODO: Remove once revdiff detects untracked renames natively (umputun/revdiff#243).
+function review_working() {
+  local temporary_index
+
+  # With no untracked files there's no untracked rename to pair, and we avoid an empty git add.
+  if [[ -z "$(git ls-files --others --exclude-standard)" ]]; then
+    revdiff --untracked --output "$output"
+    return
+  fi
+
+  # Create a temporary index and tell Git we intend to add the untracked files. That lets revdiff
+  # properly pick up the renames.
+  temporary_index="$(mktemp)"
+  cp "$(git rev-parse --git-dir)/index" "$temporary_index"
+  git ls-files --others --exclude-standard -z |
+    GIT_INDEX_FILE="$temporary_index" git add -N --pathspec-from-file=- --pathspec-file-nul
+
+  GIT_INDEX_FILE="$temporary_index" revdiff --untracked --output "$output"
+}
+
+function review_staged() {
+  revdiff --staged --output "$output"
+}
+
+# Diff a single commit against its parent, falling back to the empty tree for a root commit.
+function review_commit() {
+  local sha base
+  sha="${positionals[1]}"
+
+  if ! git rev-parse --verify --quiet "$sha^{commit}" >/dev/null 2>&1; then
+    echo "Error: The sha $sha is not a valid commit." >&2
+    exit 1
+  fi
+
+  if git rev-parse --verify --quiet "$sha^" >/dev/null 2>&1; then
+    base="$sha^"
+  else
+    base="$(git hash-object -t tree /dev/null)"
+  fi
+
+  revdiff "$base" "$sha" --output "$output"
+}
+
 output=""
 positionals=()
 
@@ -116,28 +163,14 @@ esac
 
 case "$mode" in
 working)
-  revdiff --untracked --output "$output"
+  review_working
   record_review
   ;;
 staged)
-  revdiff --staged --output "$output"
+  review_staged
   record_review
   ;;
 commit)
-  sha="${positionals[1]}"
-
-  if ! git rev-parse --verify --quiet "$sha^{commit}" >/dev/null 2>&1; then
-    echo "Error: The sha $sha is not a valid commit." >&2
-    exit 1
-  fi
-
-  # Diff the commit against its parent. A root commit has no parent, so fall back to the empty tree.
-  if git rev-parse --verify --quiet "$sha^" >/dev/null 2>&1; then
-    base="$sha^"
-  else
-    base="$(git hash-object -t tree /dev/null)"
-  fi
-
-  revdiff "$base" "$sha" --output "$output"
+  review_commit
   ;;
 esac
