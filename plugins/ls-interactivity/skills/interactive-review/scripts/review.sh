@@ -2,9 +2,10 @@
 
 set -euo pipefail
 
-# File of reviewed commits. The commit hook allows a commit when the current HEAD appears here,
-# marking the pending work on top of it as reviewed.
-REVIEWS_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.txt"
+# SQLite database of reviewed commits. The commit hook allows a commit when the current HEAD is
+# recorded here, marking the pending work on top of it as reviewed. This script is the only one
+# that creates the schema; everything else assumes it exists once a review has been recorded.
+DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
 function print_help() {
   echo "Usage: review.sh <mode> [<sha>] --output <file>"
@@ -32,13 +33,12 @@ function record_review() {
     return 0
   fi
 
-  mkdir -p "$(dirname "$REVIEWS_FILE")"
+  mkdir -p "$(dirname "$DATABASE")"
 
-  if [[ -f "$REVIEWS_FILE" ]] && grep -qxF "$head" "$REVIEWS_FILE"; then
-    return 0
-  fi
-
-  echo "$head" >>"$REVIEWS_FILE"
+  sqlite3 "$DATABASE" "
+    CREATE TABLE IF NOT EXISTS reviews (head TEXT PRIMARY KEY);
+    INSERT OR IGNORE INTO reviews (head) VALUES ('$head');
+  "
 }
 
 # Review working changes. revdiff diffs untracked files against /dev/null, so a rename whose new

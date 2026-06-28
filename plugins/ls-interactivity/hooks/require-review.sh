@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-REVIEWS_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.txt"
+DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
 command="$(jq -r '.tool_input.command // ""')"
 
@@ -22,8 +22,10 @@ if ! head="$(git rev-parse --verify --quiet HEAD 2>/dev/null)"; then
   exit 0
 fi
 
-# Allow the commit when the pending work on this base has already been reviewed.
-if [[ -f "$REVIEWS_FILE" ]] && grep -qxF "$head" "$REVIEWS_FILE"; then
+# Allow the commit when the pending work on this base has already been reviewed. Guard on the
+# database file so a fresh machine (no reviews recorded yet) doesn't create an empty one here.
+if [[ -f "$DATABASE" ]] &&
+  [[ -n "$(sqlite3 "$DATABASE" "SELECT 1 FROM reviews WHERE head = '$head' LIMIT 1;" 2>/dev/null)" ]]; then
   exit 0
 fi
 
