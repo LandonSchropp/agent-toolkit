@@ -36,9 +36,36 @@ function record_review() {
   mkdir -p "$(dirname "$DATABASE")"
 
   sqlite3 "$DATABASE" "
-    CREATE TABLE IF NOT EXISTS reviews (head TEXT PRIMARY KEY);
+    CREATE TABLE IF NOT EXISTS reviews (head TEXT PRIMARY KEY NOT NULL);
+
+    CREATE TABLE IF NOT EXISTS overrides (
+      project     TEXT NOT NULL,
+      session     TEXT NOT NULL,
+      disabled_at INTEGER NOT NULL,
+      PRIMARY KEY (project, session)
+    );
+
     INSERT OR IGNORE INTO reviews (head) VALUES ('$head');
   "
+}
+
+# The disable-review skill suspends the review requirement for an orc session by recording its
+# disable time. Treat the requirement as disabled while that time is within the last hour.
+function is_review_disabled() {
+  local caller project session
+
+  [[ -f "$DATABASE" ]] || return 1
+  caller="$(orc caller-session 2>/dev/null)" || return 1
+
+  project="${caller%%$'\t'*}"
+  session="${caller#*$'\t'}"
+
+  [[ -n "$(sqlite3 "$DATABASE" \
+    "SELECT 1 FROM overrides
+     WHERE project = '${project//\'/\'\'}'
+       AND session = '${session//\'/\'\'}'
+       AND disabled_at > strftime('%s', 'now') - 3600
+     LIMIT 1;" 2>/dev/null)" ]]
 }
 
 # Review working changes. revdiff diffs untracked files against /dev/null, so a rename whose new
@@ -160,6 +187,13 @@ commit)
   exit 1
   ;;
 esac
+
+# When review is disabled for this session the commit hook already allows commits, so there is
+# nothing to review or record.
+if is_review_disabled; then
+  echo "Review is disabled for this session; skipping the review." >&2
+  exit 0
+fi
 
 case "$mode" in
 working)

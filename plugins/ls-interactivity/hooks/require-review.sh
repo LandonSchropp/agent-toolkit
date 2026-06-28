@@ -4,6 +4,25 @@ set -euo pipefail
 
 DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
+# The disable-review skill suspends the review requirement for an orc session by recording its
+# disable time. Treat the requirement as disabled while that time is within the last hour.
+function is_review_disabled() {
+  local caller project session
+
+  [[ -f "$DATABASE" ]] || return 1
+  caller="$(orc caller-session 2>/dev/null)" || return 1
+
+  project="${caller%%$'\t'*}"
+  session="${caller#*$'\t'}"
+
+  [[ -n "$(sqlite3 "$DATABASE" \
+    "SELECT 1 FROM overrides
+     WHERE project = '${project//\'/\'\'}'
+       AND session = '${session//\'/\'\'}'
+       AND disabled_at > strftime('%s', 'now') - 3600
+     LIMIT 1;" 2>/dev/null)" ]]
+}
+
 command="$(jq -r '.tool_input.command // ""')"
 
 # Only gate commands that create a commit; ignore everything else.
@@ -13,6 +32,11 @@ fi
 
 # Amends edit existing history rather than adding new work, so leave them alone.
 if [[ "$command" == *"--amend"* ]]; then
+  exit 0
+fi
+
+# The user has temporarily disabled the review requirement for this session, so allow the commit.
+if is_review_disabled; then
   exit 0
 fi
 
