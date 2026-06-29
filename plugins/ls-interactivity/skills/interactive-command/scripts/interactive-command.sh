@@ -58,6 +58,9 @@ if [[ -z "$name" ]]; then
   exit 1
 fi
 
+# Convert the name to kebab case.
+name=$(printf '%s' "$name" | tr '[:upper:] _' '[:lower:]-')
+
 if [[ -z "${TMUX_PANE:-}" ]]; then
   echo "Error: interactive-command.sh must run inside tmux, but \$TMUX_PANE is not set." >&2
   exit 1
