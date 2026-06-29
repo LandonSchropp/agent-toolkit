@@ -82,6 +82,10 @@ read -r window pane < <(
   tmux new-window -d -a -t "$target_window" -P -F '#{window_id} #{pane_id}' -n "$name" "$command"
 )
 
+# Kill the window if this script exits before the window closes naturally (e.g.,
+# when the agent terminates the background process).
+trap 'tmux kill-window -t "$window" 2>/dev/null || true' EXIT
+
 # Force the pane to close when the command exits, regardless of the user's
 # remain-on-exit setting, so the window's disappearance is an unambiguous signal.
 tmux set-option -p -t "$pane" remain-on-exit off 2>/dev/null || true
