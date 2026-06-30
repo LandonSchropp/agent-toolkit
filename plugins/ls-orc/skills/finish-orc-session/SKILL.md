@@ -17,9 +17,9 @@ This skill deletes a worktree, so every step must succeed first. If the merge ca
    orc caller-session
    ```
 
-   It prints `<project>\t<session>`, or exits non-zero with `Not inside an Orc session`. **STOP** if it exits non-zero, or if `session` is `main` (never close the main worktree). Shell state does not persist between commands, so note both values and reuse them as literal arguments in step 4.
+   It prints `<project>\t<session>`, or exits non-zero with `Not inside an Orc session`. **STOP** if it exits non-zero. Shell state does not persist between commands, so note both values and reuse them as literal arguments in step 4.
 
-2. **Merge the branch.** **REQUIRED:** use the `git-merge-into-main` skill. It enforces the committed-and-reviewed preconditions, rebases onto the default branch, fast-forwards, pushes, and deletes the branch; it is idempotent when the branch is already merged. **STOP** if it cannot complete the merge — do not delete the session.
+2. **Merge the branch.** Skip this step if `session` is `main` — there is no feature branch to merge. Otherwise, **REQUIRED:** use the `git-merge-into-main` skill. It enforces the committed-and-reviewed preconditions, rebases onto the default branch, fast-forwards, pushes, and deletes the branch; it is idempotent when the branch is already merged. **STOP** if it cannot complete the merge — do not delete the session.
 
 3. **Verify origin is in sync.** From the default branch's worktree, `git fetch`, then confirm the local default branch equals `origin/<default>`. **STOP** if they diverge or anything is unpushed — resolve it first. Once the session is deleted, its worktree and any commits left in it are gone.
 
@@ -39,5 +39,5 @@ This skill deletes a worktree, so every step must succeed first. If the merge ca
 | "The merge bailed, but I'll delete anyway"      | If `git-merge-into-main` could not finish, STOP. Never delete a session with unmerged work.      |
 | "`orc delete` on the current session is unsafe" | orc spawns a detached worker for exactly this. It is safe and intended.                          |
 | "The branch looks merged, skip the verify"      | Confirm the local default equals origin BEFORE deleting. Unpushed commits die with the worktree. |
-| "I'm on the main session, I'll close it too"    | Never close the `main` session. Stop.                                                            |
+| "I'm on main, skip the merge and delete"        | Skip the merge step, but still verify the push and delete the session.                           |
 | "I'll cd out and delete from elsewhere"         | Run `orc delete` from the session; the detached worker handles the teardown.                     |
