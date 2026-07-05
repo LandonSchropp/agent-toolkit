@@ -23,10 +23,14 @@ function is_review_disabled() {
      LIMIT 1;" 2>/dev/null)" ]]
 }
 
-command="$(jq -r '.tool_input.command // ""')"
+input="$(cat)"
+command="$(jq -r '.tool_input.command // ""' <<<"$input")"
+working_directory="$(jq -r '.cwd // "."' <<<"$input")"
 
-# Only gate commands that create a commit; ignore everything else.
-if ! grep -qE '(^|[^[:alnum:]])git[[:space:]]+commit([[:space:]]|$)' <<<"$command"; then
+# Only gate commands that create a commit; ignore everything else. Match `commit` as the git
+# subcommand after any global options (e.g. `git -C <dir> commit`), not as a substring in a flag
+# value or branch name.
+if ! grep -qE '(^|[^[:alnum:]])git[[:space:]]+([^[:space:]]+[[:space:]]+)*commit([[:space:]]|$)' <<<"$command"; then
   exit 0
 fi
 
@@ -40,11 +44,16 @@ if is_review_disabled; then
   exit 0
 fi
 
-# The commit builds on the current HEAD. Before the first commit there is no HEAD
-# to build on, so there's nothing to review.
-if ! head="$(git rev-parse --verify --quiet HEAD 2>/dev/null)"; then
-  exit 0
+# The hook runs in the session's primary repo, but the commit may target another one by passing
+# `git -C <dir>`. Use that directory when present. An in-command `cd` isn't visible here, so commits
+# in another repo must go through `git -C`.
+if [[ "$command" =~ [[:space:]]-C[[:space:]]+([^[:space:]]+) ]]; then
+  working_directory="${BASH_REMATCH[1]}"
 fi
+
+# The commit builds on the target repo's HEAD. Before the first commit there is no HEAD to build on,
+# so there's nothing to review.
+head="$(git -C "$working_directory" rev-parse --verify --quiet HEAD 2>/dev/null)" || exit 0
 
 # Allow the commit when the pending work on this base has already been reviewed. Guard on the
 # database file so a fresh machine (no reviews recorded yet) doesn't create an empty one here.
