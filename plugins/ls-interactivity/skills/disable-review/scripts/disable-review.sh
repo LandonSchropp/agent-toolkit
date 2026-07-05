@@ -11,16 +11,13 @@ if [[ ! -f "$DATABASE" ]]; then
   exit 1
 fi
 
-caller="$(orc caller-session)"
-project="${caller%%$'\t'*}"
-session="${caller#*$'\t'}"
-
-# Escape single quotes for the SQL string literals.
-project="${project//\'/\'\'}"
-session="${session//\'/\'\'}"
+if [[ -z "${ORC_PROJECT:-}" || -z "${ORC_SESSION:-}" ]]; then
+  echo "Error: Not inside an Orc session." >&2
+  exit 1
+fi
 
 sqlite3 "$DATABASE" <<SQL
 INSERT INTO overrides (project, session, disabled_at)
-VALUES ('$project', '$session', strftime('%s', 'now'))
+VALUES ('$ORC_PROJECT', '$ORC_SESSION', strftime('%s', 'now'))
 ON CONFLICT (project, session) DO UPDATE SET disabled_at = excluded.disabled_at;
 SQL

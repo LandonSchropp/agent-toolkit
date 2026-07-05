@@ -11,22 +11,16 @@ This skill deletes a worktree, so every step must succeed first. If the merge ca
 
 ## Process
 
-1. **Identify the session.** Print the current project and session:
+Every orc session exports its project and session into the shell as `$ORC_PROJECT` and `$ORC_SESSION`. The steps below use those variables directly; if either is empty you are not inside an orc session — **STOP**.
+
+1. **Merge the branch.** Skip this step if `$ORC_SESSION` is `main` — there is no feature branch to merge. Otherwise, **REQUIRED:** use the `git-merge-into-main` skill. It enforces the committed-and-reviewed preconditions, rebases onto the default branch, fast-forwards, pushes, and deletes the branch; it is idempotent when the branch is already merged. **STOP** if it cannot complete the merge — do not delete the session.
+
+2. **Verify origin is in sync.** From the default branch's worktree, `git fetch`, then confirm the local default branch equals `origin/<default>`. **STOP** if they diverge or anything is unpushed — resolve it first. Once the session is deleted, its worktree and any commits left in it are gone.
+
+3. **Delete the session.** Run the deletion as the final action:
 
    ```bash
-   orc caller-session
-   ```
-
-   It prints `<project>\t<session>`, or exits non-zero with `Not inside an Orc session`. **STOP** if it exits non-zero. Shell state does not persist between commands, so note both values and reuse them as literal arguments in step 4.
-
-2. **Merge the branch.** Skip this step if `session` is `main` — there is no feature branch to merge. Otherwise, **REQUIRED:** use the `git-merge-into-main` skill. It enforces the committed-and-reviewed preconditions, rebases onto the default branch, fast-forwards, pushes, and deletes the branch; it is idempotent when the branch is already merged. **STOP** if it cannot complete the merge — do not delete the session.
-
-3. **Verify origin is in sync.** From the default branch's worktree, `git fetch`, then confirm the local default branch equals `origin/<default>`. **STOP** if they diverge or anything is unpushed — resolve it first. Once the session is deleted, its worktree and any commits left in it are gone.
-
-4. **Delete the session.** Run the deletion as the final action, with the literal values from step 1:
-
-   ```bash
-   orc delete <project> <session>
+   orc delete "$ORC_PROJECT" "$ORC_SESSION"
    ```
 
    You are inside the session being deleted, so orc hands the teardown to a detached worker that kills the tmux session and removes the worktree after this pane dies. Expect the session to terminate; do not run further commands.

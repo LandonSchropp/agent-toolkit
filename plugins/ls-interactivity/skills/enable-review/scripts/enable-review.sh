@@ -10,15 +10,12 @@ if [[ ! -f "$DATABASE" ]]; then
   exit 0
 fi
 
-caller="$(orc caller-session)"
-project="${caller%%$'\t'*}"
-session="${caller#*$'\t'}"
-
-# Escape single quotes for the SQL string literals.
-project="${project//\'/\'\'}"
-session="${session//\'/\'\'}"
+if [[ -z "${ORC_PROJECT:-}" || -z "${ORC_SESSION:-}" ]]; then
+  echo "Error: Not inside an Orc session." >&2
+  exit 1
+fi
 
 sqlite3 "$DATABASE" <<SQL
 DELETE FROM overrides
-WHERE project = '$project' AND session = '$session';
+WHERE project = '$ORC_PROJECT' AND session = '$ORC_SESSION';
 SQL

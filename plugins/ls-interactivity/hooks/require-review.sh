@@ -7,18 +7,13 @@ DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 # The disable-review skill suspends the review requirement for an orc session by recording its
 # disable time. Treat the requirement as disabled while that time is within the last hour.
 function is_review_disabled() {
-  local caller project session
-
   [[ -f "$DATABASE" ]] || return 1
-  caller="$(orc caller-session 2>/dev/null)" || return 1
-
-  project="${caller%%$'\t'*}"
-  session="${caller#*$'\t'}"
+  [[ -n "${ORC_PROJECT:-}" && -n "${ORC_SESSION:-}" ]] || return 1
 
   [[ -n "$(sqlite3 "$DATABASE" \
     "SELECT 1 FROM overrides
-     WHERE project = '${project//\'/\'\'}'
-       AND session = '${session//\'/\'\'}'
+     WHERE project = '$ORC_PROJECT'
+       AND session = '$ORC_SESSION'
        AND disabled_at > strftime('%s', 'now') - 3600
      LIMIT 1;" 2>/dev/null)" ]]
 }
