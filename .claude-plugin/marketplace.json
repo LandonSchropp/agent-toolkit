@@ -28,11 +28,6 @@
       "description": "Ruby skills"
     },
     {
-      "name": "ls-slack",
-      "source": "./plugins/ls-slack",
-      "description": "Slack skills"
-    },
-    {
       "name": "ls-development-environment",
       "source": "./plugins/ls-development-environment",
       "description": "Development environment skills"
