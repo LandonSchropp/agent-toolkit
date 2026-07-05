@@ -11,10 +11,13 @@ Create an empty scratch file first and pass it as `--output`. When the window cl
 
 ## Handling an Existing Review
 
-Before opening a review, check whether a `review` tmux window is already open:
+Before opening a review, check whether a `review` tmux window is already open in the current
+session. Scope the check to the current session — orc runs many sessions on one shared tmux
+server, so listing windows across all of them (`-a`) reports a sibling session's review window as
+your own:
 
 ```bash
-tmux list-windows -a -F '#{window_name}' | grep -qx 'review' && echo "running" || echo "none"
+tmux list-windows -F '#{window_name}' | grep -qx 'review' && echo "running" || echo "none"
 ```
 
 If one is running, ask the user: "A review window is already open. Close it and open a new one?"
