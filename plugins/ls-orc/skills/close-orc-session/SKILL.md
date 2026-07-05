@@ -1,11 +1,11 @@
 ---
-description: Use when finishing an orc session. Merges the session's completed, reviewed branch into the default branch, confirms origin is in sync, then deletes the orc worktree and tmux session.
+description: Use when closing an orc session. Merges the session's completed, reviewed branch into the default branch, confirms origin is in sync, then deletes the orc worktree and tmux session.
 disable-model-invocation: true
 ---
 
-# Finish Orc Session
+# Close Orc Session
 
-Finishes an orc session: merges the branch into the default branch, verifies everything is pushed, then deletes the session's worktree and tmux session. The capstone once the work is committed and reviewed.
+Closes an orc session: merges the branch into the default branch, verifies everything is pushed, then deletes the session's worktree and tmux session. The capstone once the work is committed and reviewed.
 
 This skill deletes a worktree, so every step must succeed first. If the merge cannot complete — uncommitted or unreviewed changes, a conflict, or a diverged or unpushed default branch — **STOP** and leave the session intact.
 
