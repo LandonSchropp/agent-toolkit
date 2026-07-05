@@ -56,6 +56,11 @@
       "name": "ls-orc",
       "source": "./plugins/ls-orc",
       "description": "Orc workflow skills"
+    },
+    {
+      "name": "ls-writing",
+      "source": "./plugins/ls-writing",
+      "description": "Writing toolkit skills"
     }
   ]
 }
