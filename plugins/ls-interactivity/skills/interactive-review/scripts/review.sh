@@ -57,8 +57,8 @@ function is_review_disabled() {
 
   [[ -n "$(sqlite3 "$DATABASE" \
     "SELECT 1 FROM overrides
-     WHERE project = '${ORC_PROJECT//\'/\'\'}'
-       AND session = '${ORC_SESSION//\'/\'\'}'
+     WHERE project = '$ORC_PROJECT'
+       AND session = '$ORC_SESSION'
        AND disabled_at > strftime('%s', 'now') - 3600
      LIMIT 1;" 2>/dev/null)" ]]
 }
