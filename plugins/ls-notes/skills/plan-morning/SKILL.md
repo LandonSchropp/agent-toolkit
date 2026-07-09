@@ -62,6 +62,7 @@ Run `obsidian daily:read` to load today's note content for the remaining steps.
 Build one scratch file covering every journaling prompt that's still empty, open it in Neovim, and wait. Include only the sections that need answers:
 
 - **Yesterday's Highlights:** Include only if a daily note exists for yesterday (the literal previous calendar day, not just the most recent note) and its Highlights of the Day section is empty.
+- **Identity Vote:** Include only if a daily note exists for yesterday (same rule as above) and its Identity Vote section is empty.
 - **Gratitude:** Include only if today's Gratitude slots are empty.
 - **Better Day:** Include only if today's Better Day slots are empty.
 - **Daily Affirmation:** Include only if today's Daily Affirmation section is empty.
@@ -74,6 +75,18 @@ Example with every section included:
 1.
 2.
 3.
+
+## Identity Vote
+
+_Every action is a vote for the person you're becoming. Yesterday, did you move toward that person?_
+
+- [ ] 🔴 Voted against
+- [ ] 🟠 Slipped
+- [ ] 🟡 Broke even
+- [ ] 🟢 Made progress
+- [ ] 🔵 Nailed it
+
+**Evidence:**
 
 ## Gratitude
 
@@ -90,7 +103,19 @@ Example with every section included:
 ## Daily Affirmation
 ```
 
-If nothing is empty, skip this step. After the save, write the highlights into yesterday's note as a numbered list and the remaining answers into today's matching sections.
+If nothing is empty, skip this step. After the save, the highlights and Identity Vote belong to yesterday's note; the remaining answers go into today's matching sections. Write the highlights into yesterday's note as a numbered list.
+
+For the Identity Vote, read the single checked option and fill in the empty `### :LiVote: Identity Vote` section of yesterday's note: write a `**Vote:**` line with the checked emoji mapped to its signed score, and an `**Evidence:**` line with the evidence text.
+
+| Checked          | Vote line               |
+| ---------------- | ----------------------- |
+| 🔴 Voted against | `🔴 Voted against (-2)` |
+| 🟠 Slipped       | `🟠 Slipped (-1)`       |
+| 🟡 Broke even    | `🟡 Broke even (0)`     |
+| 🟢 Made progress | `🟢 Made progress (+1)` |
+| 🔵 Nailed it     | `🔵 Nailed it (+2)`     |
+
+If no box is checked, leave yesterday's Identity Vote section empty. If more than one is checked, ask the user which they meant before writing.
 
 ## Step 5: Today's Tasks
 
