@@ -70,7 +70,13 @@ Build one scratch file covering every journaling prompt that's still empty, open
 Example with every section included:
 
 ```markdown
+# Morning Journaling
+
+_Fill in what you'd like, then save and close. Leave any section blank to skip it._
+
 ## Yesterday's Highlights
+
+_What were the notable moments from [yesterday's weekday and date]?_
 
 1.
 2.
@@ -90,17 +96,25 @@ _Every action is a vote for the person you're becoming. Yesterday, did you move 
 
 ## Gratitude
 
+_I am grateful for…_
+
 1.
 2.
 3.
 
 ## Better Day
 
+_What would make today great?_
+
 1.
 2.
 3.
 
 ## Daily Affirmation
+
+_Who do you want to be?_
+
+I am…
 ```
 
 If nothing is empty, skip this step. After the save, the highlights and Identity Vote belong to yesterday's note; the remaining answers go into today's matching sections. Write the highlights into yesterday's note as a numbered list.
