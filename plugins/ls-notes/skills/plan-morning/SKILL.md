@@ -65,7 +65,7 @@ Build one scratch file covering every journaling prompt that's still empty, open
 - **Identity Vote:** Include only if a daily note exists for yesterday (same rule as above) and its Identity Vote section is empty.
 - **Gratitude:** Include only if today's Gratitude slots are empty.
 - **Better Day:** Include only if today's Better Day slots are empty.
-- **Daily Affirmation:** Include only if today's Daily Affirmation section is empty.
+- **Daily Affirmation:** Include only if today's Daily Affirmation section is empty. If the user asks for help writing it, see [Daily Affirmation](references/daily-affirmation.md).
 
 Example with every section included:
 
