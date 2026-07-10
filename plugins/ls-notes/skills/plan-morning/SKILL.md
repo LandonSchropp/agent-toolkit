@@ -43,9 +43,9 @@ Applying the saved file: copy each task's edited marker back to its source note,
 
 ## Step 1: Resolve Tasks From Recent Daily Notes
 
-Find recent daily notes before today that still contain `- [ ]` or `- [/]` items (filenames in `Daily Notes/YYYY-MM/` sort by `YYYY-MM-DD` prefix). On a Monday this is typically the prior Friday; after a longer gap it may span several days.
+Run the resolve-tasks script at `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to the scratch file, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header (e.g., `## Monday, January 1, 2026`). Forwardable markers (`>`, `<`, `/`) carry forward automatically in Step 2, so the script leaves them out.
 
-Build one scratch file containing every such day oldest-first in the **Task List Format**, with each day under a `## [Weekday, Month Day, Year]` header (e.g., `## Monday, January 1, 2026`). Open it in Neovim and wait, then apply the results to the source notes. The forward-tasks script in Step 2 handles `>`, `<`, and `/` automatically.
+If the script reports no unresolved tasks, skip to Step 2. Otherwise open the scratch file for editing per the **Editing** steps, then apply the saved markers to the source notes.
 
 ## Step 2: Forward Tasks
 
