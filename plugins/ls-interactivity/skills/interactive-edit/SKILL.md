@@ -5,6 +5,6 @@ user-invocable: false
 
 # Interactive Edit
 
-**REQUIRED:** Use the `interactive-command` skill, running `nvim <file>` with `<name>` as the window name.
+Run `scripts/interactive-edit.sh --file <file> --name <name>`. It opens `<file>` in Neovim in a new tmux window, blocks until the window closes, and prints the user's saved edits to stdout — no separate read needed.
 
-When the window closes, `<file>` holds the user's edits — read it back and continue. To present generated content for editing, write it to a scratch file first and edit that.
+Run it in the background; it blocks until the window closes. To present generated content for editing, write it to a scratch file first and pass that as `<file>`.
