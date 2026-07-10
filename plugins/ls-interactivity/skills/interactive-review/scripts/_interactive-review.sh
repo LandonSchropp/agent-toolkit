@@ -8,7 +8,7 @@ set -euo pipefail
 DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
 function print_help() {
-  echo "Usage: review.sh <mode> [<sha>] --output <file>"
+  echo "Usage: _interactive-review.sh <mode> [<sha>] --output <file>"
   echo
   echo "Opens revdiff to review changes and writes annotations to <file>."
   echo

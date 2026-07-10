@@ -4,8 +4,8 @@ set -euo pipefail
 
 DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
-# review.sh is the only script that creates the database, so there's nothing to disable until a
-# review has run at least once.
+# _interactive-review.sh is the only script that creates the database, so there's nothing to
+# disable until a review has run at least once.
 if [[ ! -f "$DATABASE" ]]; then
   echo "Error: No review database yet." >&2
   exit 1

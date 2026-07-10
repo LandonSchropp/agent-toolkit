@@ -5,9 +5,7 @@ user-invocable: false
 
 # Interactive Review
 
-**REQUIRED:** Use the `interactive-command` skill, running `scripts/review.sh <mode> [<sha>] --output <file>` with `review` as the window name.
-
-Create an empty scratch file first and pass it as `--output`. When the window closes, `<file>` holds the user's review annotations — read it back and continue. The modes are `working`, `staged`, and `commit <sha>`; run `scripts/review.sh --help` for details.
+Run `scripts/interactive-review.sh <mode> [<sha>]` in the background. It opens revdiff in a new tmux window named `review`, blocks until the window closes, and prints the user's annotations to stdout, empty if they left none. The modes are `working`, `staged`, and `commit <sha>`; run `scripts/interactive-review.sh --help` for details.
 
 ## Handling an Existing Review
 
@@ -22,5 +20,5 @@ tmux list-windows -F '#{window_name}' | grep -qx 'review' && echo "running" || e
 
 If one is running, ask the user: "A review window is already open. Close it and open a new one?"
 
-- If yes: kill the background `interactive-command.sh` process — its EXIT trap will close the window automatically. Then start a new review normally.
+- If yes: kill the background `interactive-review.sh` process — its cleanup closes the window automatically. Then start a new review normally.
 - If no: abort.
