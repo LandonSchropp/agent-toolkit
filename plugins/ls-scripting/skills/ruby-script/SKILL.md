@@ -5,7 +5,7 @@ description: Use when writing a Ruby script. Covers the template, conventions, a
 
 ## Template
 
-Two templates cover the two kinds of script. Copy the right one exactly and fill in the specific logic.
+Two templates cover the two kinds of scripts. Copy the right one exactly and fill in the specific logic.
 
 - **Simple:** Scripts intended to be run directly by a user. These typically take either no arguments or a single positional argument. Start from [`assets/template-simple.rb`](assets/template-simple.rb). It shows the one-argument form; if the script takes no arguments, delete the argument check and keep the top comment.
 - **Complex:** Scripts capable of taking multiple arguments via flags. Skill scripts should _always_ be considered complex scripts. Start from [`assets/template-complex.rb`](assets/template-complex.rb). These always support `--help`.
