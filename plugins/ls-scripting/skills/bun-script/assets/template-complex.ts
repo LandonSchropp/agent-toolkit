@@ -7,13 +7,13 @@ const argv = cli({
     description: "Description of what the script does.",
   },
   flags: {
-    required: {
+    first: {
       type: String,
-      description: "Description of required flag.",
+      description: "Description of the first flag.",
     },
-    optional: {
+    second: {
       type: String,
-      description: "Description of optional flag.",
+      description: "Description of the second flag.",
     },
   },
 });
@@ -28,8 +28,14 @@ if (invalidOption) {
 }
 
 // Validate required arguments
-if (!argv.flags.required) {
-  console.error("Error: The --required flag is required.");
+if (!argv.flags.first) {
+  console.error("Error: The --first flag is required.");
+  argv.showHelp();
+  process.exit(1);
+}
+
+if (!argv.flags.second) {
+  console.error("Error: The --second flag is required.");
   argv.showHelp();
   process.exit(1);
 }
