@@ -9,14 +9,14 @@ function print_help() {
   echo
   echo "Options:"
   echo
-  echo "  --required <value>    Description of required flag."
-  echo "  --optional <value>    Description of optional flag."
-  echo "  --help                Show this help message and exit."
+  echo "  --first <value>     Description of the first flag."
+  echo "  --second <value>    Description of the second flag."
+  echo "  --help              Show this help message and exit."
 }
 
 # Parse arguments
-required_flag=""
-optional_flag=""
+first=""
+second=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -24,12 +24,12 @@ while [[ $# -gt 0 ]]; do
     print_help
     exit 0
     ;;
-  --required)
-    required_flag="$2"
+  --first)
+    first="$2"
     shift 2
     ;;
-  --optional)
-    optional_flag="$2"
+  --second)
+    second="$2"
     shift 2
     ;;
   *)
@@ -42,8 +42,15 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate required arguments
-if [[ -z "$required_flag" ]]; then
-  echo "Error: The --required flag is required." >&2
+if [[ -z "$first" ]]; then
+  echo "Error: The --first flag is required." >&2
+  echo >&2
+  print_help >&2
+  exit 1
+fi
+
+if [[ -z "$second" ]]; then
+  echo "Error: The --second flag is required." >&2
   echo >&2
   print_help >&2
   exit 1
