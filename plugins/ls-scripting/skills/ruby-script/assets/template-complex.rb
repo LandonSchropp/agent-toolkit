@@ -11,18 +11,18 @@ def print_help
 
     Options:
 
-      --required <value>    Description of required flag.
-      --optional <value>    Description of optional flag.
-      --help                Show this help message and exit.
+      --first <value>     Description of the first flag.
+      --second <value>    Description of the second flag.
+      --help              Show this help message and exit.
   HELP
 end
 
-required_flag = nil
-optional_flag = nil
+first = nil
+second = nil
 
 parser = OptionParser.new do |opts|
-  opts.on("--required VALUE") { required_flag = _1 }
-  opts.on("--optional VALUE") { optional_flag = _1 }
+  opts.on("--first VALUE") { first = _1 }
+  opts.on("--second VALUE") { second = _1 }
   opts.on("--help") do
     print_help
     exit 0
@@ -39,8 +39,15 @@ rescue OptionParser::InvalidOption => e
 end
 
 # Validate required arguments
-if required_flag.nil? || required_flag.empty?
-  warn "Error: The --required flag is required."
+if first.nil? || first.empty?
+  warn "Error: The --first flag is required."
+  warn
+  print_help
+  exit 1
+end
+
+if second.nil? || second.empty?
+  warn "Error: The --second flag is required."
   warn
   print_help
   exit 1
