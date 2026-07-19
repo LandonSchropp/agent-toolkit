@@ -5,16 +5,16 @@ set -euo pipefail
 function print_help() {
   echo "Usage: interactive-command.sh --command '<command>' --name <name>"
   echo
-  echo "Opens '<command>' in a new tmux window named <name>, next to the calling"
-  echo "pane's window and in its session, then blocks until the window closes. The"
-  echo "command runs with no shell, so the window closes as soon as it exits, and"
-  echo "the command persists its own result. The window is foregrounded only if"
-  echo "the user is currently looking at the calling pane. Must run inside tmux."
+  echo "Opens '<command>' in a new herdr tab named <name>, in the calling pane's"
+  echo "workspace, then blocks until the tab closes. The command runs as the tab's"
+  echo "only process, so the tab closes as soon as it exits, and the command"
+  echo "persists its own result. The tab is foregrounded only if the user is"
+  echo "currently looking at the calling pane. Must run inside herdr."
   echo
   echo "Options:"
   echo
   echo "  --command '<command>'   Command to run, given as a single string."
-  echo "  --name <name>           Name for the new window's tab."
+  echo "  --name <name>           Name for the new tab's label."
   echo "  --help                  Show this help message and exit."
 }
 
@@ -61,43 +61,47 @@ fi
 # Convert the name to kebab case.
 name=$(printf '%s' "$name" | tr '[:upper:] _' '[:lower:]-')
 
-if [[ -z "${TMUX_PANE:-}" ]]; then
-  echo "Error: interactive-command.sh must run inside tmux, but \$TMUX_PANE is not set." >&2
+if [[ -z "${HERDR_PANE_ID:-}" ]]; then
+  echo "Error: interactive-command.sh must run inside herdr, but \$HERDR_PANE_ID is not set." >&2
   exit 1
 fi
 
-# Anchor the new window to the caller's window so it lands right after it, in the
-# caller's session.
-target_window="$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}')"
+# A new herdr tab's pane starts in the workspace's default directory, not the
+# one this script was invoked from. Capture the current directory so the command
+# runs where it was invoked, matching the working directory the caller (e.g. a
+# git-aware review) expects.
+current_directory="$PWD"
 
 # Note whether the user is currently looking at the calling pane, before opening
-# anything, so we only pull them to the new window if they're actually watching.
-read -r caller_pane_active caller_window_active caller_session_attached < <(
-  tmux display-message -p -t "$TMUX_PANE" '#{pane_active} #{window_active} #{session_attached}'
+# anything, so we only pull them to the new tab if they're actually watching.
+focused_pane="$(herdr pane get "$HERDR_PANE_ID" | jq -r '.result.pane.focused')"
+focused_tab="$(herdr tab get "$HERDR_TAB_ID" | jq -r '.result.tab.focused')"
+focused_workspace="$(herdr workspace get "$HERDR_WORKSPACE_ID" | jq -r '.result.workspace.focused')"
+
+# Create the tab in the background (--no-focus) in the caller's workspace, and
+# capture its id and root pane's id (to run the command in).
+read -r tab pane < <(
+  herdr tab create --workspace "$HERDR_WORKSPACE_ID" --label "$name" --no-focus |
+    jq -r '.result.tab.tab_id + " " + .result.root_pane.pane_id'
 )
 
-# Open the command in a background window (-d). Capture the window id (to watch)
-# and pane id (to configure).
-read -r window pane < <(
-  tmux new-window -d -a -t "$target_window" -P -F '#{window_id} #{pane_id}' -n "$name" "$command"
-)
+# Close the tab if this script exits before it closes naturally (e.g., when the
+# agent terminates the background process).
+trap 'herdr tab close "$tab" 2>/dev/null || true' EXIT
 
-# Kill the window if this script exits before the window closes naturally (e.g.,
-# when the agent terminates the background process).
-trap 'tmux kill-window -t "$window" 2>/dev/null || true' EXIT
+# Run the command in the tab's pane, in the caller's directory, followed by
+# `exit` so the underlying shell terminates and the tab closes as soon as the
+# command finishes, regardless of whether it succeeded.
+herdr pane run "$pane" "cd $(printf '%q' "$current_directory") && $command; exit"
 
-# Force the pane to close when the command exits, regardless of the user's
-# remain-on-exit setting, so the window's disappearance is an unambiguous signal.
-tmux set-option -p -t "$pane" remain-on-exit off 2>/dev/null || true
-
-# Bring the new window to the foreground only if the user is currently looking at
+# Bring the new tab to the foreground only if the user is currently looking at
 # the calling pane; otherwise leave it in the background so we don't pull them
 # away from whatever they're doing.
-if [[ "$caller_pane_active" == "1" && "$caller_window_active" == "1" && "$caller_session_attached" -ge 1 ]]; then
-  tmux select-window -t "$window"
+if [[ "$focused_pane" == "true" && "$focused_tab" == "true" && "$focused_workspace" == "true" ]]; then
+  herdr tab focus "$tab"
 fi
 
-# Block until the window is gone (the command finished or the user closed it).
-while tmux list-windows -a -F '#{window_id}' 2>/dev/null | grep -Fxq "$window"; do
-  sleep 0.3
+# Block until the tab is gone (the command finished or the user closed it).
+while herdr tab get "$tab" >/dev/null 2>&1; do
+  sleep 0.5
 done
