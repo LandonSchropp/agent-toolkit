@@ -5,10 +5,10 @@ set -euo pipefail
 function print_help() {
   echo "Usage: interactive-edit.sh --file <file> --name <name>"
   echo
-  echo "Opens <file> in Neovim in a new tmux window named <name>, blocks until the"
-  echo "window closes, then prints the file's contents to stdout. Write the content"
+  echo "Opens <file> in Neovim in a new herdr tab named <name>, blocks until the"
+  echo "tab closes, then prints the file's contents to stdout. Write the content"
   echo "to be edited into <file> first; the user's saved edits are what gets printed."
-  echo "Must run inside tmux."
+  echo "Must run inside herdr."
   echo
   echo "Options:"
   echo
@@ -68,9 +68,9 @@ fi
 script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 interactive_command="$script_directory/../../interactive-command/scripts/interactive-command.sh"
 
-# Open the file in Neovim and wait for the window to close. Run interactive-command
+# Open the file in Neovim and wait for the tab to close. Run interactive-command
 # in the background and forward termination to it so that if the agent kills this
-# wrapper early, its cleanup still closes the tmux window.
+# wrapper early, its cleanup still closes the herdr tab.
 "$interactive_command" --command "nvim -- '$file'" --name "$name" &
 command_pid=$!
 trap 'kill "$command_pid" 2>/dev/null || true' EXIT
