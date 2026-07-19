@@ -80,13 +80,14 @@ read -r tab pane < <(
 )
 
 # Close the tab if this script exits before it closes naturally (e.g., when the
-# agent terminates the background process).
-trap 'herdr tab close "$tab" 2>/dev/null || true' EXIT
+# agent terminates the background process). Callers read this script's stdout as
+# the command's own output, so discard herdr's JSON responses here and below.
+trap 'herdr tab close "$tab" >/dev/null 2>&1 || true' EXIT
 
 # Run the command in the tab's pane, in the caller's directory, followed by
 # `exit` so the underlying shell terminates and the tab closes as soon as the
 # command finishes, regardless of whether it succeeded.
-herdr pane run "$pane" "cd $(printf '%q' "$current_directory") && $command; exit"
+herdr pane run "$pane" "cd $(printf '%q' "$current_directory") && $command; exit" >/dev/null
 
 # Bring the new tab to the foreground only if the user is still looking at the
 # calling pane; otherwise leave it in the background so we don't pull them away
@@ -98,7 +99,7 @@ focused_tab="$(herdr tab get "$HERDR_TAB_ID" | jq -r '.result.tab.focused')"
 focused_workspace="$(herdr workspace get "$HERDR_WORKSPACE_ID" | jq -r '.result.workspace.focused')"
 
 if [[ "$focused_pane" == "true" && "$focused_tab" == "true" && "$focused_workspace" == "true" ]]; then
-  herdr tab focus "$tab"
+  herdr tab focus "$tab" >/dev/null
 fi
 
 # Block until the tab is gone (the command finished or the user closed it).
