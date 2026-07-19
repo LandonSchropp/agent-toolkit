@@ -1,3 +1,5 @@
+**REQUIRED:** Read `README.md` before doing anything else. It documents the project's purpose, setup, and commands.
+
 ## Project Overview
 
 This is a personal toolkit for working with AI agents like Claude Code. The project uses Bun as the runtime and package manager. It contains skills following the [Agent Skills](https://agentskills.io/) specification and reusable documentation for agent workflows.
