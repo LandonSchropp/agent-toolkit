@@ -8,8 +8,8 @@ function print_help() {
   echo "Opens '<command>' in a new herdr tab named <name>, in the calling pane's"
   echo "workspace, then blocks until the tab closes. The command runs as the tab's"
   echo "only process, so the tab closes as soon as it exits, and the command"
-  echo "persists its own result. The tab is foregrounded only if the user is"
-  echo "currently looking at the calling pane. Must run inside herdr."
+  echo "persists its own result. The tab opens in the background, so it never"
+  echo "pulls the user away from what they're doing. Must run inside herdr."
   echo
   echo "Options:"
   echo
@@ -88,19 +88,6 @@ trap 'herdr tab close "$tab" >/dev/null 2>&1 || true' EXIT
 # `exit` so the underlying shell terminates and the tab closes as soon as the
 # command finishes, regardless of whether it succeeded.
 herdr pane run "$pane" "cd $(printf '%q' "$current_directory") && $command; exit" >/dev/null
-
-# Bring the new tab to the foreground only if the user is still looking at the
-# calling pane; otherwise leave it in the background so we don't pull them away
-# from whatever they're doing. Check this now rather than before the tab was
-# created: the user may have moved to another workspace while the command was
-# starting, and focusing the tab would yank them back to this one.
-focused_pane="$(herdr pane get "$HERDR_PANE_ID" | jq -r '.result.pane.focused')"
-focused_tab="$(herdr tab get "$HERDR_TAB_ID" | jq -r '.result.tab.focused')"
-focused_workspace="$(herdr workspace get "$HERDR_WORKSPACE_ID" | jq -r '.result.workspace.focused')"
-
-if [[ "$focused_pane" == "true" && "$focused_tab" == "true" && "$focused_workspace" == "true" ]]; then
-  herdr tab focus "$tab" >/dev/null
-fi
 
 # Block until the tab is gone (the command finished or the user closed it).
 while herdr tab get "$tab" >/dev/null 2>&1; do
