@@ -5,9 +5,9 @@ set -euo pipefail
 function print_help() {
   echo "Usage: interactive-review.sh <mode> [<sha>]"
   echo
-  echo "Opens revdiff in a new tmux window named 'review', blocks until the window"
+  echo "Opens revdiff in a new herdr tab named 'review', blocks until the tab"
   echo "closes, then prints the user's annotations to stdout (empty if they left"
-  echo "none). Must run inside tmux. See review.sh --help for what each mode diffs."
+  echo "none). Must run inside herdr. See review.sh --help for what each mode diffs."
   echo
   echo "Modes:"
   echo
@@ -94,14 +94,14 @@ interactive_command="$script_directory/../../interactive-command/scripts/interac
 # revdiff writes annotations to its own scratch file; we print them afterward.
 output="$(mktemp)"
 
-# Open the review and wait for the window to close. Run interactive-command in
+# Open the review and wait for the tab to close. Run interactive-command in
 # the background and forward termination to it so that if the agent kills this
-# wrapper early, its cleanup still closes the tmux window.
+# wrapper early, its cleanup still closes the herdr tab.
 "$interactive_command" --command "'$inner' ${positionals[*]} --output '$output'" --name review &
 command_pid=$!
 trap 'kill "$command_pid" 2>/dev/null || true' EXIT
 wait "$command_pid"
 trap - EXIT
 
-# The window has closed; print the user's annotations, if any.
+# The tab has closed; print the user's annotations, if any.
 cat -- "$output"
