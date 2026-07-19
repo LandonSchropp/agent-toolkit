@@ -5,7 +5,7 @@ set -euo pipefail
 function print_help() {
   echo "Usage: start-neovim.sh [options]"
   echo
-  echo "Starts Neovim in the tmux window named vim, nvim, or neovim whose working"
+  echo "Starts Neovim in the herdr tab named vim, nvim, or neovim whose working"
   echo "directory is the git repository root (or the current directory when not in"
   echo "a repo), unless Neovim is already running there (its socket exists)."
   echo
@@ -40,11 +40,31 @@ fi
 
 pane_id=""
 
-# Find this project's editor window: a pane whose window is named vim, nvim, or
-# neovim and whose working directory is the project root. Matching the root
-# avoids targeting another project's editor in a different tmux session.
-while IFS=$'\t' read -r window_name pane_path id; do
-  case "$window_name" in
+# List every pane as `label<TAB>directory<TAB>pane_id`. Panes carry the working
+# directory and tabs carry the label, so pair the two up by tab id.
+function list_panes() {
+  local tabs panes
+
+  tabs="$(herdr tab list 2>/dev/null || echo '{}')"
+  panes="$(herdr pane list 2>/dev/null || echo '{}')"
+
+  jq -rn --argjson tabs "$tabs" --argjson panes "$panes" '
+    ($tabs.result.tabs // [])
+    | map({ key: .tab_id, value: .label })
+    | from_entries
+    | . as $labels
+
+    | ($panes.result.panes // [])[]
+    | [$labels[.tab_id] // "", .cwd, .pane_id]
+    | @tsv
+  ' 2>/dev/null
+}
+
+# Find this project's editor tab: a pane whose tab is named vim, nvim, or neovim
+# and whose working directory is the project root. Matching the root avoids
+# targeting another project's editor in a different herdr workspace.
+while IFS=$'\t' read -r tab_label pane_path id; do
+  case "$tab_label" in
   vim | nvim | neovim) ;;
   *) continue ;;
   esac
@@ -53,14 +73,14 @@ while IFS=$'\t' read -r window_name pane_path id; do
     pane_id="$id"
     break
   fi
-done < <(tmux list-panes -a -F '#{window_name}'$'\t''#{pane_current_path}'$'\t''#{pane_id}' 2>/dev/null)
+done < <(list_panes)
 
 if [[ -z "$pane_id" ]]; then
-  echo "Error: No tmux window named vim, nvim, or neovim found for $root." >&2
+  echo "Error: No herdr tab named vim, nvim, or neovim found for $root." >&2
   exit 1
 fi
 
-tmux send-keys -t "$pane_id" "nvim" Enter
+herdr pane run "$pane_id" "nvim" >/dev/null
 
 # Wait for Neovim to come up and create the socket.
 timeout=$((SECONDS + 15))
