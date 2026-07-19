@@ -19,5 +19,9 @@ herdr tab list | jq -e --arg ws "$HERDR_WORKSPACE_ID" '.result.tabs[] | select(.
 
 If one is running, ask the user: "A review tab is already open. Close it and open a new one?"
 
-- If yes: kill the background `interactive-review.sh` process — its cleanup closes the tab automatically. Then start a new review normally.
+- If yes: kill the background `interactive-review.sh` process — its cleanup closes the tab automatically. If no such process is still running, close the tab directly instead. Then start a new review normally.
 - If no: abort.
+
+```bash
+herdr tab close "$(herdr tab list | jq -r --arg ws "$HERDR_WORKSPACE_ID" '.result.tabs[] | select(.label == "review" and .workspace_id == $ws) | .tab_id')"
+```

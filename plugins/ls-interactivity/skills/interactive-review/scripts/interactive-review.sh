@@ -99,9 +99,9 @@ output="$(mktemp)"
 # wrapper early, its cleanup still closes the herdr tab.
 "$interactive_command" --command "'$inner' ${positionals[*]} --output '$output'" --name review &
 command_pid=$!
-trap 'kill "$command_pid" 2>/dev/null || true' EXIT
+trap 'kill "$command_pid" 2>/dev/null || true' EXIT INT TERM HUP
 wait "$command_pid"
-trap - EXIT
+trap - EXIT INT TERM HUP
 
 # The tab has closed; print the user's annotations, if any.
 cat -- "$output"

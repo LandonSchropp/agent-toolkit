@@ -82,7 +82,9 @@ read -r tab pane < <(
 # Close the tab if this script exits before it closes naturally (e.g., when the
 # agent terminates the background process). Callers read this script's stdout as
 # the command's own output, so discard herdr's JSON responses here and below.
-trap 'herdr tab close "$tab" >/dev/null 2>&1 || true' EXIT
+# Trap the termination signals explicitly, not just EXIT: an untrapped SIGTERM
+# kills bash without running the EXIT trap, which would strand the tab open.
+trap 'herdr tab close "$tab" >/dev/null 2>&1 || true' EXIT INT TERM HUP
 
 # Run the command in the tab's pane, in the caller's directory, followed by
 # `exit` so the underlying shell terminates and the tab closes as soon as the
