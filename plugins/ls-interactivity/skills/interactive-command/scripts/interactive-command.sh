@@ -72,12 +72,6 @@ fi
 # git-aware review) expects.
 current_directory="$PWD"
 
-# Note whether the user is currently looking at the calling pane, before opening
-# anything, so we only pull them to the new tab if they're actually watching.
-focused_pane="$(herdr pane get "$HERDR_PANE_ID" | jq -r '.result.pane.focused')"
-focused_tab="$(herdr tab get "$HERDR_TAB_ID" | jq -r '.result.tab.focused')"
-focused_workspace="$(herdr workspace get "$HERDR_WORKSPACE_ID" | jq -r '.result.workspace.focused')"
-
 # Create the tab in the background (--no-focus) in the caller's workspace, and
 # capture its id and root pane's id (to run the command in).
 read -r tab pane < <(
@@ -94,9 +88,15 @@ trap 'herdr tab close "$tab" 2>/dev/null || true' EXIT
 # command finishes, regardless of whether it succeeded.
 herdr pane run "$pane" "cd $(printf '%q' "$current_directory") && $command; exit"
 
-# Bring the new tab to the foreground only if the user is currently looking at
-# the calling pane; otherwise leave it in the background so we don't pull them
-# away from whatever they're doing.
+# Bring the new tab to the foreground only if the user is still looking at the
+# calling pane; otherwise leave it in the background so we don't pull them away
+# from whatever they're doing. Check this now rather than before the tab was
+# created: the user may have moved to another workspace while the command was
+# starting, and focusing the tab would yank them back to this one.
+focused_pane="$(herdr pane get "$HERDR_PANE_ID" | jq -r '.result.pane.focused')"
+focused_tab="$(herdr tab get "$HERDR_TAB_ID" | jq -r '.result.tab.focused')"
+focused_workspace="$(herdr workspace get "$HERDR_WORKSPACE_ID" | jq -r '.result.workspace.focused')"
+
 if [[ "$focused_pane" == "true" && "$focused_tab" == "true" && "$focused_workspace" == "true" ]]; then
   herdr tab focus "$tab"
 fi
