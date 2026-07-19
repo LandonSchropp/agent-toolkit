@@ -11,13 +11,13 @@ if [[ ! -f "$DATABASE" ]]; then
   exit 1
 fi
 
-if [[ -z "${ORC_PROJECT:-}" || -z "${ORC_SESSION:-}" ]]; then
-  echo "Error: Not inside an Orc session." >&2
+if [[ -z "${HERDR_WORKSPACE_ID:-}" ]]; then
+  echo "Error: Not inside a herdr workspace." >&2
   exit 1
 fi
 
 sqlite3 "$DATABASE" <<SQL
-INSERT INTO overrides (project, session, disabled_at)
-VALUES ('$ORC_PROJECT', '$ORC_SESSION', strftime('%s', 'now'))
-ON CONFLICT (project, session) DO UPDATE SET disabled_at = excluded.disabled_at;
+INSERT INTO overrides (workspace, disabled_at)
+VALUES ('$HERDR_WORKSPACE_ID', strftime('%s', 'now'))
+ON CONFLICT (workspace) DO UPDATE SET disabled_at = excluded.disabled_at;
 SQL

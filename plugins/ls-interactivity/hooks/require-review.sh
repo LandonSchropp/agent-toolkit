@@ -4,16 +4,15 @@ set -euo pipefail
 
 DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
-# The disable-review skill suspends the review requirement for an orc session by recording its
+# The disable-review skill suspends the review requirement for a herdr workspace by recording its
 # disable time. Treat the requirement as disabled while that time is within the last hour.
 function is_review_disabled() {
   [[ -f "$DATABASE" ]] || return 1
-  [[ -n "${ORC_PROJECT:-}" && -n "${ORC_SESSION:-}" ]] || return 1
+  [[ -n "${HERDR_WORKSPACE_ID:-}" ]] || return 1
 
   [[ -n "$(sqlite3 "$DATABASE" \
     "SELECT 1 FROM overrides
-     WHERE project = '$ORC_PROJECT'
-       AND session = '$ORC_SESSION'
+     WHERE workspace = '$HERDR_WORKSPACE_ID'
        AND disabled_at > strftime('%s', 'now') - 3600
      LIMIT 1;" 2>/dev/null)" ]]
 }

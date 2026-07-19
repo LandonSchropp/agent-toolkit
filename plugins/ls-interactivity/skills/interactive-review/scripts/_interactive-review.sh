@@ -39,26 +39,23 @@ function record_review() {
     CREATE TABLE IF NOT EXISTS reviews (head TEXT PRIMARY KEY NOT NULL);
 
     CREATE TABLE IF NOT EXISTS overrides (
-      project     TEXT NOT NULL,
-      session     TEXT NOT NULL,
-      disabled_at INTEGER NOT NULL,
-      PRIMARY KEY (project, session)
+      workspace   TEXT PRIMARY KEY NOT NULL,
+      disabled_at INTEGER NOT NULL
     );
 
     INSERT OR IGNORE INTO reviews (head) VALUES ('$head');
   "
 }
 
-# The disable-review skill suspends the review requirement for an orc session by recording its
+# The disable-review skill suspends the review requirement for a herdr workspace by recording its
 # disable time. Treat the requirement as disabled while that time is within the last hour.
 function is_review_disabled() {
   [[ -f "$DATABASE" ]] || return 1
-  [[ -n "${ORC_PROJECT:-}" && -n "${ORC_SESSION:-}" ]] || return 1
+  [[ -n "${HERDR_WORKSPACE_ID:-}" ]] || return 1
 
   [[ -n "$(sqlite3 "$DATABASE" \
     "SELECT 1 FROM overrides
-     WHERE project = '$ORC_PROJECT'
-       AND session = '$ORC_SESSION'
+     WHERE workspace = '$HERDR_WORKSPACE_ID'
        AND disabled_at > strftime('%s', 'now') - 3600
      LIMIT 1;" 2>/dev/null)" ]]
 }
