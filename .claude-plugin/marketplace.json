@@ -58,6 +58,11 @@
       "description": "Orc workflow skills"
     },
     {
+      "name": "ls-project",
+      "source": "./plugins/ls-project",
+      "description": "Project setup and convention skills"
+    },
+    {
       "name": "ls-writing",
       "source": "./plugins/ls-writing",
       "description": "Writing toolkit skills"
