@@ -19,19 +19,13 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 
 3. **Verify origin is in sync.** From the default branch's worktree, `git fetch`, then confirm the local default branch equals `origin/<default>`. **STOP** if they diverge or anything is unpushed. Once the worktree is removed, any commits left in it are gone.
 
-4. **Close the workspace.** Run this as the final action. For a herdr-managed worktree:
+4. **Close the workspace.** Run this as the final action:
 
    ```bash
-   herdr worktree remove --workspace "$HERDR_WORKSPACE_ID"
+   ./scripts/close-workspace.sh
    ```
 
-   For a plain workspace, which owns no checkout to remove:
-
-   ```bash
-   herdr workspace close "$HERDR_WORKSPACE_ID"
-   ```
-
-   Never pass `--force`. It exists to discard dirty and untracked files, which is precisely the state that must stop the close instead. If the removal reports `dirty_worktree_requires_force`, **STOP** and resolve the working tree.
+   The script removes the worktree when the workspace owns a herdr-managed one and closes the workspace outright when it does not, so there is no variant to choose. It never passes `--force`, which exists to discard dirty and untracked files — precisely the state that must stop the close instead. If it reports `dirty_worktree_requires_force`, **STOP** and resolve the working tree.
 
    Expect the workspace to terminate; do not run further commands.
 
@@ -43,5 +37,6 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 | "The merge bailed, but I'll close anyway"      | If `git-merge-into-main` could not finish, STOP. Never close a workspace with unmerged work.   |
 | "`remove` would refuse if anything was unsafe" | It only refuses a dirty tree. Unpushed commits are destroyed without warning.                  |
 | "It's dirty, so I'll add `--force`"            | `--force` permanently deletes those files. Resolve the working tree instead.                   |
+| "I'll pick the close command myself"           | The script already picks it from the workspace. Just run the script.                           |
 | "The branch looks merged, skip the verify"     | Confirm the local default equals origin BEFORE closing.                                        |
 | "I'm on the default branch, so skip it all"    | Skip only the merge. Still verify the push, then close.                                        |
