@@ -51,8 +51,8 @@ DailyNote = Data.define(:path, :content) do
 
   # Appends each task to the end of its own subheader's subsection within the
   # Tasks section. Tasks are rendered verbatim, so marker conversion and
-  # de-duplication are the caller's responsibility. Each subheader is assumed to
-  # exist; the caller skips notes that lack one.
+  # de-duplication are the caller's responsibility. Creates the subheader at
+  # the end of the Tasks section when the note doesn't already have one.
   #
   # @param tasks [Array<Task>] the tasks to append, each carrying its subheader
   # @return [DailyNote] a new note with the tasks appended
@@ -60,6 +60,7 @@ DailyNote = Data.define(:path, :content) do
     return self if tasks.empty?
 
     updated_content = tasks.group_by(&:subheader).reduce(content) do |current, (subheader, group)|
+      current = add_subheader(current, subheader)
       subsection = Markdown.section(current, subheader, SUBHEADER_LEVEL)
       next current if subsection.nil?
 
@@ -93,5 +94,22 @@ DailyNote = Data.define(:path, :content) do
   # @return [String, nil] the body of the note's Tasks section
   def tasks_section
     Markdown.section(content, TASKS_SECTION, TASKS_LEVEL)
+  end
+
+  # Adds a new, empty subheader at the end of the Tasks section when the note
+  # doesn't already have one with the given name. Does nothing when the note
+  # has no Tasks section to add it to, or when the subheader already exists.
+  #
+  # @param content [String] the note content to add the subheader to
+  # @param subheader [String] the subheader name to ensure exists
+  # @return [String] the content, with the subheader added if it was missing
+  def add_subheader(content, subheader)
+    return content if Markdown.section(content, subheader, SUBHEADER_LEVEL)
+
+    body = Markdown.section(content, TASKS_SECTION, TASKS_LEVEL)
+    return content unless body
+
+    updated_body = "#{body.chomp}\n\n#{"#" * SUBHEADER_LEVEL} #{subheader}\n\n"
+    Markdown.replace_section(content, TASKS_SECTION, TASKS_LEVEL, updated_body)
   end
 end

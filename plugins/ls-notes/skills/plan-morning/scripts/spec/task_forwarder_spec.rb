@@ -115,6 +115,25 @@ RSpec.describe TaskForwarder do
       end
     end
 
+    context "when a scheduled task's subheader does not exist in today's note" do
+      let(:previous) do
+        [
+          DailyNote.new(
+            path: "Daily Notes/2026/2026-05/2026-05-26 - Daily Note.md",
+            content: "## Tasks\n\n### Personal\n\n### Content\n\n- [<] Read the article\n"
+          )
+        ]
+      end
+
+      it "creates the subheader in today's note and forwards the task there" do
+        expect(Markdown.section(today_result.content, "Content", 3)).to include("- [<] Read the article")
+      end
+
+      it "removes the task from its source" do
+        expect(source_result.content).not_to include("Read the article")
+      end
+    end
+
     context "when a previous note has an incomplete task" do
       let(:previous) do
         [

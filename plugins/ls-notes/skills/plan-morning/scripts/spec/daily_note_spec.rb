@@ -221,12 +221,20 @@ RSpec.describe DailyNote do
     context "when the task's subheader does not exist in the note" do
       let(:tasks) { [Task.new(type: "<", text: "Weekly chore", subheader: "Weekly Digital")] }
 
-      it "does not raise an error" do
-        expect { updated }.not_to raise_error
+      it "creates the subheader" do
+        expect(Markdown.header_names(updated.content, level: 3)).to include("Weekly Digital")
       end
 
-      it "leaves the note content unchanged" do
-        expect(updated.content).to eq(note.content)
+      it "adds the task under the new subheader" do
+        expect(Markdown.section(updated.content, "Weekly Digital", 3)).to include("- [<] Weekly chore")
+      end
+
+      it "keeps the note's other tasks intact" do
+        expect(Markdown.section(updated.content, "Personal", 3)).to include("- [ ] Do me")
+      end
+
+      it "does not modify the original note" do
+        expect { updated }.not_to change(note, :content)
       end
     end
   end
