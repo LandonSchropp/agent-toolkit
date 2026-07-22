@@ -7,6 +7,11 @@ set -euo pipefail
 # that creates the schema; everything else assumes it exists once a review has been recorded.
 DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
+# Resolve the sibling interactive-ui skill's confirm script relative to this one. Both skills
+# ship in the ls-interactivity plugin, so this layout is fixed wherever the plugin is installed.
+script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+confirm="$script_directory/../../interactive-ui/scripts/confirm.rb"
+
 function print_help() {
   echo "Usage: _interactive-review.sh <mode> [<sha>] --output <file>"
   echo
@@ -60,12 +65,23 @@ function is_review_disabled() {
      LIMIT 1;" 2>/dev/null)" ]]
 }
 
+# Prompts for an explicit approve/deny decision once revdiff closes. Only approval records the
+# review; denying leaves the commit hook blocking so the agent knows to keep iterating rather
+# than inferring intent from the annotations alone.
+function confirm_review() {
+  if "$confirm" --prompt "Approve these changes?"; then
+    record_review
+  fi
+}
+
 function review_working() {
   revdiff --untracked --output "$output"
+  confirm_review
 }
 
 function review_staged() {
   revdiff --staged --output "$output"
+  confirm_review
 }
 
 # Diff a single commit against its parent, falling back to the empty tree for a root commit.
@@ -170,11 +186,9 @@ fi
 case "$mode" in
 working)
   review_working
-  record_review
   ;;
 staged)
   review_staged
-  record_review
   ;;
 commit)
   review_commit
