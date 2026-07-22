@@ -15,7 +15,10 @@ confirm="$script_directory/../../interactive-ui/scripts/confirm.rb"
 function print_help() {
   echo "Usage: _interactive-review.sh <mode> [<sha>] --output <file>"
   echo
-  echo "Opens revdiff to review changes and writes annotations to <file>."
+  echo "Opens revdiff to review changes and writes annotations to <file>. For"
+  echo "working and staged mode, exits 0 if the user approves when prompted"
+  echo "after closing revdiff, or 1 if they deny. commit mode has nothing to"
+  echo "approve and always exits 0."
   echo
   echo "Modes:"
   echo
@@ -65,22 +68,27 @@ function is_review_disabled() {
      LIMIT 1;" 2>/dev/null)" ]]
 }
 
-# Prompts for an explicit approve/deny decision once revdiff closes. Only approval records the
-# review; denying leaves the commit hook blocking so the agent knows to keep iterating rather
-# than inferring intent from the annotations alone.
+# Prompts for an explicit approve/deny decision once revdiff closes. Its own exit status (0
+# approved, 1 denied) propagates as this script's exit status, so the caller can read the
+# decision directly. Approval also records the review, so the commit hook allows a commit
+# built on this HEAD as a backstop.
 function confirm_review() {
   if "$confirm" --prompt "Approve these changes?"; then
     record_review
+  else
+    return 1
   fi
 }
 
+# revdiff's own exit status isn't meaningful here — its job is only to populate $output — so
+# don't let it gate whether the approval prompt even runs.
 function review_working() {
-  revdiff --untracked --output "$output"
+  revdiff --untracked --output "$output" || true
   confirm_review
 }
 
 function review_staged() {
-  revdiff --staged --output "$output"
+  revdiff --staged --output "$output" || true
   confirm_review
 }
 
