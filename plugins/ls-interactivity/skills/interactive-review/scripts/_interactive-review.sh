@@ -34,7 +34,7 @@ function print_help() {
 
 # Record the current HEAD as reviewed so the commit hook allows a commit built on
 # it. Skip when HEAD is unborn, since the first commit has nothing above it.
-function record_review() {
+function record_review_approval() {
   local head
 
   if ! head="$(git rev-parse --verify --quiet HEAD)"; then
@@ -74,7 +74,7 @@ function is_review_disabled() {
 # built on this HEAD as a backstop.
 function confirm_review() {
   if "$confirm" --prompt "Approve these changes?"; then
-    record_review
+    record_review_approval
   else
     return 1
   fi
