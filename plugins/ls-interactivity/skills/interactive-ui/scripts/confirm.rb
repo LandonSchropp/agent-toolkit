@@ -59,6 +59,11 @@ if prompt.nil? || prompt.empty?
   exit 1
 end
 
+unless system("command -v gum > /dev/null 2>&1")
+  warn "Error: gum is not installed. See https://github.com/charmbracelet/gum."
+  exit 1
+end
+
 # ANSI escape codes
 CLEAR_SCREEN = "\e[H\e[2J"
 CURSOR_UP = "\e[%dA"

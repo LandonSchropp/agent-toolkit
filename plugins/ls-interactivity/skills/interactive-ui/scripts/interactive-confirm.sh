@@ -82,6 +82,11 @@ if [[ -z "$name" ]]; then
   exit 1
 fi
 
+if ! command -v gum >/dev/null 2>&1; then
+  echo "Error: gum is not installed. See https://github.com/charmbracelet/gum." >&2
+  exit 1
+fi
+
 script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 confirm="$script_directory/confirm.rb"
 interactive_command="$script_directory/../../interactive-command/scripts/interactive-command.sh"
