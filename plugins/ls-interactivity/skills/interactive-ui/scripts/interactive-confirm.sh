@@ -82,8 +82,11 @@ if [[ -z "$name" ]]; then
   exit 1
 fi
 
-if ! command -v gum >/dev/null 2>&1; then
-  echo "Error: gum is not installed. See https://github.com/charmbracelet/gum." >&2
+# FIX: some environments' PATH resolves an older gum that predates flags confirm.rb relies on
+# (e.g. --padding), which makes gum fail silently before ever rendering. Check the same
+# Homebrew-managed binary confirm.rb itself uses, instead of trusting whatever gum PATH resolves.
+if [[ ! -x /opt/homebrew/bin/gum ]]; then
+  echo "Error: gum is not installed at /opt/homebrew/bin/gum. See https://github.com/charmbracelet/gum." >&2
   exit 1
 fi
 

@@ -59,8 +59,12 @@ if prompt.nil? || prompt.empty?
   exit 1
 end
 
-unless system("command -v gum > /dev/null 2>&1")
-  warn "Error: gum is not installed. See https://github.com/charmbracelet/gum."
+# FIX: Some environments' PATH resolves an older, incompatible version of gum. Use the
+# Homebrew-managed binary explicitly instead.
+GUM = "/opt/homebrew/bin/gum"
+
+unless File.executable?(GUM)
+  warn "Error: gum is not installed at #{GUM}. See https://github.com/charmbracelet/gum."
   exit 1
 end
 
@@ -105,7 +109,7 @@ print "#{GRAY}#{HELP_TEXT}#{RESET}"
 print CURSOR_UP % (box_height + 1)
 
 system(
-  "gum", "confirm",
+  GUM, "confirm",
   "--padding", "0 0 0 #{buttons_left}",
   "--no-show-help",
   "--prompt.foreground", "4",
