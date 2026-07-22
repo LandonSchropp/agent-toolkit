@@ -25,7 +25,12 @@ When asked to edit a skill in this repository, always edit the skill under `plug
 
 Some skills need to hand control to the user in a separate window and block until they're done — running `revdiff` for a review, opening Neovim to edit a file, etc. That building block lives in `plugins/ls-interactivity`: `interactive-command` opens the given command in a new herdr tab and waits for it to close, and `interactive-review` and `interactive-edit` build on it for their respective workflows.
 
-Not every prompt needs a fully executable window. When a skill just needs a simple UI — a quick yes/no, a short pick-one answer — its script calls `gum` (e.g. `gum confirm`, `gum choose`) directly instead of opening a new herdr tab: it runs synchronously in the current terminal and returns a plain result (exit code or stdout), so there's no window lifecycle to manage.
+Not every prompt needs a fully executable window. `plugins/ls-interactivity/skills/interactive-ui` hosts small, themed TUI utilities for quick user interactions without having to write a full application.
+
+These utilities are located in `plugins/ls-interactivity/skills/interactive-ui/scripts` and come in two types:
+
+- `<utility>`: The bare utility script, intended to be called from other skill scripts directly.
+- `interactive-<utility>`: The interactive script that should be called by the agent.
 
 ## Code Quality
 
