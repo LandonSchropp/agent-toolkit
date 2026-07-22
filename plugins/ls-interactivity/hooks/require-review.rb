@@ -41,22 +41,28 @@ input = JSON.parse($stdin.read)
 command = input.dig("tool_input", "command") || ""
 working_directory = input["cwd"] || "."
 
-# Only gate commands that create a commit; ignore everything else. Match `commit` as the git
-# subcommand after any global options (e.g. `git -C <dir> commit`), not as a substring in a flag
-# value or branch name.
-exit 0 unless command =~ /(^|[^[:alnum:]])git[[:space:]]+([^[:space:]]+[[:space:]]+)*commit([[:space:]]|$)/
+# Split the command into an array of words.
+words = Shellwords.split(command)
 
-# Amends edit existing history rather than adding new work, so leave them alone.
-exit 0 if command.include?("--amend")
+# We only care about git commit commands, so ignore the rest.
+simplified_command = words
+  .filter { ["git", "commit", "--amend", "--fixup"].include?(_1) }
+  .join(" ")
 
-# The user has temporarily disabled the review requirement for this session, so allow the commit.
+# Only gate commands that create a commit; ignore everything else.
+exit 0 unless simplified_command.include?("git commit")
+
+# Amends and fixups edit existing history rather than adding new work, so leave them alone.
+exit 0 if simplified_command.end_with?("--amend") || simplified_command.end_with?("--fixup")
+
+# If the user has temporarily disabled the review requirement for this session, allow the commit.
 exit 0 if review_disabled?
 
 # The hook runs in the session's primary repo, but the commit may target another one by passing
 # `git -C <dir>`. Use that directory when present. An in-command `cd` isn't visible here, so
 # commits in another repo must go through `git -C`.
-if (match = command.match(/[[:space:]]-C[[:space:]]+([^[:space:]]+)/))
-  working_directory = match[1]
+if (working_directory_index = words.index("-C"))
+  working_directory = words[working_directory_index + 1] || working_directory
 end
 
 # The commit builds on the target repo's HEAD. Before the first commit there is no HEAD to build
