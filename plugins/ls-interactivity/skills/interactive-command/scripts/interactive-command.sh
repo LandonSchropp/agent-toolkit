@@ -11,6 +11,11 @@ function print_help() {
   echo "persists its own result. The tab opens in the background, so it never"
   echo "pulls the user away from what they're doing. Must run inside herdr."
   echo
+  echo "Exits with <command>'s own exit code once the tab closes, or 1 if the tab"
+  echo "is closed before <command> finishes. Callers that don't care about this"
+  echo "should ignore it explicitly (e.g. 'wait \"\$command_pid\" || true') rather"
+  echo "than let 'set -e' abort on an exit code they don't need."
+  echo
   echo "Options:"
   echo
   echo "  --command '<command>'   Command to run, given as a single string."
@@ -72,6 +77,12 @@ fi
 # git-aware review) expects.
 current_directory="$PWD"
 
+# The command runs in a pane herdr manages asynchronously, so its exit status can't be
+# read back directly (herdr exposes no way to query it). Have the pane's shell write it
+# to a file instead, and default to failure in case the tab closes before that happens.
+exit_code_file="$(mktemp)"
+echo 1 >"$exit_code_file"
+
 # Create the tab in the background (--no-focus) in the caller's workspace, and
 # capture its id and root pane's id (to run the command in).
 read -r tab pane < <(
@@ -86,12 +97,15 @@ read -r tab pane < <(
 # kills bash without running the EXIT trap, which would strand the tab open.
 trap 'herdr tab close "$tab" >/dev/null 2>&1 || true' EXIT INT TERM HUP
 
-# Run the command in the tab's pane, in the caller's directory, followed by
-# `exit` so the underlying shell terminates and the tab closes as soon as the
-# command finishes, regardless of whether it succeeded.
-herdr pane run "$pane" "cd $(printf '%q' "$current_directory") && $command; exit" >/dev/null
+# Run the command in the tab's pane, in the caller's directory, capturing its exit status to
+# exit_code_file before `exit` terminates the shell and closes the tab, regardless of whether
+# the command succeeded.
+herdr pane run "$pane" "cd $(printf '%q' "$current_directory") && $command; echo \$? > $(printf '%q' "$exit_code_file"); exit" >/dev/null
 
 # Block until the tab is gone (the command finished or the user closed it).
 while herdr tab get "$tab" >/dev/null 2>&1; do
   sleep 0.5
 done
+
+# Relay the wrapped command's own exit status as this script's own.
+exit "$(cat -- "$exit_code_file")"

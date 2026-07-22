@@ -100,7 +100,7 @@ command="'$confirm' --prompt $(printf '%q' "$prompt") --affirmative $(printf '%q
 "$interactive_command" --command "$command" --name "$name" &
 command_pid=$!
 trap 'kill "$command_pid" 2>/dev/null || true' EXIT INT TERM HUP
-wait "$command_pid"
+wait "$command_pid" || true
 trap - EXIT INT TERM HUP
 
 # The tab has closed; relay confirm.rb's exit code as this script's own.

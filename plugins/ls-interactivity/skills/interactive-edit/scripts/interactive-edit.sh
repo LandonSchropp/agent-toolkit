@@ -74,7 +74,7 @@ interactive_command="$script_directory/../../interactive-command/scripts/interac
 "$interactive_command" --command "nvim -- '$file'" --name "$name" &
 command_pid=$!
 trap 'kill "$command_pid" 2>/dev/null || true' EXIT
-wait "$command_pid"
+wait "$command_pid" || true
 trap - EXIT
 
 # The window has closed; print the user's saved edits.
