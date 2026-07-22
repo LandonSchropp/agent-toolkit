@@ -117,6 +117,6 @@ system(
 )
 result = $?.exitstatus
 
-File.write(output, result.zero? ? "approved\n" : "denied\n") if output
+File.write(output, result.to_s) if output
 
 exit result
