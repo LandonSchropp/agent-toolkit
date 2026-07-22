@@ -60,28 +60,8 @@ function is_review_disabled() {
      LIMIT 1;" 2>/dev/null)" ]]
 }
 
-# Review working changes. revdiff diffs untracked files against /dev/null, so a rename whose new
-# file is untracked shows as delete + add. Intent-to-adding the untracked files in a throwaway
-# index copy lets git's -M detection pair them, without touching the real index.
-#
-# TODO: Remove once revdiff detects untracked renames natively (umputun/revdiff#243).
 function review_working() {
-  local temporary_index
-
-  # With no untracked files there's no untracked rename to pair, and we avoid an empty git add.
-  if [[ -z "$(git ls-files --others --exclude-standard)" ]]; then
-    revdiff --untracked --output "$output"
-    return
-  fi
-
-  # Create a temporary index and tell Git we intend to add the untracked files. That lets revdiff
-  # properly pick up the renames.
-  temporary_index="$(mktemp)"
-  cp "$(git rev-parse --git-dir)/index" "$temporary_index"
-  git ls-files --others --exclude-standard -z |
-    GIT_INDEX_FILE="$temporary_index" git add -N --pathspec-from-file=- --pathspec-file-nul
-
-  GIT_INDEX_FILE="$temporary_index" revdiff --untracked --output "$output"
+  revdiff --untracked --output "$output"
 }
 
 function review_staged() {
