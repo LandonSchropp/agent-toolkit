@@ -12,7 +12,7 @@ For files with `kanban-plugin: board` in the frontmatter, follow these formattin
 | Blocked     | `[?]`         |
 | To-Do       | `[ ]`         |
 | On Deck     | `[>]`         |
-| In Progress | `[/]`         |
+| In-Progress | `[/]`         |
 | Done        | `[x]`         |
 | Cancelled   | `[-]`         |
 
