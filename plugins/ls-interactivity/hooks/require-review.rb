@@ -5,6 +5,9 @@
 # PreToolUse hook that blocks `git commit` until the pending changes have been reviewed. Reads a
 # tool-call description as JSON from stdin and denies it unless the target repo's current HEAD is
 # recorded as reviewed in the shared reviews database.
+ 
+# NOTE: Hooks run outside the interactive shell, without mise's activation, so `ruby` can resolve
+# to the macOS system Ruby (2.6). Stick to syntax that works there — no numbered block parameters.
 
 require "json"
 require "shellwords"
@@ -46,7 +49,7 @@ words = Shellwords.split(command)
 
 # We only care about git commit commands, so ignore the rest.
 simplified_command = words
-  .filter { ["git", "commit", "--amend", "--fixup"].include?(_1) }
+  .filter { |word| ["git", "commit", "--amend", "--fixup"].include?(word) }
   .join(" ")
 
 # Only gate commands that create a commit; ignore everything else.
