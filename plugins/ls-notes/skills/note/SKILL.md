@@ -12,10 +12,10 @@ Landon's Obsidian vault is at `~/Notes`.
 - [Conventions](references/conventions.md): File naming, frontmatter, triage.
 - [Icons](references/icons.md)
 - [Templates](references/templates.md)
-- [Kanban Boards](references/kanban.md): Formatting rules for files with `kanban-plugin: board`.
 - [Obsidian CLI](references/obsidian-cli.md)
 
 ## Related Skills
 
 - `daily-note`: Invoke when the user mentions a daily note or daily todos, or when reading or writing any file under `Daily Notes/`.
+- `project`: Invoke when reading or writing any file under `Projects/`, starting a new project, archiving a finished one, or editing any file with `kanban-plugin: board` in its frontmatter. It owns the kanban board conventions.
 - `plan-morning`: Invoke when the user says "plan my morning" or wants to walk through morning journaling and tasks for today's daily note.
