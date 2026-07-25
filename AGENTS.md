@@ -32,6 +32,10 @@ These utilities are located in `plugins/ls-interactivity/skills/interactive-ui/s
 - `<utility>`: The bare utility script, intended to be called from other skill scripts directly.
 - `interactive-<utility>`: The interactive script that should be called by the agent.
 
+## Documentation
+
+- **Never use real examples in documentation.** Real file names, project names, and note titles pulled from the vault or from actual repositories go stale as soon as the underlying content changes, and then the documentation is wrong. Use generic placeholders such as `<Project Name>` instead.
+
 ## Code Quality
 
 - Prettier configuration with import sorting and JSDoc plugins
