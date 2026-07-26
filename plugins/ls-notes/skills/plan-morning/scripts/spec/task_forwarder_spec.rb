@@ -165,6 +165,27 @@ RSpec.describe TaskForwarder do
       it "forwards a personal task" do
         expect(Markdown.section(today_result.content, "Personal", 3)).to include("- [<] Water the plants")
       end
+
+      context "when a previous note has an incomplete work task" do
+        let(:previous) do
+          [daily_note("2026-05-29 - Daily Note.md", personal: ["- [<] Water the plants"], work: ["- [ ] Unresolved"])]
+        end
+
+        it "does not raise, since the task is not being forwarded" do
+          expect { forwarder.forward }.not_to raise_error
+        end
+      end
+
+      context "when a previous note has an incomplete personal task" do
+        let(:previous) do
+          [daily_note("2026-05-29 - Daily Note.md", personal: ["- [ ] Unresolved"])]
+        end
+
+        it "raises, naming the offending note" do
+          expect { forwarder.forward }
+            .to raise_error(TaskForwarder::IncompleteTasksError, /2026-05-29 - Daily Note/)
+        end
+      end
     end
 
     context "when a previous note has an incomplete task" do

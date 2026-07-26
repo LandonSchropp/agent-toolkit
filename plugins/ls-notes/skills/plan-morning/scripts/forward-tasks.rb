@@ -14,8 +14,9 @@ def print_help
     keep their marker and are removed from their source. Work tasks stay put when
     today is a weekend.
 
-    Exits 1 if any previous note still holds an incomplete (- [ ]) task, or holds
-    a task that is not under a subheader, naming the offending notes on stderr.
+    Exits 1 if any previous note still holds an incomplete (- [ ]) task it would
+    forward, or holds a task that is not under a subheader, naming the offending
+    notes on stderr.
 
     Options:
 

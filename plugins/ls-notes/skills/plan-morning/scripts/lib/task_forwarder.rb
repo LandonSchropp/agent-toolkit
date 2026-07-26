@@ -34,7 +34,7 @@ class TaskForwarder
   #   tasks appended, plus each source note with its scheduled tasks removed
   # @raise [IncompleteTasksError] when a previous note has an incomplete task
   def forward
-    incomplete_daily_notes = @previous_daily_notes.select(&:incomplete?)
+    incomplete_daily_notes = @previous_daily_notes.select { candidate_tasks(_1).any?(&:incomplete?) }
     raise IncompleteTasksError, incomplete_daily_notes unless incomplete_daily_notes.empty?
 
     [@todays_daily_note.append_tasks(tasks_to_forward), *sources_without_scheduled_tasks]
