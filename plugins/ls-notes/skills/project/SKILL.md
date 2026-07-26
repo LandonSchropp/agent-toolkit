@@ -27,14 +27,13 @@ Frontmatter:
 
 ```yaml
 ---
-date: 2025-10-06
+date: <YYYY-MM-DD>
 tags: []
 icon: LiKanbanSquare
 kanban-plugin: board
+prettier: false
 ---
 ```
-
-Remove `prettier: false` from the frontmatter if it's there.
 
 Sections appear in this order, and no board uses all of them: Backlog, Blocked, To-Do, On Deck, In-Progress, Done, Cancelled, Archive. The header is `In-Progress`, hyphenated.
 

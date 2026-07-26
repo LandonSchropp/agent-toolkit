@@ -2,6 +2,8 @@
 
 For files with `kanban-plugin: board` in the frontmatter, follow these formatting conventions:
 
+**Never format a board with Prettier, and never remove `prettier: false` from a board's frontmatter.** Prettier rewrites the list and indentation structure the kanban plugin depends on, which corrupts the board. Add the key if a board is missing it.
+
 ## Card Formatting
 
 **Checkbox types:** Use specific checkbox types for top-level list items based on the header text. Preserve existing checkboxes in sub-lists.
