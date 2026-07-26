@@ -61,9 +61,10 @@ Board files end with a `kanban:settings` block holding the board's JSON configur
 
 The category pill only renders when `category` is listed in `metadata-keys`, so a board that colors categories needs both settings. Other common keys are `list-collapse`, `show-relative-date`, `archive-with-date`, and `append-archive-date`.
 
-````markdown
-%% kanban:settings
+**Leave no blank lines inside the block.** The marker, the fence, and the closing `%%` sit on consecutive lines, and the file ends at `%%` with no trailing newline. Prettier inserts blank lines around the fence, which is one more reason boards keep `prettier: false`.
 
+````text
+%% kanban:settings
 ```
 {
   "kanban-plugin": "board",
@@ -83,7 +84,6 @@ The category pill only renders when `category` is listed in `metadata-keys`, so 
   ]
 }
 ```
-
 %%
 ````
 
