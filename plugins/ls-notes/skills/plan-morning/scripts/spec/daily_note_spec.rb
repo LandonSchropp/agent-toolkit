@@ -109,6 +109,26 @@ RSpec.describe DailyNote do
       end
     end
 
+    context "when tasks precede the first subheader" do
+      let(:content) do
+        <<~MARKDOWN
+          ## :LiCheckCircle2: Tasks
+
+          - [<] Roll me forward
+          - [ ] Do me
+
+          ### Work
+
+          - [x] Shipped it
+        MARKDOWN
+      end
+
+      it "raises, naming the note" do
+        expect { note.tasks }
+          .to raise_error(/2026-05-22 - Daily Note has tasks that are not under a subheader/)
+      end
+    end
+
     context "when a subheader has sub-subheaders" do
       let(:content) do
         <<~MARKDOWN

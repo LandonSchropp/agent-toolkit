@@ -18,6 +18,7 @@ DailyNote = Data.define(:path, :content) do
   # The header level of the subheaders (Personal, Work) within the Tasks section.
   SUBHEADER_LEVEL = 3
 
+
   # Matches a complete task block: a top-level task line followed by any body
   # content (indented lines and blank separators between them) up to but not
   # including the next top-level task line or a header line (so nested
@@ -33,14 +34,17 @@ DailyNote = Data.define(:path, :content) do
 
   # @return [Array<Task>] the tasks within the note's Tasks section, each tagged
   #   with the subheader (Personal, Work, ...) it falls under
+  # @raise [RuntimeError] when a task precedes the first subheader
   def tasks
     body = tasks_section
     return [] unless body
 
+    orphaned_tasks = parse_tasks(preamble(body), nil)
+
+    raise "#{File.basename(path, '.md')} has tasks that are not under a subheader." unless orphaned_tasks.empty?
+
     Markdown.header_names(body, level: SUBHEADER_LEVEL).flat_map do |subheader|
-      Markdown.section(body, subheader, SUBHEADER_LEVEL)
-        .scan(TASK_BLOCK_REGEX)
-        .filter_map { Task.parse(_1, subheader) }
+      parse_tasks(Markdown.section(body, subheader, SUBHEADER_LEVEL), subheader)
     end
   end
 
@@ -94,6 +98,19 @@ DailyNote = Data.define(:path, :content) do
   # @return [String, nil] the body of the note's Tasks section
   def tasks_section
     Markdown.section(content, TASKS_SECTION, TASKS_LEVEL)
+  end
+
+  # @param body [String] the body of the Tasks section
+  # @return [String] the part of the section preceding its first subheader
+  def preamble(body)
+    body[/\A.*?(?=^#{"#" * SUBHEADER_LEVEL} |\z)/m]
+  end
+
+  # @param content [String] the content to scan for task blocks
+  # @param subheader [String] the subheader to tag each task with
+  # @return [Array<Task>] the tasks parsed from the content
+  def parse_tasks(content, subheader)
+    content.scan(TASK_BLOCK_REGEX).filter_map { Task.parse(_1, subheader) }
   end
 
   # Adds a new, empty subheader at the end of the Tasks section when the note

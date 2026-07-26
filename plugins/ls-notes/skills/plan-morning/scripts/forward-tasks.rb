@@ -13,8 +13,8 @@ def print_help
     today's daily note. Forwarded and partial tasks become to-dos; scheduled tasks
     keep their marker and are removed from their source.
 
-    Exits 1 if any previous note still holds an incomplete (- [ ]) task, listing
-    the offending notes to stderr.
+    Exits 1 if any previous note still holds an incomplete (- [ ]) task, or holds
+    a task that is not under a subheader, naming the offending notes on stderr.
 
     Options:
 

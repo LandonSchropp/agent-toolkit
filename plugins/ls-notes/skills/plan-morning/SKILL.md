@@ -103,7 +103,10 @@ Open the scratch file for editing per the **Editing** steps with window name "ye
 
 Run the forward-tasks script at `scripts/forward-tasks.rb`. It creates today's note from the template (if it doesn't yet exist) and pulls every `>`, `<`, and `/` from the recent prior notes into today's note under the matching subheader, removing scheduled tasks from their source.
 
-If the script exits non-zero, it will list the prior notes that still contain unresolved `- [ ]` items. Present the listed notes in the editor again as in Step 1, then rerun the script. Repeat until the script exits 0.
+If the script exits non-zero, it names the prior notes it can't proceed with, and the message says which of the two problems it found. Fix them, then rerun the script, repeating until it exits 0.
+
+- **A task not under a subheader:** The note lost a header such as `### Personal`. Restore it yourself; don't open the editor for this.
+- **Unresolved `- [ ]` items:** Present the listed notes in the editor again as in Step 1.
 
 ## Step 3: Read Today's Daily Note
 
