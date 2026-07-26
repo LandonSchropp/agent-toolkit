@@ -134,6 +134,39 @@ RSpec.describe TaskForwarder do
       end
     end
 
+    context "when the note is on a weekend" do
+      let(:today) { daily_note("2026-05-30 - Daily Note.md") }
+
+      let(:previous) do
+        [
+          daily_note(
+            "2026-05-29 - Daily Note.md",
+            personal: ["- [<] Water the plants"],
+            work: ["- [>] Forward me", "- [<] Schedule me"]
+          )
+        ]
+      end
+
+      let(:today_result) { forwarder.forward.find { File.basename(_1.path) == "2026-05-30 - Daily Note.md" } }
+      let(:source_result) { forwarder.forward.find { File.basename(_1.path) == "2026-05-29 - Daily Note.md" } }
+
+      it "does not forward a forwarded work task" do
+        expect(today_result.content).not_to include("Forward me")
+      end
+
+      it "does not forward a scheduled work task" do
+        expect(today_result.content).not_to include("Schedule me")
+      end
+
+      it "leaves the scheduled work task on its source" do
+        expect(source_result.content).to include("- [<] Schedule me")
+      end
+
+      it "forwards a personal task" do
+        expect(Markdown.section(today_result.content, "Personal", 3)).to include("- [<] Water the plants")
+      end
+    end
+
     context "when a previous note has an incomplete task" do
       let(:previous) do
         [

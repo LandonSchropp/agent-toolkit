@@ -4,9 +4,12 @@ require_relative "task"
 
 # Forwards tasks from previous daily notes into today's note. Forwarded and
 # partial tasks become to-dos; scheduled tasks keep their marker and are removed
-# from their source. Operates on DailyNote values — the caller persists the
-# result.
+# from their source. Work tasks stay put on weekends. Operates on DailyNote
+# values — the caller persists the result.
 class TaskForwarder
+  # The subheader whose tasks are left alone when today is a weekend.
+  WORK_SUBHEADER = "Work"
+
   # Raised when a previous note still holds an incomplete task, which must be
   # resolved before forwarding can proceed. Carries the offending notes.
   class IncompleteTasksError < StandardError
@@ -49,7 +52,7 @@ class TaskForwarder
 
   def forwarded_tasks
     @previous_daily_notes
-      .flat_map(&:tasks)
+      .flat_map { candidate_tasks(_1) }
       .reduce({}) { |registry, task| registry.merge([task.subheader, task.first_line] => task) }
       .values
       .select(&:forwardable?)
@@ -57,9 +60,24 @@ class TaskForwarder
   end
 
   def sources_without_scheduled_tasks
-    @previous_daily_notes
-      .select { _1.tasks.any?(&:scheduled?) }
-      .map { _1.remove_tasks(_1.tasks.select(&:scheduled?)) }
+    @previous_daily_notes.filter_map do |note|
+      scheduled_tasks = candidate_tasks(note).select(&:scheduled?)
+      note.remove_tasks(scheduled_tasks) unless scheduled_tasks.empty?
+    end
+  end
+
+  # @param note [DailyNote] the note to take tasks from
+  # @return [Array<Task>] the note's tasks that today is eligible to take
+  def candidate_tasks(note)
+    weekend? ? note.tasks.reject { _1.subheader == WORK_SUBHEADER } : note.tasks
+  end
+
+  # @return [Boolean] whether today's note falls on a Saturday or Sunday
+  def weekend?
+    date = @todays_daily_note.date
+    return false unless date
+
+    date.saturday? || date.sunday?
   end
 
   # Carries a task into today's note: scheduled tasks keep their marker so they

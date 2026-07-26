@@ -11,7 +11,8 @@ def print_help
 
     Forwards forwardable tasks (>, <, /) from the recent previous daily notes into
     today's daily note. Forwarded and partial tasks become to-dos; scheduled tasks
-    keep their marker and are removed from their source.
+    keep their marker and are removed from their source. Work tasks stay put when
+    today is a weekend.
 
     Exits 1 if any previous note still holds an incomplete (- [ ]) task, or holds
     a task that is not under a subheader, naming the offending notes on stderr.
