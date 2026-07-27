@@ -25,6 +25,6 @@ agent: Plan
    - For the Commits section, invoke the `ls-git:git-atomic-commit` skill and apply its principles to decompose the implementation into ordered atomic commits, then fill in the list. Order the commits so the tree stays green at each step (pure refactors first, behavior changes on top). The plan file stores the commits as an ordered list, but when presenting the breakdown to the user in the conversation, render it as a table (columns: #, Commit, Contents).
    - Do not modify sections that contain the comment "Copy this section exactly as written, without modification", but do delete the comment.
 
-7. After the plan is complete, invoke the `neovim` skill and open the plan file in Neovim so the user can review it.
+7. After the plan is complete, invoke the `ls-interactivity:interactive-edit` skill with the plan file so the user can review and edit it, then read their changes back.
 
 ultrathink
