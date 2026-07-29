@@ -9,6 +9,10 @@ Run `scripts/interactive-review.sh <mode> [<sha>]` in the background. It opens r
 
 For `working` and `staged` mode, the script's own exit code is the approve/deny decision: 0 if the user approved when prompted after closing revdiff, 1 if they denied (or closed the tab without answering). This is the only signal that matters — don't ask the user separately whether to commit or re-review. On approval, proceed to commit. On denial, address the annotations and invoke this skill again; do not attempt the commit in between, since the commit hook still blocks it either way. `commit` mode has nothing to approve and always exits 0.
 
+## Choosing Working vs. Staged Mode
+
+`working` mode reviews every uncommitted change in the worktree, including untracked files — not just the change under review. Before invoking the script, run `git status`. If the worktree has uncommitted changes unrelated to the commit being built, `working` mode would mix them into the review. In that case, stage only the files belonging to this commit (`git add <files>`) and invoke `staged` mode instead, so the review shows just the intended change.
+
 ## Handling an Existing Review
 
 Before opening a review, check whether a `review` herdr tab is already open in the
