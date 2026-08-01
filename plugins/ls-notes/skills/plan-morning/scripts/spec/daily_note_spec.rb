@@ -200,6 +200,21 @@ RSpec.describe DailyNote do
 
       it { expect(note).not_to be_incomplete }
     end
+
+    context "when only a subtask is incomplete" do
+      let(:content) do
+        <<~MARKDOWN
+          ## :LiCheckCircle2: Tasks
+
+          ### Personal
+
+          - [x] Complete
+            - [ ] Unresolved subtask
+        MARKDOWN
+      end
+
+      it { expect(note).to be_incomplete }
+    end
   end
 
   describe "#merge_tasks" do

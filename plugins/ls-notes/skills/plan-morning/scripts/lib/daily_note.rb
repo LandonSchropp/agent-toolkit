@@ -50,9 +50,10 @@ DailyNote = Data.define(:path, :content) do
     end
   end
 
-  # @return [Boolean] whether the note has any unresolved (incomplete) task
+  # @return [Boolean] whether the note has any unresolved (incomplete) task, at
+  #   any nesting depth
   def incomplete?
-    tasks.any?(&:incomplete?)
+    tasks.any? { _1.any?(&:incomplete?) }
   end
 
   # Merges each task into its own subheader's subsection within the Tasks

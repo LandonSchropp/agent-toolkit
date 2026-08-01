@@ -34,10 +34,12 @@ class TaskForwarder
   #   tasks merged in, plus each source note with its scheduled tasks removed
   # @raise [IncompleteTasksError] when a previous note has an incomplete task
   def forward
-    incomplete_daily_notes = @previous_daily_notes.select { candidate_tasks(_1).any?(&:incomplete?) }
+    incomplete_daily_notes = @previous_daily_notes.select { |note| candidate_tasks(note).any? { _1.any?(&:incomplete?) } }
     raise IncompleteTasksError, incomplete_daily_notes unless incomplete_daily_notes.empty?
 
-    [@todays_daily_note.merge_tasks(forwarded_tasks), *sources_without_scheduled_tasks]
+    result = @todays_daily_note.merge_tasks(forwarded_tasks)
+
+    [result, *sources_without_forwarded_tasks(result.tasks)]
   end
 
   private
@@ -55,11 +57,26 @@ class TaskForwarder
       .filter_map { carry_forward(_1.reverse.reduce { |newer, older| newer.merge(older) }) }
   end
 
-  def sources_without_scheduled_tasks
+  # Removes each source note's scheduled tasks, but only the ones that made it
+  # into today's note, so that nothing is ever dropped without being written
+  # somewhere first.
+  #
+  # @param present_tasks [Array<Task>] today's top-level tasks
+  # @return [Array<DailyNote>] the source notes that changed
+  def sources_without_forwarded_tasks(present_tasks)
     @previous_daily_notes.filter_map do |note|
-      scheduled_tasks = candidate_tasks(note).select(&:scheduled?)
-      note.remove_tasks(scheduled_tasks) unless scheduled_tasks.empty?
+      removable_tasks = candidate_tasks(note).flat_map { removable(_1, present_tasks) }
+      note.remove_tasks(removable_tasks) unless removable_tasks.empty?
     end
+  end
+
+  # @param task [Task] the task to inspect, along with everything beneath it
+  # @param present_tasks [Array<Task>] today's top-level tasks
+  # @return [Array<Task>] the tasks whose source copy can be dropped
+  def removable(task, present_tasks)
+    return [task] if task.scheduled? && present_tasks.any? { |present| present.any? { _1.matches?(task) } }
+
+    task.children.flat_map { removable(_1, present_tasks) }
   end
 
   # @param note [DailyNote] the note to take tasks from

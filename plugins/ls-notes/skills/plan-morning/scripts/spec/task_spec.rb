@@ -163,6 +163,22 @@ RSpec.describe Task do
     end
   end
 
+  describe "#any?" do
+    subject(:task) { Task.parse("- [x] Main task\n  - [x] First\n    - [>] Deepest\n  - [x] Second", "Personal") }
+
+    it "is true when the task itself satisfies the block" do
+      expect(task.any?(&:complete?)).to be(true)
+    end
+
+    it "is true when a deeply nested subtask satisfies the block" do
+      expect(task.any?(&:forwarded?)).to be(true)
+    end
+
+    it "is false when nothing in the tree satisfies the block" do
+      expect(task.any?(&:incomplete?)).to be(false)
+    end
+  end
+
   describe "#merge" do
     subject(:merged) { existing.merge(incoming) }
 

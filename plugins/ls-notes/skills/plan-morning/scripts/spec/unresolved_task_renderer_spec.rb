@@ -87,6 +87,19 @@ RSpec.describe UnresolvedTaskRenderer do
       end
     end
 
+    context "when only a subtask is unresolved" do
+      let(:notes) do
+        [daily_note(
+          "2026-01-05 - Daily Note.md",
+          personal: ["- [x] Parent", "  - [x] Done child", "  - [ ] Unresolved child"]
+        )]
+      end
+
+      it "renders the whole block, so the subtask arrives with its context" do
+        expect(markdown).to include("- [x] Parent\n  - [x] Done child\n  - [ ] Unresolved child")
+      end
+    end
+
     context "when only one subheader has unresolved tasks" do
       let(:notes) do
         [daily_note("2026-01-05 - Daily Note.md", personal: ["- [ ] Personal task"], work: ["- [x] Done work"])]

@@ -39,8 +39,11 @@ class UnresolvedTaskRenderer
     [header, *subheader_sections(note)].join("\n\n")
   end
 
+  # Keeps each task block holding an unresolved to-do, whole, so that a nested
+  # to-do arrives with its parent for context and nothing the user might edit is
+  # missing from the file.
   def subheader_sections(note)
-    note.tasks.select(&:incomplete?).group_by(&:subheader).map do |subheader, tasks|
+    note.tasks.select { _1.any?(&:incomplete?) }.group_by(&:subheader).map do |subheader, tasks|
       "### #{subheader}\n\n#{tasks.map(&:to_markdown).join("\n")}"
     end
   end

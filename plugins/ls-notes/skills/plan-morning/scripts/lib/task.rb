@@ -112,6 +112,13 @@ Task = Data.define(:type, :text, :subheader, :children) do
     text.lines.first&.chomp || text
   end
 
+  # @yieldparam task [Task] the task itself, then each of its descendants
+  # @yieldreturn [Boolean] whether the task satisfies the caller
+  # @return [Boolean] whether the task or anything beneath it satisfies the block
+  def any?(&block)
+    block.call(self) || children.any? { _1.any?(&block) }
+  end
+
   # @param other [Task] the task to compare against
   # @return [Boolean] whether both refer to the same task, ignoring their markers,
   #   any differences in body lines, and any emoji decoration

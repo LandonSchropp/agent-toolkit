@@ -11,6 +11,16 @@ RSpec.describe TaskForwarder do
     DailyNote.new(path: "Daily Notes/2026/2026-05/#{basename}", content:)
   end
 
+  # Every task line in the content, at any nesting depth, as a marker and text pair.
+  def task_lines(content)
+    content.scan(/^[ \t]*(?:[-+*]|\d+\.) \[(.)\] (.*)$/)
+  end
+
+  # The text of every task line in the content, at any nesting depth.
+  def task_texts(content)
+    task_lines(content).map(&:last)
+  end
+
   let(:today) { daily_note("2026-05-27 - Daily Note.md") }
 
   describe "#forward" do
@@ -80,6 +90,14 @@ RSpec.describe TaskForwarder do
 
       it "does not forward the resolved subtask" do
         expect(today_result.content).not_to include("Warm-up")
+      end
+
+      it "removes the subtask from its source" do
+        expect(source_result.content).not_to include("K Closest Points")
+      end
+
+      it "leaves the parent and its resolved subtask on the source" do
+        expect(source_result.content).to include("- [x] Grind 75\n  - [x] Warm-up")
       end
     end
 
@@ -270,6 +288,54 @@ RSpec.describe TaskForwarder do
           expect { forwarder.forward }
             .to raise_error(TaskForwarder::IncompleteTasksError, /2026-05-29 - Daily Note/)
         end
+      end
+    end
+
+    context "when the sources hold every shape of nested task" do
+      let(:today) do
+        daily_note(
+          "2026-05-27 - Daily Note.md",
+          personal: ["- [ ] Read up on system design", "  - [ ] Existing child"]
+        )
+      end
+
+      let(:previous) do
+        [
+          daily_note(
+            "2026-05-25 - Daily Note.md",
+            personal: ["- [<] Read up on system design", "  - [<] System Design Primer"],
+            work: ["- [x] Grind 75", "  - [<] K Closest Points"]
+          ),
+          daily_note(
+            "2026-05-26 - Daily Note.md",
+            personal: ["- [>] Standalone", "- [<] Rolling", "  - [-] Cancelled child"],
+            work: ["- [/] Partial parent", "  - [>] Forwarded child", "  - [x] Done child"]
+          )
+        ]
+      end
+
+      it "writes every unresolved task it removes from a source into today's note" do
+        results = forwarder.forward
+        todays_texts = task_texts(results.first.content)
+
+        previous.each do |note|
+          result = results.find { _1.path == note.path } || note
+          removed = task_lines(note.content) - task_lines(result.content)
+          unresolved = removed.reject { ["x", "-"].include?(_1.first) }.map(&:last)
+
+          expect(todays_texts).to include(*unresolved) unless unresolved.empty?
+        end
+      end
+    end
+
+    context "when a previous note has an incomplete subtask" do
+      let(:previous) do
+        [daily_note("2026-05-26 - Daily Note.md", personal: ["- [<] Rolling", "  - [ ] Unresolved child"])]
+      end
+
+      it "raises rather than removing the parent and losing the subtask" do
+        expect { forwarder.forward }
+          .to raise_error(TaskForwarder::IncompleteTasksError, /2026-05-26 - Daily Note/)
       end
     end
 
