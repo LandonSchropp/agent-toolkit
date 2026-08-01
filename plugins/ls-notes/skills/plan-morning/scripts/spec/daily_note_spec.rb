@@ -57,7 +57,7 @@ RSpec.describe DailyNote do
       expect(note.tasks.map(&:text)).not_to include("Not a task to forward")
     end
 
-    context "when a task has indented body lines" do
+    context "when a task has subtasks" do
       let(:content) do
         <<~MARKDOWN
           ## :LiCheckCircle2: Tasks
@@ -72,17 +72,22 @@ RSpec.describe DailyNote do
         MARKDOWN
       end
 
-      it "includes the body lines in the task text" do
-        main = note.tasks.find { _1.first_line == "Main task" }
-        expect(main.text).to eq("Main task\n  - [<] Sub-task")
+      it "nests the subtask under its parent" do
+        main = note.tasks.find { _1.text == "Main task" }
+        expect(main.children.map(&:text)).to eq(["Sub-task"])
       end
 
-      it "does not create a separate task for the body line" do
+      it "gives the subtask its parent's subheader" do
+        main = note.tasks.find { _1.text == "Main task" }
+        expect(main.children.map(&:subheader)).to eq(["Personal"])
+      end
+
+      it "does not return the subtask as a top-level task" do
         expect(note.tasks.length).to eq(2)
       end
     end
 
-    context "when a task body has blank lines between items" do
+    context "when a task's subtasks are separated by blank lines" do
       let(:content) do
         <<~MARKDOWN
           ## :LiCheckCircle2: Tasks
@@ -99,12 +104,12 @@ RSpec.describe DailyNote do
         MARKDOWN
       end
 
-      it "includes all body lines including the blank line" do
-        main = note.tasks.find { _1.first_line == "Main task" }
-        expect(main.text).to eq("Main task\n  - [<] First\n\n  - [<] Second")
+      it "nests every subtask under its parent" do
+        main = note.tasks.find { _1.text == "Main task" }
+        expect(main.children.map(&:text)).to eq(["First", "Second"])
       end
 
-      it "does not create a separate task for the body lines" do
+      it "does not return the subtasks as top-level tasks" do
         expect(note.tasks.length).to eq(2)
       end
     end
@@ -224,6 +229,10 @@ RSpec.describe DailyNote do
       expect { note.append_tasks(tasks) }.not_to change(note, :content)
     end
 
+    it "separates the subheader from the next one with a blank line" do
+      expect(updated.content).to include("- [ ] New personal\n\n### Work")
+    end
+
     context "when the target subheader is empty" do
       let(:content) { "---\ndate: 2026-05-22\n---\n\n## Tasks\n\n### Personal\n\n### Work\n\n- [ ] Daily\n" }
 
@@ -235,6 +244,10 @@ RSpec.describe DailyNote do
 
       it "does not insert the task before the Tasks section" do
         expect(updated.content).to start_with("---\ndate: 2026-05-22\n---\n\n## Tasks")
+      end
+
+      it "separates the subheader from the next one with a blank line" do
+        expect(updated.content).to include("- [ ] First personal\n\n### Work")
       end
     end
 
@@ -291,15 +304,72 @@ RSpec.describe DailyNote do
         MARKDOWN
       end
 
-      let(:forward) { note.tasks.find { _1.first_line == "Scheduled task" } }
+      let(:forward) { note.tasks.find { _1.text == "Scheduled task" } }
 
-      it "removes the task and its body" do
+      it "removes the task" do
         expect(updated.content).not_to include("Scheduled task")
+      end
+
+      it "removes the task's subtasks along with it" do
         expect(updated.content).not_to include("Sub-item")
       end
 
-      it "keeps other tasks" do
+      it "keeps the other tasks" do
         expect(updated.content).to include("- [ ] Keep me")
+      end
+    end
+
+    context "when the task is a subtask" do
+      let(:content) do
+        <<~MARKDOWN
+          ---
+          date: 2026-05-22
+          ---
+
+          ## :LiCheckCircle2: Tasks
+
+          ### Personal
+
+          - [x] Parent task
+            - [x] Finished sub-item
+            - [<] Rolling sub-item
+
+          ### Work
+        MARKDOWN
+      end
+
+      let(:forward) { note.tasks.first.children.find { _1.text == "Rolling sub-item" } }
+
+      it "removes the subtask" do
+        expect(updated.content).not_to include("Rolling sub-item")
+      end
+
+      it "keeps the parent and its other subtasks" do
+        expect(updated.content).to include("- [x] Parent task\n  - [x] Finished sub-item")
+      end
+
+      it "separates the subheader from the next one with a blank line" do
+        expect(updated.content).to include("- [x] Finished sub-item\n\n### Work")
+      end
+    end
+
+    context "when the removed task is the last one in its subheader" do
+      let(:content) { "## Tasks\n\n### Personal\n\n- [x] Keep me\n- [<] Remove me\n\n### Work\n\n- [ ] Daily\n" }
+
+      let(:forward) { note.tasks.find { _1.text == "Remove me" } }
+
+      it "separates the subheader from the next one with a blank line" do
+        expect(updated.content).to include("- [x] Keep me\n\n### Work")
+      end
+    end
+
+    context "when the removed task is the only one in its subheader" do
+      let(:content) { "## Tasks\n\n### Personal\n\n- [<] Only task\n\n### Work\n\n- [ ] Keep me\n" }
+
+      let(:forward) { note.tasks.find { _1.text == "Only task" } }
+
+      it "leaves a single blank line between the subheaders" do
+        expect(updated.content).to include("### Personal\n\n### Work")
       end
     end
   end

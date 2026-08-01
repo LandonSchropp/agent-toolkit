@@ -18,12 +18,13 @@ DailyNote = Data.define(:path, :content) do
   # The header level of the subheaders (Personal, Work) within the Tasks section.
   SUBHEADER_LEVEL = 3
 
-
-  # Matches a complete task block: a top-level task line followed by any body
-  # content (indented lines and blank separators between them) up to but not
-  # including the next top-level task line or a header line (so nested
-  # sub-subheaders are not absorbed into the preceding task's body).
-  TASK_BLOCK_REGEX = /^(?:[-+*]|\d+\.) \[.\] [^\n]+(?:\n(?!(?:[-+*]|\d+\.) \[|#)[^\n]*)*/
+  # Matches a complete task block: a top-level task line, any body content
+  # (indented lines and blank separators between them) up to but not including
+  # the next top-level task line or a header line (so nested sub-subheaders are
+  # not absorbed into the preceding task's body), and the newline that ends it.
+  # Consuming that newline keeps blank-line separators intact when a block is
+  # rewritten or dropped.
+  TASK_BLOCK_REGEX = /^(?:[-+*]|\d+\.) \[.\] [^\n]+(?:\n(?!(?:[-+*]|\d+\.) \[|#)[^\n]*)*\n?/
 
   # @return [Date, nil] the date parsed from the filename, or nil when the file
   #   is not a daily note
@@ -32,8 +33,9 @@ DailyNote = Data.define(:path, :content) do
     match && Date.iso8601(match[1])
   end
 
-  # @return [Array<Task>] the tasks within the note's Tasks section, each tagged
-  #   with the subheader (Personal, Work, ...) it falls under
+  # @return [Array<Task>] the top-level tasks within the note's Tasks section,
+  #   each tagged with the subheader (Personal, Work, ...) it falls under and
+  #   carrying its subtasks as children
   # @raise [RuntimeError] when a task precedes the first subheader
   def tasks
     body = tasks_section
@@ -69,16 +71,16 @@ DailyNote = Data.define(:path, :content) do
       next current if subsection.nil?
 
       addition = group.map(&:to_markdown).join("\n")
-      appended = subsection.sub(/\n*\z/) { "\n#{addition}#{_1}" }
+      appended = end_with_blank_line("#{subsection.rstrip}\n#{addition}")
       Markdown.replace_section(current, subheader, SUBHEADER_LEVEL, appended)
     end
 
-    with(content: updated_content)
+    with(content: end_with_newline(updated_content))
   end
 
-  # Removes the given tasks from the Tasks section, matching each task's full
-  # rendered block (including any indented body lines) so that sub-task content
-  # is removed together with its parent.
+  # Removes the given tasks from the Tasks section. A task is removed together
+  # with everything nested beneath it, and a subtask is removed without
+  # disturbing the rest of its parent's block.
   #
   # @param tasks [Array<Task>] the tasks to remove
   # @return [DailyNote] a new note with the tasks removed
@@ -86,11 +88,15 @@ DailyNote = Data.define(:path, :content) do
     section = tasks_section
     return self if tasks.empty? || section.nil?
 
-    remaining = tasks.reduce(section) do |current, task|
-      current.sub(/#{Regexp.escape(task.to_markdown)}\n?/, "")
+    remaining = Markdown.header_names(section, level: SUBHEADER_LEVEL).reduce(section) do |current, subheader|
+      subsection = Markdown.section(current, subheader, SUBHEADER_LEVEL)
+      next current if subsection.nil?
+
+      removed = rewrite_blocks(subsection, subheader) { _1.remove(tasks) }
+      Markdown.replace_section(current, subheader, SUBHEADER_LEVEL, end_with_blank_line(removed))
     end
 
-    with(content: Markdown.replace_section(content, TASKS_SECTION, TASKS_LEVEL, remaining))
+    with(content: end_with_newline(Markdown.replace_section(content, TASKS_SECTION, TASKS_LEVEL, remaining)))
   end
 
   private
@@ -113,6 +119,37 @@ DailyNote = Data.define(:path, :content) do
     content.scan(TASK_BLOCK_REGEX).filter_map { Task.parse(_1, subheader) }
   end
 
+  # Runs each of a subsection's task blocks through a transformation, leaving
+  # the block's original text alone when the transformation is a no-op so that
+  # untouched blocks keep their exact formatting.
+  #
+  # @param subsection [String] the body of a subheader
+  # @param subheader [String] the subheader's name
+  # @yieldparam task [Task] the task parsed from a block
+  # @yieldreturn [Task, nil] the replacement task, or nil to drop the block
+  # @return [String] the body with every block rewritten
+  def rewrite_blocks(subsection, subheader)
+    subsection.gsub(TASK_BLOCK_REGEX) do |block|
+      task = Task.parse(block, subheader)
+      next block unless task
+
+      updated = yield(task)
+      next "" if updated.nil?
+
+      updated == task ? block : "#{updated.to_markdown}#{block[/\n*\z/]}"
+    end
+  end
+
+  # Gives a subheader body exactly one blank line between its tasks and whatever
+  # follows the subheader, since dropping the last task block takes that
+  # separator with it.
+  #
+  # @param subsection [String] the body of a subheader
+  # @return [String] the body to write back
+  def end_with_blank_line(subsection)
+    subsection.rstrip.empty? ? "\n" : "#{subsection.rstrip}\n\n"
+  end
+
   # Adds a new, empty subheader at the end of the Tasks section when the note
   # doesn't already have one with the given name. Does nothing when the note
   # has no Tasks section to add it to, or when the subheader already exists.
@@ -128,5 +165,12 @@ DailyNote = Data.define(:path, :content) do
 
     updated_body = "#{body.chomp}\n\n#{"#" * SUBHEADER_LEVEL} #{subheader}\n\n"
     Markdown.replace_section(content, TASKS_SECTION, TASKS_LEVEL, updated_body)
+  end
+
+  # @param content [String] the note content
+  # @return [String] the content ending in exactly one newline, so that a
+  #   rewritten trailing section doesn't leave a blank line at the end of file
+  def end_with_newline(content)
+    content.sub(/\n*\z/, "\n")
   end
 end

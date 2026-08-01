@@ -114,20 +114,74 @@ RSpec.describe Task do
       it { is_expected.to be_nil }
     end
 
-    context "when the task has indented body lines" do
+    context "when the task has a subtask" do
       subject(:task) { Task.parse("- [/] Main task\n  - [<] Sub-task", "Personal") }
 
-      it "includes the body in the text" do
-        expect(task.text).to eq("Main task\n  - [<] Sub-task")
+      it "keeps the parent's own text" do
+        expect(task.text).to eq("Main task")
+      end
+
+      it "parses the subtask as a child" do
+        expect(task.children.map(&:text)).to eq(["Sub-task"])
+      end
+
+      it "gives the child the parent's subheader" do
+        expect(task.children.map(&:subheader)).to eq(["Personal"])
+      end
+
+      it "parses the child's marker" do
+        expect(task.children.first.type).to eq("<")
       end
     end
 
-    context "when the task body contains blank lines between items" do
+    context "when the subtasks are separated by blank lines" do
       subject(:task) { Task.parse("- [/] Main task\n  - [<] First\n\n  - [<] Second", "Personal") }
 
-      it "includes all body lines in the text" do
-        expect(task.text).to eq("Main task\n  - [<] First\n\n  - [<] Second")
+      it "parses each subtask as a child" do
+        expect(task.children.map(&:text)).to eq(["First", "Second"])
       end
+    end
+
+    context "when the subtasks are nested more than one level deep" do
+      subject(:task) { Task.parse("- [/] Main task\n  - [<] Sub-task\n    - [>] Sub-sub-task", "Personal") }
+
+      it "nests the deepest task under its own parent" do
+        expect(task.children.first.children.map(&:text)).to eq(["Sub-sub-task"])
+      end
+    end
+
+    context "when the task has a non-task body line" do
+      subject(:task) { Task.parse("- [/] Main task\n  Some context\n  - [<] Sub-task", "Personal") }
+
+      it "keeps the body line in the text" do
+        expect(task.text).to eq("Main task\n  Some context")
+      end
+
+      it "still parses the subtask as a child" do
+        expect(task.children.map(&:text)).to eq(["Sub-task"])
+      end
+    end
+  end
+
+  describe "#remove" do
+    subject(:task) { Task.parse("- [x] Parent\n  - [x] Done child\n    - [<] Grandchild\n  - [<] Open child", "Personal") }
+
+    it "drops a nested task" do
+      remaining = task.remove([task.children.last])
+      expect(remaining.children.map(&:text)).to eq(["Done child"])
+    end
+
+    it "drops a task's descendants along with it" do
+      remaining = task.remove([task.children.first])
+      expect(remaining.to_markdown).not_to include("Grandchild")
+    end
+
+    it "returns nil when the task itself is dropped" do
+      expect(task.remove([task])).to be_nil
+    end
+
+    it "returns an equal task when nothing is dropped" do
+      expect(task.remove([])).to eq(task)
     end
   end
 
@@ -140,8 +194,8 @@ RSpec.describe Task do
       end
     end
 
-    context "when the task has multiple lines" do
-      subject(:task) { Task.new(type: ">", text: "Write the docs\n  - Sub item", subheader: "Personal") }
+    context "when the task has body lines" do
+      subject(:task) { Task.new(type: ">", text: "Write the docs\n  Some context", subheader: "Personal") }
 
       it "returns only the first line" do
         expect(task.first_line).to eq("Write the docs")
@@ -342,11 +396,26 @@ RSpec.describe Task do
       end
     end
 
-    context "when the task has body lines" do
-      subject(:task) { Task.new(type: "/", text: "Main task\n  - [<] Sub-task", subheader: "Personal") }
+    context "when the task has children" do
+      subject(:task) do
+        Task.new(
+          type: "/",
+          text: "Main task",
+          subheader: "Personal",
+          children: [Task.new(type: "<", text: "Sub-task", subheader: "Personal")]
+        )
+      end
 
-      it "renders the full block" do
+      it "indents each child under its parent" do
         expect(task.to_markdown).to eq("- [/] Main task\n  - [<] Sub-task")
+      end
+    end
+
+    context "when the children are nested more than one level deep" do
+      subject(:task) { Task.parse("- [/] Main task\n  - [<] Sub-task\n    - [>] Deepest", "Personal") }
+
+      it "round-trips the block" do
+        expect(task.to_markdown).to eq("- [/] Main task\n  - [<] Sub-task\n    - [>] Deepest")
       end
     end
   end
