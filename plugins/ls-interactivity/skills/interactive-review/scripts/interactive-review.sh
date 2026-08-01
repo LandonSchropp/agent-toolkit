@@ -12,7 +12,8 @@ function print_help() {
   echo "For 'working' and 'staged' mode, exits 0 if the user approved the"
   echo "changes when prompted after closing revdiff, or 1 if they denied (or"
   echo "closed the tab without answering). 'commit' mode has nothing to"
-  echo "approve and always exits 0."
+  echo "approve and always exits 0. A mode with no changes to review prints an"
+  echo "error and exits 1 without opening a review."
   echo
   echo "Modes:"
   echo

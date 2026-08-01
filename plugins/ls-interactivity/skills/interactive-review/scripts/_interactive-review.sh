@@ -80,14 +80,30 @@ function confirm_review() {
   fi
 }
 
+# An empty review is almost always the agent picking the wrong mode — the changes are staged but
+# working mode was requested, or the reverse. Report it instead of opening revdiff on nothing.
+# The message goes to $output rather than stderr, since this script's output dies with the tab
+# and only $output makes it back to the agent.
+function require_changes_to_review() {
+  case "$1" in
+  working) if [[ -n "$(git status --porcelain)" ]]; then return 0; fi ;;
+  staged) if ! git diff --cached --quiet; then return 0; fi ;;
+  esac
+
+  echo "Error: The '$1' mode has no changes to review. Double check the mode is correct." >"$output"
+  exit 1
+}
+
 # revdiff's own exit status isn't meaningful here — its job is only to populate $output — so
 # don't let it gate whether the approval prompt even runs.
 function review_working() {
+  require_changes_to_review working
   revdiff --untracked --output "$output" || true
   confirm_review
 }
 
 function review_staged() {
+  require_changes_to_review staged
   revdiff --staged --output "$output" || true
   confirm_review
 }
