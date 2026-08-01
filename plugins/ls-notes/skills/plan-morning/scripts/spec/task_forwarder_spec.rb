@@ -64,6 +64,40 @@ RSpec.describe TaskForwarder do
       end
     end
 
+    context "when a forwardable subtask sits under a resolved parent" do
+      let(:previous) do
+        [
+          daily_note(
+            "2026-05-26 - Daily Note.md",
+            personal: ["- [x] Grind 75", "  - [x] Warm-up", "  - [<] K Closest Points"]
+          )
+        ]
+      end
+
+      it "forwards the subtask under an unchecked copy of the parent" do
+        expect(todays_personal).to include("- [ ] Grind 75\n  - [<] K Closest Points")
+      end
+
+      it "does not forward the resolved subtask" do
+        expect(today_result.content).not_to include("Warm-up")
+      end
+    end
+
+    context "when a forwardable parent has a resolved subtask" do
+      let(:previous) do
+        [
+          daily_note(
+            "2026-05-26 - Daily Note.md",
+            personal: ["- [<] Read up on system design", "  - [x] Grokking notes"]
+          )
+        ]
+      end
+
+      it "does not forward the resolved subtask" do
+        expect(today_result.content).not_to include("Grokking notes")
+      end
+    end
+
     context "when a forwardable parent has forwardable subtasks" do
       let(:previous) do
         [

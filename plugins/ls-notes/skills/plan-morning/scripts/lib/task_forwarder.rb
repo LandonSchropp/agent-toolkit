@@ -42,13 +42,17 @@ class TaskForwarder
 
   private
 
+  # Every forwardable task across the previous notes. A task appearing on more
+  # than one day is forwarded once: the most recent version of it wins, and the
+  # older versions contribute any subtasks it no longer lists.
+  #
+  # @return [Array<Task>] the tasks as they should appear in today's note
   def forwarded_tasks
     @previous_daily_notes
       .flat_map { candidate_tasks(_1) }
-      .reduce({}) { |registry, task| registry.merge([task.subheader, task.first_line] => task) }
+      .group_by { [_1.subheader, _1.first_line] }
       .values
-      .select(&:forwardable?)
-      .map { carry_forward(_1) }
+      .filter_map { carry_forward(_1.reverse.reduce { |newer, older| newer.merge(older) }) }
   end
 
   def sources_without_scheduled_tasks
@@ -72,12 +76,18 @@ class TaskForwarder
     date.saturday? || date.sunday?
   end
 
-  # Carries a task into today's note: scheduled tasks keep their marker so they
-  # keep rolling; everything else becomes a fresh to-do.
+  # Carries a task into today's note, keeping only the branches that still have
+  # work in them. Scheduled tasks keep their marker so they keep rolling;
+  # everything else becomes a fresh to-do, including a resolved task that has to
+  # come along as a container for a forwardable subtask.
   #
   # @param task [Task] the task to carry forward
-  # @return [Task] the task as it should appear in today's note
+  # @return [Task, nil] the task as it should appear in today's note, or nil
+  #   when neither it nor anything beneath it is forwardable
   def carry_forward(task)
-    task.scheduled? ? task : task.with(type: " ")
+    children = task.children.filter_map { carry_forward(_1) }
+    return nil unless task.forwardable? || children.any?
+
+    task.with(type: task.scheduled? ? task.type : " ", children:)
   end
 end
