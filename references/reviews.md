@@ -15,10 +15,11 @@ The exit code and the annotations are independent signals — read both. They co
 
 1. **REQUIRED:** Invoke the `git-atomic-commit` skill before making changes, and follow its guidance. Group the work into atomic commits.
 2. Work one commit at a time. Keep your changes scoped to the single commit you're building.
-3. Present the changes for review. **REQUIRED:** Invoke the `interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
-4. Read the exit code and the annotations output, and follow the matching case above.
-5. Create the commit. **REQUIRED:** Use the `git-commit` skill.
-6. Repeat for the next commit.
+3. Review your own changes first. **REQUIRED:** Invoke the `pre-review` skill, and fix what it finds before the user sees the diff.
+4. Present the changes for review. **REQUIRED:** Invoke the `interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
+5. Read the exit code and the annotations output, and follow the matching case above.
+6. Create the commit. **REQUIRED:** Use the `git-commit` skill.
+7. Repeat for the next commit.
 
 ## Staying In Scope
 
