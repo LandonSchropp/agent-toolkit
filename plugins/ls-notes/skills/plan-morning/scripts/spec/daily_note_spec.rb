@@ -202,8 +202,8 @@ RSpec.describe DailyNote do
     end
   end
 
-  describe "#append_tasks" do
-    subject(:updated) { note.append_tasks(tasks) }
+  describe "#merge_tasks" do
+    subject(:updated) { note.merge_tasks(tasks) }
 
     let(:tasks) do
       [
@@ -226,7 +226,7 @@ RSpec.describe DailyNote do
     end
 
     it "does not modify the original note" do
-      expect { note.append_tasks(tasks) }.not_to change(note, :content)
+      expect { note.merge_tasks(tasks) }.not_to change(note, :content)
     end
 
     it "separates the subheader from the next one with a blank line" do
@@ -248,6 +248,70 @@ RSpec.describe DailyNote do
 
       it "separates the subheader from the next one with a blank line" do
         expect(updated.content).to include("- [ ] First personal\n\n### Work")
+      end
+    end
+
+    context "when the note already has the task's parent" do
+      let(:content) do
+        <<~MARKDOWN
+          ## Tasks
+
+          ### Personal
+
+          - [ ] Read up on system design
+            - [ ] Existing child
+
+          ### Work
+        MARKDOWN
+      end
+
+      let(:tasks) do
+        [
+          Task.new(
+            type: " ",
+            text: "Read up on system design",
+            subheader: "Personal",
+            children: [Task.new(type: "<", text: "New child", subheader: "Personal")]
+          )
+        ]
+      end
+
+      it "nests the new subtask under the existing parent" do
+        expect(updated.content).to include("- [ ] Read up on system design\n  - [ ] Existing child\n  - [<] New child")
+      end
+
+      it "does not duplicate the parent" do
+        expect(updated.content.scan("Read up on system design").length).to eq(1)
+      end
+    end
+
+    context "when the note already has the task and its subtask" do
+      let(:content) do
+        <<~MARKDOWN
+          ## Tasks
+
+          ### Personal
+
+          - [ ] Read up on system design
+            - [ ] Existing child
+
+          ### Work
+        MARKDOWN
+      end
+
+      let(:tasks) do
+        [
+          Task.new(
+            type: "<",
+            text: "Read up on system design",
+            subheader: "Personal",
+            children: [Task.new(type: "<", text: "Existing child", subheader: "Personal")]
+          )
+        ]
+      end
+
+      it "leaves the note untouched" do
+        expect(updated.content).to eq(content)
       end
     end
 

@@ -163,6 +163,51 @@ RSpec.describe Task do
     end
   end
 
+  describe "#merge" do
+    subject(:merged) { existing.merge(incoming) }
+
+    let(:existing) do
+      Task.new(
+        type: " ",
+        text: "Parent",
+        subheader: "Personal",
+        children: [Task.new(type: " ", text: "Existing child", subheader: "Personal")]
+      )
+    end
+
+    let(:incoming) do
+      Task.new(
+        type: "<",
+        text: "Parent",
+        subheader: "Personal",
+        children: [
+          Task.new(type: "<", text: "Existing child", subheader: "Personal"),
+          Task.new(type: "<", text: "New child", subheader: "Personal")
+        ]
+      )
+    end
+
+    it "keeps its own marker" do
+      expect(merged.type).to eq(" ")
+    end
+
+    it "keeps its own version of a subtask it already has" do
+      expect(merged.children.first.type).to eq(" ")
+    end
+
+    it "adds the subtasks it does not have" do
+      expect(merged.children.map(&:text)).to eq(["Existing child", "New child"])
+    end
+
+    context "when there is nothing to add" do
+      let(:incoming) { existing.with(type: "<") }
+
+      it "returns an equal task" do
+        expect(merged).to eq(existing)
+      end
+    end
+  end
+
   describe "#remove" do
     subject(:task) { Task.parse("- [x] Parent\n  - [x] Done child\n    - [<] Grandchild\n  - [<] Open child", "Personal") }
 

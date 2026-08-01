@@ -119,6 +119,23 @@ Task = Data.define(:type, :text, :subheader, :children) do
     match_key == other.match_key && subheader == other.subheader
   end
 
+  # Folds another version of this same task into this one, keeping this task's
+  # own marker and text and adding only the subtasks it does not already have.
+  # Subtasks present in both are merged the same way, recursively.
+  #
+  # @param other [Task] the other version of this task
+  # @return [Task] this task with the other's missing subtasks added
+  def merge(other)
+    merged = other.children.reduce(children) do |current, child|
+      index = current.index { _1.matches?(child) }
+      next current + [child] unless index
+
+      current.each_with_index.map { |existing, position| position == index ? existing.merge(child) : existing }
+    end
+
+    with(children: merged)
+  end
+
   # Drops the given tasks, and everything beneath them, from the tree.
   #
   # @param tasks [Array<Task>] the tasks to drop

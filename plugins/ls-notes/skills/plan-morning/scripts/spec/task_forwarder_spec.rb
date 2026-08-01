@@ -64,6 +64,57 @@ RSpec.describe TaskForwarder do
       end
     end
 
+    context "when a forwardable parent has forwardable subtasks" do
+      let(:previous) do
+        [
+          daily_note(
+            "2026-05-26 - Daily Note.md",
+            personal: ["- [<] Read up on system design", "  - [<] System Design Primer"]
+          )
+        ]
+      end
+
+      it "forwards the parent with its subtasks" do
+        expect(todays_personal).to include("- [<] Read up on system design\n  - [<] System Design Primer")
+      end
+
+      it "removes the group from its source" do
+        expect(source_result.content).not_to include("Read up on system design")
+      end
+    end
+
+    context "when today's note already has the parent of a forwardable subtask" do
+      let(:today) do
+        daily_note(
+          "2026-05-27 - Daily Note.md",
+          personal: ["- [ ] Read up on system design", "  - [ ] Existing child"]
+        )
+      end
+
+      let(:previous) do
+        [
+          daily_note(
+            "2026-05-26 - Daily Note.md",
+            personal: ["- [<] Read up on system design", "  - [<] System Design Primer", "  - [<] Grokking notes"]
+          )
+        ]
+      end
+
+      it "nests the forwarded subtasks under the existing parent" do
+        expect(todays_personal).to include(
+          "- [ ] Read up on system design\n  - [ ] Existing child\n  - [<] System Design Primer\n  - [<] Grokking notes"
+        )
+      end
+
+      it "does not duplicate the parent" do
+        expect(todays_personal.scan("Read up on system design").length).to eq(1)
+      end
+
+      it "keeps the forwarded subtasks it removed from the source" do
+        expect(todays_personal).to include("System Design Primer")
+      end
+    end
+
     context "when a task is completed in a later previous note" do
       let(:previous) do
         [

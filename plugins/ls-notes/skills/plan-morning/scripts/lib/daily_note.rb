@@ -55,14 +55,16 @@ DailyNote = Data.define(:path, :content) do
     tasks.any?(&:incomplete?)
   end
 
-  # Appends each task to the end of its own subheader's subsection within the
-  # Tasks section. Tasks are rendered verbatim, so marker conversion and
-  # de-duplication are the caller's responsibility. Creates the subheader at
-  # the end of the Tasks section when the note doesn't already have one.
+  # Merges each task into its own subheader's subsection within the Tasks
+  # section. A task the note already has keeps its own marker and gains only the
+  # subtasks it is missing; a task the note doesn't have is appended whole.
+  # Tasks are rendered verbatim, so marker conversion is the caller's
+  # responsibility. Creates the subheader at the end of the Tasks section when
+  # the note doesn't already have one.
   #
-  # @param tasks [Array<Task>] the tasks to append, each carrying its subheader
-  # @return [DailyNote] a new note with the tasks appended
-  def append_tasks(tasks)
+  # @param tasks [Array<Task>] the tasks to merge in, each carrying its subheader
+  # @return [DailyNote] a new note with the tasks merged in
+  def merge_tasks(tasks)
     return self if tasks.empty?
 
     updated_content = tasks.group_by(&:subheader).reduce(content) do |current, (subheader, group)|
@@ -70,9 +72,7 @@ DailyNote = Data.define(:path, :content) do
       subsection = Markdown.section(current, subheader, SUBHEADER_LEVEL)
       next current if subsection.nil?
 
-      addition = group.map(&:to_markdown).join("\n")
-      appended = end_with_blank_line("#{subsection.rstrip}\n#{addition}")
-      Markdown.replace_section(current, subheader, SUBHEADER_LEVEL, appended)
+      Markdown.replace_section(current, subheader, SUBHEADER_LEVEL, merge_into(subsection, group, subheader))
     end
 
     with(content: end_with_newline(updated_content))
@@ -117,6 +117,22 @@ DailyNote = Data.define(:path, :content) do
   # @return [Array<Task>] the tasks parsed from the content
   def parse_tasks(content, subheader)
     content.scan(TASK_BLOCK_REGEX).filter_map { Task.parse(_1, subheader) }
+  end
+
+  # @param subsection [String] the body of a subheader
+  # @param tasks [Array<Task>] the tasks to merge into it
+  # @param subheader [String] the subheader's name
+  # @return [String] the body with the tasks merged in
+  def merge_into(subsection, tasks, subheader)
+    remaining = tasks.dup
+
+    merged = rewrite_blocks(subsection, subheader) do |task|
+      index = remaining.index { task.matches?(_1) }
+      index ? task.merge(remaining.delete_at(index)) : task
+    end
+
+    merged = "#{merged.rstrip}\n#{remaining.map(&:to_markdown).join("\n")}" unless remaining.empty?
+    end_with_blank_line(merged)
   end
 
   # Runs each of a subsection's task blocks through a transformation, leaving

@@ -31,24 +31,16 @@ class TaskForwarder
   end
 
   # @return [Array<DailyNote>] the notes to persist: today with the forwarded
-  #   tasks appended, plus each source note with its scheduled tasks removed
+  #   tasks merged in, plus each source note with its scheduled tasks removed
   # @raise [IncompleteTasksError] when a previous note has an incomplete task
   def forward
     incomplete_daily_notes = @previous_daily_notes.select { candidate_tasks(_1).any?(&:incomplete?) }
     raise IncompleteTasksError, incomplete_daily_notes unless incomplete_daily_notes.empty?
 
-    [@todays_daily_note.append_tasks(tasks_to_forward), *sources_without_scheduled_tasks]
+    [@todays_daily_note.merge_tasks(forwarded_tasks), *sources_without_scheduled_tasks]
   end
 
   private
-
-  def tasks_to_forward
-    present_tasks = @todays_daily_note.tasks
-
-    forwarded_tasks.reduce([]) do |accumulator, task|
-      (present_tasks + accumulator).any? { _1.matches?(task) } ? accumulator : accumulator + [task]
-    end
-  end
 
   def forwarded_tasks
     @previous_daily_notes
