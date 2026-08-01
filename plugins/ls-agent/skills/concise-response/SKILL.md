@@ -9,9 +9,12 @@ The user invoked this because your prose has been too long. For the rest of this
 
 This only governs the prose you write to the user. Don't shorten code, generated documents, or other artifacts because of it.
 
+Favor scannable formatting over dense paragraphs: bullets for parallel items, tables for comparisons, short headers to let the user skip to what they need. This overrides any general preference for prose over bullets, since scannability wins here.
+
 ## Rationalizations
 
-| Thought                                      | Reality                                                         |
-| -------------------------------------------- | --------------------------------------------------------------- |
-| "This one reply needs more detail"           | Keep genuinely essential detail, but cut the padding around it. |
-| "The user will want a summary of what I did" | They asked for less reading, not more. Let the result speak.    |
+| Thought                                      | Reality                                                                                                 |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| "This one reply needs more detail"           | Keep genuinely essential detail, but cut the padding around it.                                         |
+| "The user will want a summary of what I did" | They asked for less reading, not more. Let the result speak.                                            |
+| "I should prefer prose over bullets here"    | That default is for normal explanations. This skill overrides it: use whatever formats fastest to scan. |
