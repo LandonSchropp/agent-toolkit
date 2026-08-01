@@ -14,6 +14,11 @@ def print_help
     keep their marker and are removed from their source. Work tasks stay put when
     today is a weekend.
 
+    A subtask carries forward whatever its parent's marker is, nesting under a
+    matching parent already in today's note when there is one and bringing its own
+    parent along as a to-do when there isn't. Nothing is removed from a source note
+    without first being written into today's.
+
     Exits 1 if any previous note still holds an incomplete (- [ ]) task it would
     forward, or holds a task that is not under a subheader, naming the offending
     notes on stderr.
