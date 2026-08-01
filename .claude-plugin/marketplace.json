@@ -43,6 +43,11 @@
       "description": "Planning skills"
     },
     {
+      "name": "ls-agent",
+      "source": "./plugins/ls-agent",
+      "description": "Agent behavior skills"
+    },
+    {
       "name": "ls-agent-toolkit",
       "source": "./plugins/ls-agent-toolkit",
       "description": "Agent toolkit meta-skills"
