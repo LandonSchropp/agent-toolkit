@@ -53,11 +53,6 @@
       "description": "Notes repository skills"
     },
     {
-      "name": "ls-orc",
-      "source": "./plugins/ls-orc",
-      "description": "Orc workflow skills"
-    },
-    {
       "name": "ls-project",
       "source": "./plugins/ls-project",
       "description": "Project setup and convention skills"
