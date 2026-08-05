@@ -8,4 +8,8 @@ Review your own changes adversarially before the user sees them. Assume the diff
 
 **REQUIRED:** Invoke the `ponytail-review` skill.
 
+## Checks
+
+- **Tests:** Every test the diff adds or changes has to follow this environment's testing skill. Search the available skills for the one covering tests in this language, framework, or layer of the stack, invoke it, and read the tests against its guidelines rather than trusting that you already followed them. Rewrite whatever diverges.
+
 Fix everything the pre-review turns up. Then continue to the interactive review, and state in one line what you fixed and anything you deliberately left alone.
