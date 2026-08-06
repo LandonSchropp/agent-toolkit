@@ -1,4 +1,5 @@
 {
   "*": "prettier --check --cache --ignore-unknown",
-  "*.{ts,d.ts}": "tsc-files --noEmit"
+  "*.{ts,d.ts}": "tsc-files --noEmit",
+  "{Gemfile,*.rb}": "bundle exec rubocop --force-exclusion"
 }
