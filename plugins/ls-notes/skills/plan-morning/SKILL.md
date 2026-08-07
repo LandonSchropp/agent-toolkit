@@ -8,7 +8,7 @@ description: Use when the user says "plan my morning" or wants to fill out morni
 
 This skill is split into 3 phases: pre-process the scratch files, run one editing pass through up to three windows (Yesterday, Today, Standup), then post-process the results.
 
-Before doing anything else, read yesterday's and today's daily note files.
+Before doing anything else, read yesterday's and today's daily note files. (Today's note already having content is expected, not ambiguous.)
 
 ## Structure
 
@@ -44,6 +44,8 @@ Markers mean: `x` complete, `>` forward to today, `<` rolling task that moves fo
 ## Phase 1: Pre-Processing
 
 Build each scratch file per **Scratch File Paths**, before opening any window.
+
+Complete all of Phase 1 without stopping or asking the user for input.
 
 ### Yesterday's Content
 
