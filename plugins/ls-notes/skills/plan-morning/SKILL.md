@@ -4,21 +4,21 @@ description: Use when the user says "plan my morning" or wants to fill out morni
 
 # Plan Morning
 
-Walkthrough of the morning sections of today's daily note in at most three stops: Yesterday, Today, and Standup. Each interactive stop gives the user a single file to edit rather than a chat Q&A, so the whole walkthrough needs only a few responses.
-
 **REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
 
-## Editing
+This skill is split into 3 phases: pre-process the scratch files, run one editing pass through up to three windows (Yesterday, Today, Standup), then post-process the results.
 
-Each interactive stop presents a single scratch file at `/tmp/plan-morning.md`:
+Before doing anything else, read yesterday's and today's daily note files.
 
-1. Write the content to the scratch file.
-2. **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill to open it, passing a lower-kebab-case window name for the current step (e.g. "yesterday" or "today"). Summarize for the user what to fill in.
-3. When the window closes, read the scratch file and apply the responses per the current step.
+## Structure
 
-## Task List Format
+### Scratch File Paths
 
-Use this format whenever presenting tasks for editing, as one section nested within a stop's scratch file:
+Each window's content lives at `/tmp/plan-morning-<step>-<date>.md`, where `<step>` is `yesterday`, `today`, or `standup` and `<date>` is today's ISO date (e.g. `/tmp/plan-morning-yesterday-2026-08-06.md`). If a step's file already exists, don't rebuild its content — leave it as-is.
+
+### Task List Format
+
+Use this format whenever presenting tasks for editing, as one section nested within a window's scratch file:
 
 - Give the task block a `##` header — either `## Tasks` or a day header (e.g., `## Monday, January 1, 2026`) when the step calls for one.
 - Give each subsection that has tasks a `###` header.
@@ -39,19 +39,17 @@ Example:
 - [/] Post a [status update](https://example.com) for my current project
 ```
 
-Applying the saved file: copy each task's edited marker back to its source note, and remove tasks the user deleted from the file. Markers mean: `x` complete, `>` forward to today, `<` rolling task that moves forward daily until done, `-` cancelled, `/` started but unfinished (carries to today).
+Markers mean: `x` complete, `>` forward to today, `<` rolling task that moves forward daily until done, `-` cancelled, `/` started but unfinished (carries to today).
 
-## Step 1: Yesterday
+## Phase 1: Pre-Processing
 
-Combine yesterday's unresolved tasks with its journaling prompts into a single scratch file.
+Build each scratch file per **Scratch File Paths**, before opening any window.
 
-**Unresolved tasks:** Run the resolve-tasks script at `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to the scratch file, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header (e.g., `## Monday, January 1, 2026`). Forwardable markers (`>`, `<`, `/`) carry forward automatically in Step 2, so the script leaves them out.
+### Yesterday's Content
 
-**Highlights and Identity Vote:** Include each section only if a daily note exists for yesterday (the literal previous calendar day, not just the most recent note) and its matching section (Highlights of the Day, Identity Vote) is empty.
+Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to its output path, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header. Forwardable markers (`>`, `<`, `/`) carry forward automatically in Phase 3, so the script leaves them out. Move its output to the dated Yesterday path.
 
-If the resolve-tasks script wrote unresolved tasks, retitle its `# Resolve Tasks` header to `# Yesterday` and append whichever journaling sections apply below it. If the script found nothing to resolve, start the file fresh with a `# Yesterday` header and just the journaling sections. If no unresolved tasks exist and both journaling sections are already filled, skip this stop entirely.
-
-Example with every section included:
+Check whether a daily note exists for yesterday (the literal previous calendar day) and whether its Highlights of the Day and Identity Vote sections are empty. If either is empty, append the relevant prompt(s) to the Yesterday scratch file below the resolved tasks, under a `# Yesterday` header:
 
 ```markdown
 # Yesterday
@@ -83,42 +81,11 @@ _Every action is a vote for the person you're becoming. Yesterday, did you move 
 **Evidence:**
 ```
 
-Open the scratch file for editing per the **Editing** steps with window name "yesterday". After the window closes:
+Skip this window entirely if there are no unresolved tasks and both journaling sections are already filled.
 
-- Apply the saved task markers to the source notes per the **Task List Format**.
-- Write the highlights into yesterday's note as a numbered list.
-- For the Identity Vote, read the single checked option and fill in the empty `### :LiVote: Identity Vote` section of yesterday's note: write a `**Vote:**` line with the checked emoji mapped to its signed score, and an `**Evidence:**` line with the evidence text.
+### Today's Content
 
-  | Checked          | Vote line               |
-  | ---------------- | ----------------------- |
-  | 🔴 Voted against | `🔴 Voted against (-2)` |
-  | 🟠 Slipped       | `🟠 Slipped (-1)`       |
-  | 🟡 Broke even    | `🟡 Broke even (0)`     |
-  | 🟢 Made progress | `🟢 Made progress (+1)` |
-  | 🔵 Nailed it     | `🔵 Nailed it (+2)`     |
-
-  If no box is checked, leave yesterday's Identity Vote section empty. If more than one is checked, ask the user which they meant before writing.
-
-## Step 2: Forward Tasks
-
-Run the forward-tasks script at `scripts/forward-tasks.rb`. It creates today's note from the template (if it doesn't yet exist) and pulls every `>`, `<`, and `/` from the recent prior notes into today's note under the matching subheader, removing scheduled tasks from their source. Subtasks carry forward on their own markers, nesting under a matching parent already in today's note. Work tasks stay put when today is a weekend.
-
-If the script exits non-zero, it names the prior notes it can't proceed with, and the message says which of the two problems it found. Fix them, then rerun the script, repeating until it exits 0.
-
-- **A task not under a subheader:** The note lost a header such as `### Personal`. Restore it yourself; don't open the editor for this.
-- **Unresolved `- [ ]` items:** Present the listed notes in the editor again as in Step 1.
-
-## Step 3: Read Today's Daily Note
-
-Run `obsidian daily:read` to load today's note content for the remaining steps.
-
-## Step 4: Today
-
-Combine today's tasks with its journaling prompts into a single scratch file.
-
-**Gratitude, Better Day, and Daily Affirmation:** Include each section only if its slot(s) in today's note are still empty. If the user asks for help writing the Daily Affirmation, see [Daily Affirmation](references/daily-affirmation.md).
-
-**Today's Tasks:** Before building the scratch file, fetch the user's open non-draft pull requests from the `oysterhr` GitHub organization:
+Fetch the user's open non-draft pull requests from the `oysterhr` GitHub organization:
 
 ```bash
 gh search prs --author=@me --owner=oysterhr --state=open --draft=false --json title,url,number,repository
@@ -133,10 +100,10 @@ gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeabl
 Assign each PR a status emoji using this priority order:
 
 - 💬: `reviewDecision` is `CHANGES_REQUESTED`
-- ❌: Any entry in `statusCheckRollup` has `state` of `FAILURE` or `ERROR`
+- ❌: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
 - 💔: `mergeable` is `CONFLICTING` (merge conflicts)
 - ⏱️: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
-- ❓: Any other merge-blocking condition not already covered (e.g., branch protection rules unmet)
+- ❓: Any other merge-blocking condition, including `mergeable` being unresolved (`UNKNOWN`)
 - ✅: All CI checks pass, PR is approved, and no pending review requests
 
 Format each PR title:
@@ -144,14 +111,22 @@ Format each PR title:
 1. Strip any conventional commit type prefix (e.g., `feat: `, `fix(scope): `)
 2. Strip any Linear ticket ID (e.g., `[EX-123] `, `AI-456: `)
 3. Title case the remaining text
-4. Prepend the repository name followed by a colon
+4. Prepend the repository name followed by a colon — check `CLAUDE.local.md` for a repository abbreviation before falling back to the full name
 
-**Resolve auto-titled links:** Obsidian automatically converts pasted URLs into markdown links, but its title-fetch often lacks permissions, leaving a generic site name as the label (`Slack`, `GitHub`, `Linear`, `Notion`, etc.). Before building the scratch file, scan for tasks with these placeholder labels and handle each based on context:
+Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader:
+
+```markdown
+- [ ] Update/merge open pull requests
+  - [ ] [WIDGETS: Add Pagination to Widget List](https://github.com/example-org/widget-service/pull/42) 💬
+  - [ ] [webapp: Fix Login Redirect on Expired Session](https://github.com/example-org/webapp/pull/1234) ❌
+```
+
+**Resolve auto-titled links:** Obsidian automatically converts pasted URLs into markdown links, but its title-fetch often lacks permissions, leaving a generic site name as the label (`Slack`, `GitHub`, `Linear`, `Notion`, etc.). Scan today's note and the recent prior notes for tasks with these placeholder labels and fix each one in place:
 
 - **Link-only task:** The task has no description beyond the link. Fetch the resource and derive a full, actionable task title following the daily-note formatting conventions. For Slack links, read the thread carefully — the body often references another resource that is the actual focus of the task, and the title should reflect that.
 - **Link within a task:** The task has descriptive text but one of its links has a generic label. Use the appropriate MCP server to look up the resource and replace only the link label with its real title.
 
-Build a scratch file with today's Personal and Work tasks in the **Task List Format** under a `## Tasks` header, followed by whichever journaling sections apply. Add one line to the file's instructions: fill in the daily improvement focus by extending its line to `- [ ] Daily improvement: <focus>`. Include the fetched PRs as indented subtasks under `- [ ] Update/merge open pull requests`:
+Build the Today scratch file from today's note's current Tasks section plus the journaling prompts. Include the Gratitude, Better Day, and Daily Affirmation prompts only for slots that are still empty in today's note. If the user asks for help writing the Daily Affirmation, see [Daily Affirmation](references/daily-affirmation.md). Add one line to the file's instructions: fill in the daily improvement focus by extending its line to `- [ ] Daily improvement: <focus>`.
 
 ```markdown
 # Today
@@ -167,7 +142,6 @@ Build a scratch file with today's Personal and Work tasks in the **Task List For
 
 - [ ] Update/merge open pull requests
   - [ ] [WIDGETS: Add Pagination to Widget List](https://github.com/example-org/widget-service/pull/42) 💬
-  - [ ] [webapp: Fix Login Redirect on Expired Session](https://github.com/example-org/webapp/pull/1234) ❌
 
 ## Gratitude
 
@@ -192,39 +166,75 @@ _Who do you want to be?_
 I am…
 ```
 
-Open the scratch file for editing per the **Editing** steps with window name "today". After the window closes:
+### Standup's Content
 
-- Apply the task changes to today's note per the **Task List Format**. For each newly added Work task, search Linear for matching issues in the user's teams. If a match is found, link to the Linear issue URL. If multiple candidates exist, ask which one matches.
+Skip this window if the `oyster-team-ai:standup` skill isn't installed.
+
+Search `#team-ai-standups` with `slack_search_public_and_private` (query: `from:@<user> in:#team-ai-standups`) to find the user's most recent post, and extract its **Today** section bullets. Build the Standup scratch file:
+
+```markdown
+# Daily Standup
+
+## Yesterday
+
+• Previous standup Today item 1
+• Previous standup Today item 2
+
+## Today
+
+<!-- Work tasks from today's daily note (reference only — not included in standup):
+- [ ] Task A
+- [ ] Task B
+-->
+
+## Blockers
+
+## Feeling
+```
+
+## Phase 2: The Editing Pass
+
+**REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill exactly once, with a single command that opens `nvim` on each window whose scratch file exists, in order:
+
+```bash
+nvim -- /tmp/plan-morning-yesterday-<date>.md; nvim -- /tmp/plan-morning-today-<date>.md; nvim -- /tmp/plan-morning-standup-<date>.md
+```
+
+Omit any window that Phase 1 skipped. Name the tab `plan-morning`.
+
+## Phase 3: Post-Processing
+
+After the tab closes, read each scratch file that exists directly from its dated path and apply the results.
+
+### From Yesterday
+
+- For each day section, apply the saved task markers to that day's source note: a task whose marker changed gets updated in place, and a task the user deleted from the file gets removed from the note. Leave untouched anything the file doesn't mention.
+- Write the Highlights answers into yesterday's note as a numbered list, if that section was included.
+- For the Identity Vote, if it was included, read the single checked option and fill in yesterday's note's empty Identity Vote section: a `**Vote:**` line with the checked emoji mapped to its signed score, and an `**Evidence:**` line with the evidence text.
+
+  | Checked          | Vote line               |
+  | ---------------- | ----------------------- |
+  | 🔴 Voted against | `🔴 Voted against (-2)` |
+  | 🟠 Slipped       | `🟠 Slipped (-1)`       |
+  | 🟡 Broke even    | `🟡 Broke even (0)`     |
+  | 🟢 Made progress | `🟢 Made progress (+1)` |
+  | 🔵 Nailed it     | `🔵 Nailed it (+2)`     |
+
+  If no box is checked, leave yesterday's Identity Vote section empty. If more than one is checked, ask the user which they meant before writing.
+
+Then run `scripts/forward-tasks.rb`. It merges every `>`, `<`, and `/` task from the recent prior notes into today's note under the matching subheader, removing scheduled tasks from their source.
+
+If the script exits non-zero, it names the prior notes it can't proceed with. Fix the named problem and rerun until it exits 0:
+
+- **A task not under a subheader:** The note lost a header such as `### Personal`. Restore it directly.
+- **Unresolved `- [ ]` items:** Resolve it directly in the source note.
+
+### From Today
+
+- Apply the saved task edits to today's note, the same way as Yesterday's: update changed markers/text in place, remove anything the user deleted, leave everything else untouched.
+- For each newly added Work task, search Linear for a matching issue in the user's teams. If a match is found, link to the Linear issue URL. If multiple candidates exist, ask which one matches. If none match, leave the task unlinked.
 - Apply the Gratitude, Better Day, and Daily Affirmation answers to their matching sections in today's note.
 
-## Step 5: Standup
+### From Standup
 
-If the `oyster-team-ai:standup` skill is installed, build and open a pre-filled scratch file rather than asking standup questions in chat.
-
-1. **Fetch yesterday:** Search `#team-ai-standups` with `slack_search_public_and_private` (query: `from:@<user> in:#team-ai-standups`) to find the user's most recent post. Extract its **Today** section bullets — these pre-fill Yesterday.
-
-2. **Build scratch file:** Write `/tmp/plan-morning.md` using this template. Fill in the Yesterday bullets from the previous standup and the Work tasks comment from today's daily note. Include all Work tasks in the comment — the user will decide what to carry into Today.
-
-   ```markdown
-   # Daily Standup
-
-   ## Yesterday
-
-   • Previous standup Today item 1
-   • Previous standup Today item 2
-
-   ## Today
-
-   <!-- Work tasks from today's daily note (reference only — not included in standup):
-   - [ ] Task A
-   - [ ] Task B
-   -->
-
-   ## Blockers
-
-   ## Feeling
-   ```
-
-3. **Open for editing:** **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill with window name "standup".
-
-4. **Hand off:** After the window closes, read the file and parse each section. Invoke `oyster-team-ai:standup` and tell it: "The user has already filled in their standup answers via an interactive editor — skip all context-gathering and question steps, compose the message, and post it directly without asking for confirmation. Yesterday: [bullets from file], Today: [bullets from file], Blockers: [content or none], Feeling: [content or none]."
+If the Standup window ran, parse its sections and hand off to `oyster-team-ai:standup`: "The user has already filled in their standup answers via an interactive editor — skip all context-gathering and question steps, compose the message, and post it directly without asking for confirmation. Yesterday: [bullets from file], Today: [bullets from file], Blockers: [content or none], Feeling: [content or none]."
