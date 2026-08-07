@@ -13,21 +13,10 @@ For `working` and `staged` mode, the script's own exit code is the approve/deny 
 
 `working` mode reviews every uncommitted change in the worktree, including untracked files — not just the change under review. Before invoking the script, run `git status`. If the worktree has uncommitted changes unrelated to the commit being built, `working` mode would mix them into the review. In that case, stage only the files belonging to this commit (`git add <files>`) and invoke `staged` mode instead, so the review shows just the intended change.
 
-## Handling an Existing Review
+## Handling a Stale Review
 
-Before opening a review, check whether a `review` herdr tab is already open in the
-current workspace. Scope the check to `$HERDR_WORKSPACE_ID` — other workspaces run
-their own sessions, so a sibling workspace's `review` tab is not yours:
+Before opening a review, check whether a `review` herdr tab is already open in the current workspace. It's always a leftover from an earlier review that didn't close — e.g. its background process was killed before cleanup ran — since only one review runs at a time in a workspace.
 
-```bash
-herdr tab list | jq -e --arg ws "$HERDR_WORKSPACE_ID" '.result.tabs[] | select(.label == "review" and .workspace_id == $ws)' >/dev/null && echo "running" || echo "none"
-```
+Close it automatically, without asking the user first, then open the new review normally. **REQUIRED:** Use the `herdr` skill for the close mechanics.
 
-If one is running, ask the user: "A review tab is already open. Close it and open a new one?"
-
-- If yes: kill the background `interactive-review.sh` process — its cleanup closes the tab automatically. If no such process is still running, close the tab directly instead. Then start a new review normally.
-- If no: abort.
-
-```bash
-herdr tab close "$(herdr tab list | jq -r --arg ws "$HERDR_WORKSPACE_ID" '.result.tabs[] | select(.label == "review" and .workspace_id == $ws) | .tab_id')"
-```
+One addition specific to this skill: if a background `interactive-review.sh` process for that tab is still running, kill that process instead of closing the tab directly — its own cleanup closes the tab.
