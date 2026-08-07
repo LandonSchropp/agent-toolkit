@@ -35,3 +35,7 @@ tab_id=$(herdr tab list --workspace "$HERDR_WORKSPACE_ID" | jq -r --arg label "<
 ```
 
 If the tab was opened by a script that traps termination signals to close its own tab on exit (like `interactive-command.sh`), kill that background process instead of closing the tab directly — its own cleanup handles it.
+
+## Closing a Workspace
+
+To close an entire workspace rather than a single tab — e.g. tearing down a finished worktree — use the `close-workspace` skill instead; it also merges the branch and checks it's safe to remove.
