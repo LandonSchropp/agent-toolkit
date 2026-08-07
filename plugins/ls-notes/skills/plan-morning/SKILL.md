@@ -51,7 +51,7 @@ Complete all of Phase 1 without stopping or asking the user for input.
 
 Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to its output path, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header. Forwardable markers (`>`, `<`, `/`) carry forward automatically in Phase 3, so the script leaves them out. Move its output to the dated Yesterday path.
 
-Check whether a daily note exists for yesterday (the literal previous calendar day) and whether its Highlights of the Day and Identity Vote sections are empty. If either is empty, append the relevant prompt(s) to the Yesterday scratch file below the resolved tasks, under a `# Yesterday` header:
+Check whether a daily note exists for yesterday (the literal previous calendar day) and whether its `### :LiStar: Highlights of the Day` and `### :LiVote: Identity Vote` sections (both under `## :LiMoon: Evening`) are empty or missing entirely — an older note may not have these headers at all. If either is empty or missing, append the relevant prompt(s) to the Yesterday scratch file below the resolved tasks, under a `# Yesterday` header:
 
 ```markdown
 # Yesterday
@@ -211,8 +211,8 @@ After the tab closes, read each scratch file that exists directly from its dated
 ### From Yesterday
 
 - For each day section, apply the saved task markers to that day's source note: a task whose marker changed gets updated in place, and a task the user deleted from the file gets removed from the note. Leave untouched anything the file doesn't mention.
-- Write the Highlights answers into yesterday's note as a numbered list, if that section was included.
-- For the Identity Vote, if it was included, read the single checked option and fill in yesterday's note's empty Identity Vote section: a `**Vote:**` line with the checked emoji mapped to its signed score, and an `**Evidence:**` line with the evidence text.
+- Write the Highlights answers into yesterday's note as a numbered list under `### :LiStar: Highlights of the Day`, if that section was included. Add the header (and its parent `## :LiMoon: Evening` header, per the template) if the note doesn't already have it.
+- For the Identity Vote, if it was included, read the single checked option and fill in yesterday's note's `### :LiVote: Identity Vote` section (adding the header, and its parent `## :LiMoon: Evening` header, if missing): a `**Vote:**` line with the checked emoji mapped to its signed score, and an `**Evidence:**` line with the evidence text.
 
   | Checked          | Vote line               |
   | ---------------- | ----------------------- |
@@ -223,6 +223,22 @@ After the tab closes, read each scratch file that exists directly from its dated
   | 🔵 Nailed it     | `🔵 Nailed it (+2)`     |
 
   If no box is checked, leave yesterday's Identity Vote section empty. If more than one is checked, ask the user which they meant before writing.
+
+The resulting section, whether it already existed or had to be added:
+
+```markdown
+## :LiMoon: Evening
+
+### :LiStar: Highlights of the Day
+
+1. Shipped the plan-morning rewrite
+2. Fixed the missing Evening section bug
+
+### :LiVote: Identity Vote
+
+**Vote:** 🟢 Made progress (+1)
+**Evidence:** Kept iterating on plan-morning until it actually worked end to end.
+```
 
 Then run `scripts/forward-tasks.rb`. It merges every `>`, `<`, and `/` task from the recent prior notes into today's note under the matching subheader, removing scheduled tasks from their source.
 
