@@ -43,6 +43,11 @@
       "description": "Planning skills"
     },
     {
+      "name": "ls-code",
+      "source": "./plugins/ls-code",
+      "description": "Language-agnostic coding skills"
+    },
+    {
       "name": "ls-agent",
       "source": "./plugins/ls-agent",
       "description": "Agent behavior skills"
