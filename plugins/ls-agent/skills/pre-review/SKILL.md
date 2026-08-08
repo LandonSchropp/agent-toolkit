@@ -4,14 +4,21 @@ description: Use when a commit's changes are finished and about to be presented 
 
 # Pre-Review
 
-Review your own changes adversarially before the user sees them. Assume the diff has a problem and go find it.
+You wrote this diff, so you are the worst available reviewer of it. Hand it to a subagent that reads it cold.
 
-**REQUIRED:** Invoke the `ponytail-review` skill.
+**REQUIRED:** Launch one `general-purpose` subagent with the Agent tool, with `run_in_background: false` so its findings arrive before the user sees anything. Do not read `references/checks.md` yourself; it is the subagent's rubric, and running it against a diff you already have in context is the one thing this skill exists to prevent. Give the subagent this prompt, with `<absolute path>` resolved against this skill's directory:
 
-## Checks
+> Review the current working changes: `git diff HEAD`, plus every untracked file `git status` lists. Read `<absolute path>/references/checks.md` and apply it. Report findings; change nothing.
 
-- **Tests:** Every test the diff adds or changes has to follow this environment's testing skill. Search the available skills for the one covering tests in this language, framework, or layer of the stack, invoke it, and read the tests against its guidelines rather than trusting that you already followed them. Rewrite whatever diverges.
-- **Documentation:** Documentation describes the observable behavior a function promises, not how it carries it out. Cut anything that restates the implementation, and cut the minutia that survives only because it was easy to write down. What's left should be brief and worth a human's time to read.
-- **Commit size:** Reviews happen a commit at a time, so a diff carrying more than one logical change is harder to review than it needs to be. If this one can be split, split it before presenting anything. **REQUIRED:** Invoke the `git-atomic-commit` skill. Presenting the whole diff and offering to split it afterward doesn't count.
+Fix everything it turns up. Splitting a diff it flags as more than one logical change is yours to do, not the subagent's: **REQUIRED:** Invoke the `git-atomic-commit` skill. Then continue to the interactive review, and state in one line what you fixed and anything you deliberately left alone.
 
-Fix everything the pre-review turns up. Then continue to the interactive review, and state in one line what you fixed and anything you deliberately left alone.
+## Rationalizations
+
+| Thought                                      | Reality                                                     |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| "The diff is small, I'll check it myself"    | You already read it once and missed it. Dispatch the agent. |
+| "I know what's in it, I just wrote it"       | That's the problem the subagent exists to fix.              |
+| "I'll run it in the background and present"  | Findings after the user reviews are worthless. Block on it. |
+| "I'll let the subagent fix what it finds"    | It reports; you fix. Its edits never got reviewed.          |
+| "The checks are loaded, I can just run them" | Loading the rubric is not the point. Fresh eyes are.        |
+| "Dispatching costs a round trip"             | Cheaper than the round trip through the user.               |
