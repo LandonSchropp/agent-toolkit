@@ -50,12 +50,12 @@ RSpec.describe "resolve-tasks" do
     context "when there are unresolved tasks" do
       before do
         allow(renderer).to receive(:empty?).and_return(false)
-        allow(renderer).to receive(:to_markdown).and_return("# Resolve Tasks\n")
+        allow(renderer).to receive(:to_markdown).and_return("# Yesterday\n")
       end
 
       it "writes the rendered file to the scratch path" do
         expect { run_script }.to output.to_stdout
-        expect(File).to have_received(:write).with(scratch_path, "# Resolve Tasks\n")
+        expect(File).to have_received(:write).with(scratch_path, "# Yesterday\n")
       end
 
       it "exits 0" do

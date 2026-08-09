@@ -21,17 +21,19 @@ RSpec.describe UnresolvedTaskRenderer do
 
       it "renders the preamble, day, and tasks grouped by subheader" do
         expect(markdown).to eq(<<~MARKDOWN)
-          # Resolve Tasks
+          # Yesterday
+
+          ## Tasks
 
           _These tasks were left unresolved. Mark each one with what happened to it._
 
-          ## Monday, January 5, 2026
+          ### Monday, January 5, 2026
 
-          ### Personal
+          #### Personal
 
           - [ ] Write the report
 
-          ### Work
+          #### Work
 
           - [ ] Review the PR
         MARKDOWN
@@ -85,7 +87,7 @@ RSpec.describe UnresolvedTaskRenderer do
       end
 
       it "keeps the day that has unresolved tasks" do
-        expect(markdown).to include("## Tuesday, January 6, 2026")
+        expect(markdown).to include("### Tuesday, January 6, 2026")
       end
     end
 
@@ -108,7 +110,7 @@ RSpec.describe UnresolvedTaskRenderer do
       end
 
       it "omits the subheader with nothing to resolve" do
-        expect(markdown).not_to include("### Work")
+        expect(markdown).not_to include("Work")
       end
     end
   end

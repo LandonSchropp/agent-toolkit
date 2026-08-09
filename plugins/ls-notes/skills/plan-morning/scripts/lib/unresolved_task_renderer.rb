@@ -2,14 +2,15 @@
 
 require_relative "daily_note"
 
-# Renders the scratch file for Step 1 of plan-morning: every recent daily note
+# Renders plan-morning's Yesterday scratch file: every recent daily note
 # that still holds an unresolved (- [ ]) task, grouped by day and subheader, so
 # the user can resolve them in a single editing pass before forwarding. Only
 # unresolved tasks appear — forwardable markers (>, <, /) carry forward on their
 # own and need no resolution. Operates on DailyNote values; the caller persists
 # the result.
 class UnresolvedTaskRenderer
-  PREAMBLE = "# Resolve Tasks\n\n_These tasks were left unresolved. Mark each one with what happened to it._"
+  PREAMBLE = "# Yesterday\n\n## Tasks\n\n" \
+             "_These tasks were left unresolved. Mark each one with what happened to it._"
 
   # @param daily_notes [Array<DailyNote>] the previous notes, oldest first
   def initialize(daily_notes)
@@ -34,7 +35,7 @@ class UnresolvedTaskRenderer
   end
 
   def day_section(note)
-    header = "## #{note.date.strftime('%A, %B %-d, %Y')}"
+    header = "### #{note.date.strftime('%A, %B %-d, %Y')}"
     [header, *subheader_sections(note)].join("\n\n")
   end
 
@@ -43,7 +44,7 @@ class UnresolvedTaskRenderer
   # missing from the file.
   def subheader_sections(note)
     note.tasks.select { _1.any?(&:incomplete?) }.group_by(&:subheader).map do |subheader, tasks|
-      "### #{subheader}\n\n#{tasks.map(&:to_markdown).join("\n")}"
+      "#### #{subheader}\n\n#{tasks.map(&:to_markdown).join("\n")}"
     end
   end
 end

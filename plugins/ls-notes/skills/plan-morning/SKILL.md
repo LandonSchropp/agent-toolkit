@@ -20,8 +20,8 @@ Each window's content lives at `/tmp/plan-morning-<step>-<date>.md`, where `<ste
 
 Use this format whenever presenting tasks for editing, as one section nested within a window's scratch file:
 
-- Give the task block a `##` header — either `## Tasks` or a day header (e.g., `## Monday, January 1, 2026`) when the step calls for one.
-- Give each subsection that has tasks a `###` header.
+- Open the task block with a `## Tasks` header and one italic sentence saying what the user should do with them.
+- Give each subsection that has tasks a header one level below the block. Yesterday's window groups by day first, so its day headers take `###` (e.g., `### Monday, January 1, 2026`) and its subsections `####`.
 - Copy task lines verbatim (keep wikilinks and current markers) so they round-trip cleanly.
 - Never invent a placeholder task. The Today window is the one exception to the previous bullet: keep today's subheaders even when empty, so the user has somewhere to add tasks.
 
@@ -29,6 +29,8 @@ Example:
 
 ```markdown
 ## Tasks
+
+_Add, edit, and remove tasks to plan today._
 
 ### Personal
 
@@ -50,16 +52,20 @@ Complete all of Phase 1 without stopping or asking the user for input.
 
 ### Yesterday's Content
 
-Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to its output path, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header. Forwardable markers (`>`, `<`, `/`) carry forward automatically in Phase 3, so the script leaves them out. Move its output to the dated Yesterday path.
+Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to its output path, oldest-first in the **Task List Format**, each day under a `### [Weekday, Month Day, Year]` header. Forwardable markers (`>`, `<`, `/`) carry forward automatically in Phase 3, so the script leaves them out. Move its output to the dated Yesterday path.
 
-Check whether a daily note exists for yesterday (the literal previous calendar day) and whether its `### :LiStar: Highlights of the Day` and `### :LiVote: Identity Vote` sections (both under `## :LiMoon: Evening`) are empty or missing entirely — an older note may not have these headers at all. If either is empty or missing, append the relevant prompt(s) to the Yesterday scratch file below the resolved tasks, under a `# Yesterday` header:
+Check whether a daily note exists for yesterday (the literal previous calendar day) and whether its `### :LiStar: Highlights of the Day` and `### :LiVote: Identity Vote` sections (both under `## :LiMoon: Evening`) are empty or missing entirely — an older note may not have these headers at all. If either is empty or missing, append the relevant prompt(s) to the Yesterday scratch file below the tasks. The script writes the `# Yesterday` and `## Tasks` sections; append only the prompts. If the script wrote nothing, start the file with the `# Yesterday` header yourself.
 
 ```markdown
 # Yesterday
 
-## Monday, January 1, 2026
+## Tasks
 
-### Personal
+_These tasks were left unresolved. Mark each one with what happened to it._
+
+### Monday, January 1, 2026
+
+#### Personal
 
 - [ ] Update the README.md
 
@@ -135,6 +141,8 @@ Build the Today scratch file from today's note's current Tasks section plus the 
 # Today
 
 ## Tasks
+
+_Add, edit, and remove tasks to plan today._
 
 ### Personal
 
