@@ -35,7 +35,7 @@ When a skill includes executable scripts, **REQUIRED:** Use the `ls-scripting:sc
 
 ## Interactive File Editing
 
-If a script you're writing would benefit from the user interactively editing and saving a file, add to the SKILL.md: **REQUIRED:** Invoke the `ls-development-environment:neovim` skill. Have the script call `edit-and-wait.sh`.
+If a skill needs the user to edit a file mid-workflow and hand the result back, add to its SKILL.md: **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill.
 
 ## Required Reading
 
