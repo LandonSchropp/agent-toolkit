@@ -23,6 +23,7 @@ Use this format whenever presenting tasks for editing, as one section nested wit
 - Give the task block a `##` header — either `## Tasks` or a day header (e.g., `## Monday, January 1, 2026`) when the step calls for one.
 - Give each subsection that has tasks a `###` header.
 - Copy task lines verbatim (keep wikilinks and current markers) so they round-trip cleanly.
+- Never invent a placeholder task. The Today window is the one exception to the previous bullet: keep today's subheaders even when empty, so the user has somewhere to add tasks.
 
 Example:
 
