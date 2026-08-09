@@ -6,11 +6,11 @@ description: Use when a commit's changes are finished and about to be presented 
 
 You wrote this diff, so you are the worst available reviewer of it. Hand it to a subagent that reads it cold.
 
-**REQUIRED:** Launch one `general-purpose` subagent with the Agent tool, with `run_in_background: false` so its findings arrive before the user sees anything. Do not read `references/checks.md` yourself; it is the subagent's rubric, and running it against a diff you already have in context is the one thing this skill exists to prevent. Give the subagent this prompt, with `<absolute path>` resolved against this skill's directory:
+**REQUIRED:** Launch one `general-purpose` subagent with the Agent tool, with `run_in_background: false`. Do not read `references/checks.md` yourself. Give the subagent this prompt, with `<absolute path>` resolved against this skill's directory:
 
-> Review the current working changes: `git diff HEAD`, plus every untracked file `git status` lists. Read `<absolute path>/references/checks.md` and apply it. Report findings; change nothing.
+> Review the changes under review: `git diff --cached` if anything is staged, otherwise `git diff HEAD` plus every untracked file `git status` lists. Read `<absolute path>/references/checks.md` and apply it. Report findings; change nothing.
 
-Fix everything it turns up. Splitting a diff it flags as more than one logical change is yours to do, not the subagent's: **REQUIRED:** Invoke the `git-atomic-commit` skill. Then continue to the interactive review, and state in one line what you fixed and anything you deliberately left alone.
+Fix everything it turns up. When it flags more than one logical change, narrow the working set to the first commit's files here rather than presenting all of them: **REQUIRED:** Invoke the `git-atomic-commit` skill. Then continue to the interactive review, and state in one line what you fixed and anything you deliberately left alone.
 
 ## Rationalizations
 
@@ -22,3 +22,4 @@ Fix everything it turns up. Splitting a diff it flags as more than one logical c
 | "I'll let the subagent fix what it finds"    | It reports; you fix. Its edits never got reviewed.          |
 | "The checks are loaded, I can just run them" | Loading the rubric is not the point. Fresh eyes are.        |
 | "Dispatching costs a round trip"             | Cheaper than the round trip through the user.               |
+| "Splitting means committing, so I'll ask"    | Narrowing to one commit's files is not committing.          |
