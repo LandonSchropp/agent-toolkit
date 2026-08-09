@@ -38,4 +38,4 @@ If the tab was opened by a script that traps termination signals to close its ow
 
 ## Closing a Workspace
 
-To close an entire workspace — e.g. tearing down a finished worktree — use the `ls-development-environment:close-workspace` skill instead; it also merges the branch and checks it's safe to remove.
+To close an entire workspace — e.g. tearing down a finished worktree — use the `ls-agent:close-workspace` skill instead; it also merges the branch and checks it's safe to remove.
