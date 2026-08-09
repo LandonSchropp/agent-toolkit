@@ -4,28 +4,10 @@ description: Use when interacting with the user's local Neovim instance. Require
 
 # Neovim
 
-This skill provides several scripts for interacting with the user's local Neovim instance.
-
-## Edit
-
 Open a file in the user's running Neovim instance:
 
 ```bash
 ./skills/neovim/scripts/edit.sh --file <path>
 ```
 
-## Edit and Wait
-
-Open a file in Neovim and block until the user saves it. Useful when the agent needs the user to review or modify a file before continuing. Exits non-zero if the file is not saved within 10 minutes.
-
-Before running the script, print a message to the user so they know what's happening. For example:
-
-> ✏️ Opening `<path>` in Neovim for review. Save the file when you're done.
-
-Then run the script:
-
-```bash
-./skills/neovim/scripts/edit-and-wait.sh --file <path>
-```
-
-Set the Bash tool timeout to 10 minutes (600000ms) when running this script.
+To block until the user has finished editing, use the `ls-interactivity:interactive-edit` skill instead.
