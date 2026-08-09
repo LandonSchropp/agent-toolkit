@@ -29,9 +29,9 @@ Present the plan to the user as a table and wait for confirmation before executi
 
 ## Step 2: Edits to Prior Commits
 
-Stage only the hunks belonging to the edit using the techniques in Step 3 and Step 4. **REQUIRED:** Invoke the `git-edit-commit` skill and follow its instructions to edit existing commits.
+Stage only the hunks belonging to the edit using the techniques in Step 3 and Step 4. **REQUIRED:** Invoke the `ls-git:git-edit-commit` skill and follow its instructions to edit existing commits.
 
-If the target commit lives on a different branch in the stack, stash the staged hunks (`git stash push --staged`), check out that branch, restore the stash, then invoke the `git-edit-commit` skill there. After editing, return to the original branch and run `git town sync` so downstream branches pick up the change.
+If the target commit lives on a different branch in the stack, stash the staged hunks (`git stash push --staged`), check out that branch, restore the stash, then invoke the `ls-git:git-edit-commit` skill there. After editing, return to the original branch and run `git town sync` so downstream branches pick up the change.
 
 ## Step 3: Split Within a Single File
 
@@ -46,7 +46,7 @@ Agents can't use `git add -p` to interactively stage hunks (it requires a TTY). 
    git restore path/to/file.ts
    ```
 3. Use `Edit` to apply ONLY the changes for the current commit. Reference `/tmp/file.ts.full` to see what to add.
-4. Stage and commit. **REQUIRED:** Use the `git-commit` skill.
+4. Stage and commit. **REQUIRED:** Use the `ls-git:git-commit` skill.
 5. Repeat step 3 and 4 for each intermediate commit.
 6. For the final commit, restore the full working version and commit:
    ```bash
@@ -60,7 +60,7 @@ Agents can't use `git add -p` to interactively stage hunks (it requires a TTY). 
 
 ## Step 4: Split Across Separate Files
 
-Stage selectively per commit. **REQUIRED:** Use the `git-commit` skill for each.
+Stage selectively per commit. **REQUIRED:** Use the `ls-git:git-commit` skill for each.
 
 ```bash
 git add path/to/first.ts path/to/second.ts

@@ -31,11 +31,11 @@ If the user opts for the agent to test the skill:
 
 ## Scripts
 
-When a skill includes executable scripts, **REQUIRED:** Use the `script` skill for language selection and conventions.
+When a skill includes executable scripts, **REQUIRED:** Use the `ls-scripting:script` skill for language selection and conventions.
 
 ## Interactive File Editing
 
-If a script you're writing would benefit from the user interactively editing and saving a file, add to the SKILL.md: **REQUIRED:** Invoke the `neovim` skill. Have the script call `edit-and-wait.sh`.
+If a script you're writing would benefit from the user interactively editing and saving a file, add to the SKILL.md: **REQUIRED:** Invoke the `ls-development-environment:neovim` skill. Have the script call `edit-and-wait.sh`.
 
 ## Required Reading
 

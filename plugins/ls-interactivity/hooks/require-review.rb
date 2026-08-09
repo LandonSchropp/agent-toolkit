@@ -76,7 +76,7 @@ exit 0 if head.empty?
 # Allow the commit when the pending work on this base has already been reviewed.
 exit 0 if reviewed?(head)
 
-reason = "The user has not reviewed these changes. Invoke the interactive-review skill, present the changes to the user, and only commit once the user signs off."
+reason = "The user has not reviewed these changes. Invoke the ls-interactivity:interactive-review skill, present the changes to the user, and only commit once the user signs off."
 
 puts JSON.generate(
   {

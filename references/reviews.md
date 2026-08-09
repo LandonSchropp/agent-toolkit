@@ -2,7 +2,7 @@
 
 Every commit is reviewed before it is created. Present each commit's changes for review and create the commit only after the user signs off. Drive the review yourself.
 
-The `interactive-review` skill's own exit code is the approve/deny decision: 0 means the user approved, nonzero means they denied. That's the only signal that matters — never ask the user whether they're ready to commit or want another look. A commit hook also blocks `git commit` until an approved review is on record, as a backstop, but don't rely on hitting it to find out the answer; read the skill's exit code directly.
+The `ls-interactivity:interactive-review` skill's own exit code is the approve/deny decision: 0 means the user approved, nonzero means they denied. That's the only signal that matters — never ask the user whether they're ready to commit or want another look. A commit hook also blocks `git commit` until an approved review is on record, as a backstop, but don't rely on hitting it to find out the answer; read the skill's exit code directly.
 
 The exit code and the annotations are independent signals — read both. They combine into four cases:
 
@@ -13,12 +13,12 @@ The exit code and the annotations are independent signals — read both. They co
 
 ## The Process
 
-1. **REQUIRED:** Invoke the `git-atomic-commit` skill before making changes, and follow its guidance. Group the work into atomic commits.
+1. **REQUIRED:** Invoke the `ls-git:git-atomic-commit` skill before making changes, and follow its guidance. Group the work into atomic commits.
 2. Work one commit at a time. Keep your changes scoped to the single commit you're building.
-3. Review your own changes first. **REQUIRED:** Invoke the `pre-review` skill, and fix what it finds before the user sees the diff.
-4. Present the changes for review. **REQUIRED:** Invoke the `interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
+3. Review your own changes first. **REQUIRED:** Invoke the `ls-agent:pre-review` skill, and fix what it finds before the user sees the diff.
+4. Present the changes for review. **REQUIRED:** Invoke the `ls-interactivity:interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
 5. Read the exit code and the annotations output, and follow the matching case above.
-6. Create the commit. **REQUIRED:** Use the `git-commit` skill.
+6. Create the commit. **REQUIRED:** Use the `ls-git:git-commit` skill.
 7. Repeat for the next commit.
 
 ## Staying In Scope

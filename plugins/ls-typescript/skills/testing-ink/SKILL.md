@@ -19,7 +19,7 @@ expect(lastFrame()).toContain("expected text");
 
 ## Testing hooks in a Bun project
 
-Bun has no DOM, so testing a hook (via `testing-react`) needs DOM globals registered. Call `@happy-dom/global-registrator` before any `@testing-library/react` import, so the DOM is present when React DOM loads.
+Bun has no DOM, so testing a hook (via `ls-typescript:testing-react`) needs DOM globals registered. Call `@happy-dom/global-registrator` before any `@testing-library/react` import, so the DOM is present when React DOM loads.
 
 ```tsx
 import { GlobalRegistrator } from "@happy-dom/global-registrator";

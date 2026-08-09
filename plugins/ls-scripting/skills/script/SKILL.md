@@ -17,6 +17,6 @@ The best choice is the one that's simplest for the job.
 
 Once you've picked a language, follow its skill:
 
-- **REQUIRED:** Use the `bash-script` skill for Bash
-- **REQUIRED:** Use the `ruby-script` skill for Ruby
-- **REQUIRED:** Use the `bun-script` skill for Bun/TypeScript
+- **REQUIRED:** Use the `ls-scripting:bash-script` skill for Bash
+- **REQUIRED:** Use the `ls-scripting:ruby-script` skill for Ruby
+- **REQUIRED:** Use the `ls-scripting:bun-script` skill for Bun/TypeScript

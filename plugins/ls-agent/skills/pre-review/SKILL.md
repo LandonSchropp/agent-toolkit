@@ -10,7 +10,7 @@ You wrote this diff, so you are the worst available reviewer of it. Hand it to a
 
 > Review the changes under review: `git diff --cached` if anything is staged, otherwise `git diff HEAD` plus every untracked file `git status` lists. Read `<absolute path>/references/checks.md` and apply it. Report findings; change nothing.
 
-Fix everything it turns up. When it flags more than one logical change, narrow the working set to the first commit's files here rather than presenting all of them: **REQUIRED:** Invoke the `git-atomic-commit` skill. Then continue to the interactive review, and state in one line what you fixed and anything you deliberately left alone.
+Fix everything it turns up. When it flags more than one logical change, narrow the working set to the first commit's files here rather than presenting all of them: **REQUIRED:** Invoke the `ls-git:git-atomic-commit` skill. Then continue to the interactive review, and state in one line what you fixed and anything you deliberately left alone.
 
 ## Rationalizations
 

@@ -6,7 +6,7 @@ Ask the user: "What would you like to add tests for?"
 
 After receiving their response, add tests for the user's target using the following process:
 
-1. Invoke the `testing-typescript` skill.
+1. Invoke the `ls-typescript:testing-typescript` skill.
 2. **Analyze current state:** Determine the appropriate test file location. If there's an existing test file, read it to understand the current structure.
 3. **Plan test structure:** List describe and context blocks without wrapping in commands:
 

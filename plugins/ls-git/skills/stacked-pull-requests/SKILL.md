@@ -34,7 +34,7 @@ Merge oldest ancestor first. **REQUIRED:** Confirm the full merge order with the
 
    a. **Retarget the next PR** (if one exists): Run `scripts/retarget-pull-request-to-default-branch.sh --pull-request-url <next-url>`. When merging via the CLI, GitHub does not auto-retarget dependent PRs — it closes them instead (cli/cli#1168). Retargeting manually before each merge prevents this.
 
-   b. **Merge the current PR:** **REQUIRED:** Use the `ls:merge-pull-request` skill.
+   b. **Merge the current PR:** **REQUIRED:** Use the `ls-git:merge-pull-request` skill.
 
    c. **Sync the remaining stack:** Run `git town sync --stack` from any remaining branch. Git Town will detect the merged branch is gone and rebase the next branch onto main.
 

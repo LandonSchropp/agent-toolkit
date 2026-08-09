@@ -7,7 +7,7 @@ description: Use when writing or editing a React component. Covers preferred pat
 
 - Functional component declared with `export function ComponentName` (named export, not default, not arrow)
 - Props typed above the component as `type ComponentNameProps = { ... }`
-- Props whose purpose isn't evident from their name and type carry a JSDoc description. **REQUIRED:** Use the `comments-and-documentation` skill
+- Props whose purpose isn't evident from their name and type carry a JSDoc description. **REQUIRED:** Use the `ls-code:comments-and-documentation` skill
 - Destructure props in the function signature
 - Use Tailwind classes for styling (no custom CSS classes)
 - Use `clsx` only when combining dynamic classes

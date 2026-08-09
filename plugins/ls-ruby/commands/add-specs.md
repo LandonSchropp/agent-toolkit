@@ -6,7 +6,7 @@ Ask the user: "What would you like to add specs for?"
 
 After receiving their response, add specs for the user's target using the following process:
 
-1. Invoke the `testing-ruby` skill.
+1. Invoke the `ls-ruby:rspec` skill.
 2. **Analyze current state:** Determine the appropriate spec file location. If there's an existing spec file, read it to understand the current structure.
 3. **Plan test structure:** List describe and context blocks without wrapping in commands:
 

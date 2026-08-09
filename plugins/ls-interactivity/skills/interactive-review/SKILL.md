@@ -17,6 +17,6 @@ For `working` and `staged` mode, the script's own exit code is the approve/deny 
 
 Before opening a review, check whether a `review` herdr tab is already open in the current workspace. It's always a leftover from an earlier review that didn't close — e.g. its background process was killed before cleanup ran — since only one review runs at a time in a workspace.
 
-Close it automatically, without asking the user first, then open the new review normally. **REQUIRED:** Use the `herdr` skill for the close mechanics.
+Close it automatically, without asking the user first, then open the new review normally. **REQUIRED:** Use the `ls-agent:herdr` skill for the close mechanics.
 
 One addition specific to this skill: if a background `interactive-review.sh` process for that tab is still running, kill that process instead of closing the tab directly — its own cleanup closes the tab.
