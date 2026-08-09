@@ -9,8 +9,7 @@ require_relative "daily_note"
 # own and need no resolution. Operates on DailyNote values; the caller persists
 # the result.
 class UnresolvedTaskRenderer
-  # The file's top-level header.
-  HEADER = "# Resolve Tasks"
+  PREAMBLE = "# Resolve Tasks\n\n_These tasks were left unresolved. Mark each one with what happened to it._"
 
   # @param daily_notes [Array<DailyNote>] the previous notes, oldest first
   def initialize(daily_notes)
@@ -22,10 +21,10 @@ class UnresolvedTaskRenderer
     notes_to_resolve.empty?
   end
 
-  # @return [String] the header followed by each day that has unresolved tasks,
+  # @return [String] the preamble followed by each day that has unresolved tasks,
   #   under a weekday-and-date header with the tasks grouped by subheader
   def to_markdown
-    "#{[HEADER, *notes_to_resolve.map { day_section(_1) }].join("\n\n")}\n"
+    "#{[PREAMBLE, *notes_to_resolve.map { day_section(_1) }].join("\n\n")}\n"
   end
 
   private

@@ -19,9 +19,11 @@ RSpec.describe UnresolvedTaskRenderer do
         [daily_note("2026-01-05 - Daily Note.md", personal: ["- [ ] Write the report"], work: ["- [ ] Review the PR"])]
       end
 
-      it "renders the header, day, and tasks grouped by subheader" do
+      it "renders the preamble, day, and tasks grouped by subheader" do
         expect(markdown).to eq(<<~MARKDOWN)
           # Resolve Tasks
+
+          _These tasks were left unresolved. Mark each one with what happened to it._
 
           ## Monday, January 5, 2026
 
