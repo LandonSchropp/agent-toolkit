@@ -9,8 +9,10 @@ require_relative "daily_note"
 # own and need no resolution. Operates on DailyNote values; the caller persists
 # the result.
 class UnresolvedTaskRenderer
-  PREAMBLE = "# Yesterday\n\n## Tasks\n\n" \
-             "_These tasks were left unresolved. Mark each one with what happened to it._"
+  TITLE = "# Previous Daily Notes"
+
+  TASKS_SECTION = "### Tasks\n\n" \
+                 "_These tasks were left unresolved. Mark each one with what happened to it._"
 
   # @param daily_notes [Array<DailyNote>] the previous notes, oldest first
   def initialize(daily_notes)
@@ -22,10 +24,10 @@ class UnresolvedTaskRenderer
     notes_to_resolve.empty?
   end
 
-  # @return [String] the preamble followed by each day that has unresolved tasks,
+  # @return [String] the title followed by each day that has unresolved tasks,
   #   under a weekday-and-date header with the tasks grouped by subheader
   def to_markdown
-    "#{[PREAMBLE, *notes_to_resolve.map { day_section(_1) }].join("\n\n")}\n"
+    "#{[TITLE, *notes_to_resolve.map { day_section(_1) }].join("\n\n")}\n"
   end
 
   private
@@ -35,8 +37,8 @@ class UnresolvedTaskRenderer
   end
 
   def day_section(note)
-    header = "### #{note.date.strftime('%A, %B %-d, %Y')}"
-    [header, *subheader_sections(note)].join("\n\n")
+    header = "## #{note.date.strftime('%A, %B %-d, %Y')}"
+    [header, TASKS_SECTION, *subheader_sections(note)].join("\n\n")
   end
 
   # Keeps each task block holding an unresolved to-do, whole, so that a nested
