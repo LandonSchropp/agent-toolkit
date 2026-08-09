@@ -76,7 +76,7 @@ Set both to restrict a skill to neither invoker. Omit both (the default) when ei
 Good examples are:
 
 - Complete and runnable
-- Commented only where the pattern isn't evident from the code. **REQUIRED:** Use the `comments-and-documentation` skill
+- Commented only where the pattern isn't evident from the code. **REQUIRED:** Use the `ls-code:comments-and-documentation` skill
 - From a real scenario
 - Shows the pattern clearly
 - Ready to adapt (not generic)
@@ -132,21 +132,27 @@ Before testing, commit your changes:
 
 <!-- GOOD: Reference other skill -->
 
-Before testing, commit your changes. REQUIRED: Use the `git-workflow` skill for the commit process.
+Before testing, commit your changes. REQUIRED: Use the `ls-git:git-commit` skill for the commit process.
 ```
 
 ## Referencing Other Skills
 
 When referencing other skills, wrap the skill name in backticks and use explicit requirement markers.
 
-```markdown
-<!-- GOOD: Explicit requirement marker -->
+Name a skill exactly as the skills listing shows it, which for a skill in a plugin is `plugin:skill`. A bare name the Skill tool can't resolve reads to the agent as a skill that doesn't exist, and it moves on without the guidance.
 
-**REQUIRED:** Use the `test-driven-development` skill
+```markdown
+<!-- GOOD: Qualified name, explicit requirement marker -->
+
+**REQUIRED:** Use the `ls-typescript:testing-bun` skill
 
 <!-- GOOD: Clear requirement language -->
 
-**REQUIRED:** You MUST use the `using-skills` skill
+**REQUIRED:** You MUST use the `ls-git:git-commit` skill
+
+<!-- BAD: Bare name the Skill tool can't resolve -->
+
+**REQUIRED:** Use the `testing-bun` skill
 
 <!-- BAD: Unclear if required -->
 
