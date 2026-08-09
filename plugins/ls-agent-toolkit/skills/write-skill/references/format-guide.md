@@ -76,7 +76,7 @@ Set both to restrict a skill to neither invoker. Omit both (the default) when ei
 Good examples are:
 
 - Complete and runnable
-- Well-commented explaining WHY
+- Commented only where the pattern isn't evident from the code. **REQUIRED:** Use the `comments-and-documentation` skill
 - From a real scenario
 - Shows the pattern clearly
 - Ready to adapt (not generic)
