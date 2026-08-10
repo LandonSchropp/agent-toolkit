@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "date"
 require_relative "daily_note"
 
 # Renders plan-morning's Yesterday scratch file: every recent daily note
@@ -25,7 +26,8 @@ class UnresolvedTaskRenderer
   end
 
   # @return [String] the title followed by each day that has unresolved tasks,
-  #   under a weekday-and-date header with the tasks grouped by subheader
+  #   under a weekday-and-date header, yesterday's suffixed "(Yesterday)", with
+  #   the tasks grouped by subheader
   def to_markdown
     "#{[TITLE, *notes_to_resolve.map { day_section(_1) }].join("\n\n")}\n"
   end
@@ -37,7 +39,8 @@ class UnresolvedTaskRenderer
   end
 
   def day_section(note)
-    header = "## #{note.date.strftime('%A, %B %-d, %Y')}"
+    marker = " (Yesterday)" if note.date == Date.today - 1
+    header = "## #{note.date.strftime('%A, %B %-d, %Y')}#{marker}"
     [header, TASKS_SECTION, *subheader_sections(note)].join("\n\n")
   end
 

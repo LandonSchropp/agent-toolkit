@@ -61,6 +61,25 @@ RSpec.describe UnresolvedTaskRenderer do
       end
     end
 
+    context "when a note is from yesterday" do
+      let(:notes) do
+        [
+          daily_note("2026-01-04 - Daily Note.md", personal: ["- [ ] Older task"]),
+          daily_note("2026-01-05 - Daily Note.md", personal: ["- [ ] Yesterday's task"])
+        ]
+      end
+
+      before { allow(Date).to receive(:today).and_return(Date.new(2026, 1, 6)) }
+
+      it "marks yesterday's day header" do
+        expect(markdown).to match(/^## Monday, January 5, 2026 \(Yesterday\)$/)
+      end
+
+      it "leaves the other day header alone" do
+        expect(markdown).to match(/^## Sunday, January 4, 2026$/)
+      end
+    end
+
     context "when several days have unresolved tasks" do
       let(:notes) do
         [
