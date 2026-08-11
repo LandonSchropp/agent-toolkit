@@ -18,14 +18,6 @@ DailyNote = Data.define(:path, :content) do
   # The header level of the subheaders (Personal, Work) within the Tasks section.
   SUBHEADER_LEVEL = 3
 
-  # Matches a complete task block: a top-level task line, any body content
-  # (indented lines and blank separators between them) up to but not including
-  # the next top-level task line or a header line (so nested sub-subheaders are
-  # not absorbed into the preceding task's body), and the newline that ends it.
-  # Consuming that newline keeps blank-line separators intact when a block is
-  # rewritten or dropped.
-  TASK_BLOCK_REGEX = /^(?:[-+*]|\d+\.) \[.\] [^\n]+(?:\n(?!(?:[-+*]|\d+\.) \[|#)[^\n]*)*\n?/
-
   # @return [Date, nil] the date parsed from the filename, or nil when the file
   #   is not a daily note
   def date
@@ -41,12 +33,12 @@ DailyNote = Data.define(:path, :content) do
     body = tasks_section
     return [] unless body
 
-    orphaned_tasks = parse_tasks(preamble(body), nil)
+    orphaned_tasks = Task.scan(preamble(body), nil)
 
     raise "#{File.basename(path, '.md')} has tasks that are not under a subheader." unless orphaned_tasks.empty?
 
     Markdown.header_names(body, level: SUBHEADER_LEVEL).flat_map do |subheader|
-      parse_tasks(Markdown.section(body, subheader, SUBHEADER_LEVEL), subheader)
+      Task.scan(Markdown.section(body, subheader, SUBHEADER_LEVEL), subheader)
     end
   end
 
@@ -113,13 +105,6 @@ DailyNote = Data.define(:path, :content) do
     body[/\A.*?(?=^#{"#" * SUBHEADER_LEVEL} |\z)/m]
   end
 
-  # @param content [String] the content to scan for task blocks
-  # @param subheader [String] the subheader to tag each task with
-  # @return [Array<Task>] the tasks parsed from the content
-  def parse_tasks(content, subheader)
-    content.scan(TASK_BLOCK_REGEX).filter_map { Task.parse(_1, subheader) }
-  end
-
   # @param subsection [String] the body of a subheader
   # @param tasks [Array<Task>] the tasks to merge into it
   # @param subheader [String] the subheader's name
@@ -146,7 +131,7 @@ DailyNote = Data.define(:path, :content) do
   # @yieldreturn [Task, nil] the replacement task, or nil to drop the block
   # @return [String] the body with every block rewritten
   def rewrite_blocks(subsection, subheader)
-    subsection.gsub(TASK_BLOCK_REGEX) do |block|
+    subsection.gsub(BLOCK_REGEX) do |block|
       task = Task.parse(block, subheader)
       next block unless task
 

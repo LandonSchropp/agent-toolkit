@@ -13,6 +13,14 @@ Task = Data.define(:type, :text, :subheader, :children) do
   # after the checkbox, so a bare "- [ ]" is not treated as a task.
   TASK_REGEX = /\A([ \t]*)(?:[-+*]|\d+\.) \[(.)\] (.*)\z/
 
+  # Matches a complete task block: a top-level task line, any body content
+  # (indented lines and blank separators between them) up to but not including
+  # the next top-level task line or a header line (so nested sub-subheaders are
+  # not absorbed into the preceding task's body), and the newline that ends it.
+  # Consuming that newline keeps blank-line separators intact when a block is
+  # rewritten or dropped.
+  BLOCK_REGEX = /^(?:[-+*]|\d+\.) \[.\] [^\n]+(?:\n(?!(?:[-+*]|\d+\.) \[|#)[^\n]*)*\n?/
+
   def initialize(type:, text:, subheader:, children: [])
     super
   end
@@ -33,6 +41,15 @@ Task = Data.define(:type, :text, :subheader, :children) do
 
       body, children = split_body(body_lines, subheader)
       new(type: match[2], text: [match[3], *body].join("\n").rstrip, subheader:, children:)
+    end
+
+    # Scans arbitrary content for top-level task blocks and parses each one.
+    #
+    # @param content [String] the content to scan for task blocks
+    # @param subheader [String] the subheader to tag each task with
+    # @return [Array<Task>] the tasks parsed from the content
+    def scan(content, subheader)
+      content.scan(BLOCK_REGEX).filter_map { parse(_1, subheader) }
     end
 
     private

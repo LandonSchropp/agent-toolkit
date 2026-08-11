@@ -163,6 +163,36 @@ RSpec.describe Task do
     end
   end
 
+  describe ".scan" do
+    subject(:tasks) { Task.scan(content, "Personal") }
+
+    let(:content) do
+      <<~MARKDOWN
+        - [ ] First task
+        - [x] Second task
+          - [<] Its subtask
+      MARKDOWN
+    end
+
+    it "parses every top-level task block" do
+      expect(tasks.map(&:text)).to eq(["First task", "Second task"])
+    end
+
+    it "tags each task with the given subheader" do
+      expect(tasks.map(&:subheader)).to eq(["Personal", "Personal"])
+    end
+
+    it "nests a task's subtasks instead of returning them separately" do
+      expect(tasks.last.children.map(&:text)).to eq(["Its subtask"])
+    end
+
+    context "when the content has no task blocks" do
+      let(:content) { "Just some prose.\n" }
+
+      it { is_expected.to eq([]) }
+    end
+  end
+
   describe "#any?" do
     subject(:task) { Task.parse("- [x] Main task\n  - [x] First\n    - [>] Deepest\n  - [x] Second", "Personal") }
 
