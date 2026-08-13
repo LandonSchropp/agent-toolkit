@@ -353,4 +353,25 @@ RSpec.describe TaskForwarder do
       end
     end
   end
+
+  describe "#forwarded_tasks" do
+    let(:previous) do
+      [
+        daily_note(
+          "2026-05-26 - Daily Note.md",
+          personal: ["- [>] Forward me", "- [<] Schedule me", "- [x] Done"],
+          work: ["- [>] Work item"]
+        )
+      ]
+    end
+
+    it "returns the tasks #forward would create in today's note, as to-dos or with their rolling marker" do
+      expect(forwarder.forwarded_tasks.map { [_1.type, _1.text] })
+        .to contain_exactly([" ", "Forward me"], ["<", "Schedule me"], [" ", "Work item"])
+    end
+
+    it "does not return completed tasks" do
+      expect(forwarder.forwarded_tasks.map(&:text)).not_to include("Done")
+    end
+  end
 end

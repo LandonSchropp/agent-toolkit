@@ -42,13 +42,12 @@ class TaskForwarder
     [result, *sources_without_forwarded_tasks(result.tasks)]
   end
 
-  private
-
-  # Every forwardable task across the previous notes. A task appearing on more
-  # than one day is forwarded once: the most recent version of it wins, and the
-  # older versions contribute any subtasks it no longer lists.
+  # Every forwardable task across the previous notes, as it should appear in
+  # today's note. A task appearing on more than one day is forwarded once: the
+  # most recent version of it wins, and the older versions contribute any
+  # subtasks it no longer lists.
   #
-  # @return [Array<Task>] the tasks as they should appear in today's note
+  # @return [Array<Task>] the tasks {#forward} creates in today's note
   def forwarded_tasks
     @previous_daily_notes
       .flat_map { candidate_tasks(_1) }
@@ -56,6 +55,8 @@ class TaskForwarder
       .values
       .filter_map { carry_forward(_1.reverse.reduce { |newer, older| newer.merge(older) }) }
   end
+
+  private
 
   # Removes each source note's scheduled tasks, but only the ones that made it
   # into today's note, so that nothing is ever dropped without being written
