@@ -1,5 +1,5 @@
 ---
-description: Use when a skill needs to open a project as a new herdr workspace via herdr-project, or close a herdr tab it no longer needs. Covers herdr-project create's --worktree and --prompt flags, and finding a tab by label to close it.
+description: Use when a skill needs to open a project as a new herdr workspace via herdr-project, or close a herdr tab it no longer needs. Covers herdr-project open's --worktree and --prompt flags, and finding a tab by label to close it.
 user-invocable: false
 ---
 
@@ -12,7 +12,7 @@ user-invocable: false
 `herdr-project` opens one of your configured projects as a new herdr workspace, laying out that project's tabs:
 
 ```bash
-herdr-project create <project> [--worktree <branch>] [--prompt <text>]
+herdr-project open <project> [--worktree <branch>] [--prompt <text>]
 ```
 
 - Without `--worktree`, it opens the project's main workspace — this fails if that workspace is already open.
@@ -23,7 +23,7 @@ Run `herdr-project --help` for the full reference.
 
 ## Listing Projects
 
-Run `herdr-project list` for the configured projects and their paths, one per line as `<name>\t<path>`. Run `herdr-project list --json` instead for a JSON array.
+Run `herdr-project list` for a table of the configured projects, the branch of each of their open worktrees, and its checkout path (`N/A` for a project with nothing open). Run `herdr-project list --json` instead for the same rows as a JSON array.
 
 ## Closing a Tab
 
