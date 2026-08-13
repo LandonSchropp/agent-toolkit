@@ -470,6 +470,22 @@ RSpec.describe Task do
     end
   end
 
+  describe "#in?" do
+    subject(:task) { Task.new(type: " ", text: "Write the docs", subheader: "Personal") }
+
+    context "when a task in the collection matches" do
+      it { is_expected.to be_in([Task.new(type: "x", text: "Write the docs", subheader: "Personal")]) }
+    end
+
+    context "when no task in the collection matches" do
+      it { is_expected.not_to be_in([Task.new(type: " ", text: "Something else", subheader: "Personal")]) }
+    end
+
+    context "when the collection is empty" do
+      it { is_expected.not_to be_in([]) }
+    end
+  end
+
   describe "#with" do
     subject(:task) { Task.new(type: " ", text: "A task", subheader: "Personal") }
 

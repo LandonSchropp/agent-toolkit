@@ -143,6 +143,12 @@ Task = Data.define(:type, :text, :subheader, :children) do
     match_key == other.match_key && subheader == other.subheader
   end
 
+  # @param tasks [Array<Task>] the tasks to search
+  # @return [Boolean] whether any of the tasks matches this one
+  def in?(tasks)
+    tasks.any? { matches?(_1) }
+  end
+
   # Folds another version of this same task into this one, keeping this task's
   # own marker and text and adding only the subtasks it does not already have.
   # Subtasks present in both are merged the same way, recursively.
