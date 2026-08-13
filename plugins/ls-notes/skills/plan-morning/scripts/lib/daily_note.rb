@@ -5,8 +5,8 @@ require_relative "task"
 require_relative "markdown"
 
 # An immutable daily note: its file path and raw content. Derives its date and
-# its Tasks-section tasks, and returns new notes when tasks are added or removed.
-# Reading and writing the file live outside this object.
+# its Tasks-section tasks, and returns new notes when tasks are created,
+# updated, or deleted. Reading and writing the file live outside this object.
 DailyNote = Data.define(:path, :content) do
   # Matches a daily note filename and captures its ISO date prefix.
   DAILY_NOTE_REGEX = /\A(\d{4}-\d{2}-\d{2}) - Daily Note\.md\z/
@@ -48,16 +48,16 @@ DailyNote = Data.define(:path, :content) do
     tasks.any? { _1.any?(&:incomplete?) }
   end
 
-  # Merges each task into its own subheader's subsection within the Tasks
-  # section. A task the note already has keeps its own marker and gains only the
-  # subtasks it is missing; a task the note doesn't have is appended whole.
-  # Tasks are rendered verbatim, so marker conversion is the caller's
-  # responsibility. Creates the subheader at the end of the Tasks section when
-  # the note doesn't already have one.
+  # Creates whatever the note is missing from the given tasks: a task the note
+  # doesn't have is appended under its own subheader, and a task the note
+  # already has keeps its own marker and gains only its missing subtasks. Tasks
+  # are rendered verbatim, so marker conversion is the caller's responsibility.
+  # Creates the subheader at the end of the Tasks section when the note doesn't
+  # already have one.
   #
-  # @param tasks [Array<Task>] the tasks to merge in, each carrying its subheader
-  # @return [DailyNote] a new note with the tasks merged in
-  def merge_tasks(tasks)
+  # @param tasks [Array<Task>] the tasks to create, each carrying its subheader
+  # @return [DailyNote] a new note with the tasks created
+  def create_tasks(tasks)
     return self if tasks.empty?
 
     updated_content = tasks.group_by(&:subheader).reduce(content) do |current, (subheader, group)|
@@ -71,13 +71,13 @@ DailyNote = Data.define(:path, :content) do
     with(content: end_with_newline(updated_content))
   end
 
-  # Removes the given tasks from the Tasks section. A task is removed together
-  # with everything nested beneath it, and a subtask is removed without
+  # Deletes the given tasks from the Tasks section. A task is deleted together
+  # with everything nested beneath it, and a subtask is deleted without
   # disturbing the rest of its parent's block.
   #
-  # @param tasks [Array<Task>] the tasks to remove
-  # @return [DailyNote] a new note with the tasks removed
-  def remove_tasks(tasks)
+  # @param tasks [Array<Task>] the tasks to delete
+  # @return [DailyNote] a new note with the tasks deleted
+  def delete_tasks(tasks)
     return self if tasks.empty?
 
     rewrite_tasks { _1.remove(tasks) }

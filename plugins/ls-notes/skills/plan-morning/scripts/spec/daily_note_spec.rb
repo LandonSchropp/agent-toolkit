@@ -217,8 +217,8 @@ RSpec.describe DailyNote do
     end
   end
 
-  describe "#merge_tasks" do
-    subject(:updated) { note.merge_tasks(tasks) }
+  describe "#create_tasks" do
+    subject(:updated) { note.create_tasks(tasks) }
 
     let(:tasks) do
       [
@@ -241,7 +241,7 @@ RSpec.describe DailyNote do
     end
 
     it "does not modify the original note" do
-      expect { note.merge_tasks(tasks) }.not_to change(note, :content)
+      expect { note.create_tasks(tasks) }.not_to change(note, :content)
     end
 
     it "separates the subheader from the next one with a blank line" do
@@ -351,12 +351,12 @@ RSpec.describe DailyNote do
     end
   end
 
-  describe "#remove_tasks" do
-    subject(:updated) { note.remove_tasks([forward]) }
+  describe "#delete_tasks" do
+    subject(:updated) { note.delete_tasks([forward]) }
 
     let(:forward) { note.tasks.find { |task| task.text == "Forward me" } }
 
-    it "removes the task" do
+    it "deletes the task" do
       expect(updated.content).not_to include("Forward me")
     end
 
@@ -385,11 +385,11 @@ RSpec.describe DailyNote do
 
       let(:forward) { note.tasks.find { _1.text == "Scheduled task" } }
 
-      it "removes the task" do
+      it "deletes the task" do
         expect(updated.content).not_to include("Scheduled task")
       end
 
-      it "removes the task's subtasks along with it" do
+      it "deletes the task's subtasks along with it" do
         expect(updated.content).not_to include("Sub-item")
       end
 
@@ -419,7 +419,7 @@ RSpec.describe DailyNote do
 
       let(:forward) { note.tasks.first.children.find { _1.text == "Rolling sub-item" } }
 
-      it "removes the subtask" do
+      it "deletes the subtask" do
         expect(updated.content).not_to include("Rolling sub-item")
       end
 

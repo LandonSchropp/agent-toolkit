@@ -37,7 +37,7 @@ class TaskForwarder
     incomplete_daily_notes = @previous_daily_notes.select { |note| candidate_tasks(note).any? { _1.any?(&:incomplete?) } }
     raise IncompleteTasksError, incomplete_daily_notes unless incomplete_daily_notes.empty?
 
-    result = @todays_daily_note.merge_tasks(forwarded_tasks)
+    result = @todays_daily_note.create_tasks(forwarded_tasks)
 
     [result, *sources_without_forwarded_tasks(result.tasks)]
   end
@@ -66,7 +66,7 @@ class TaskForwarder
   def sources_without_forwarded_tasks(present_tasks)
     @previous_daily_notes.filter_map do |note|
       removable_tasks = candidate_tasks(note).flat_map { removable(_1, present_tasks) }
-      note.remove_tasks(removable_tasks) unless removable_tasks.empty?
+      note.delete_tasks(removable_tasks) unless removable_tasks.empty?
     end
   end
 
