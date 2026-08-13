@@ -78,21 +78,45 @@ DailyNote = Data.define(:path, :content) do
   # @param tasks [Array<Task>] the tasks to remove
   # @return [DailyNote] a new note with the tasks removed
   def remove_tasks(tasks)
+    return self if tasks.empty?
+
+    rewrite_tasks { _1.remove(tasks) }
+  end
+
+  # Replaces each of the note's tasks with its matching counterpart from the
+  # given tasks, in place. Tasks with no counterpart, and given tasks matching
+  # nothing in the note, are left alone.
+  #
+  # @param tasks [Array<Task>] the replacement tasks, each carrying its subheader
+  # @return [DailyNote] a new note with the matching tasks replaced
+  def update_tasks(tasks)
+    return self if tasks.empty?
+
+    rewrite_tasks { |task| tasks.find { _1.matches?(task) } || task }
+  end
+
+  private
+
+  # Runs every top-level task in the Tasks section through a transformation,
+  # subheader by subheader, writing the result back into the note.
+  #
+  # @yieldparam task [Task] each top-level task, carrying its subheader
+  # @yieldreturn [Task, nil] the replacement task, or nil to drop it
+  # @return [DailyNote] a new note with every task rewritten
+  def rewrite_tasks(&block)
     section = tasks_section
-    return self if tasks.empty? || section.nil?
+    return self if section.nil?
 
     remaining = Markdown.header_names(section, level: SUBHEADER_LEVEL).reduce(section) do |current, subheader|
       subsection = Markdown.section(current, subheader, SUBHEADER_LEVEL)
       next current if subsection.nil?
 
-      removed = rewrite_blocks(subsection, subheader) { _1.remove(tasks) }
-      Markdown.replace_section(current, subheader, SUBHEADER_LEVEL, end_with_blank_line(removed))
+      rewritten = rewrite_blocks(subsection, subheader, &block)
+      Markdown.replace_section(current, subheader, SUBHEADER_LEVEL, end_with_blank_line(rewritten))
     end
 
     with(content: end_with_newline(Markdown.replace_section(content, TASKS_SECTION, TASKS_LEVEL, remaining)))
   end
-
-  private
 
   # @return [String, nil] the body of the note's Tasks section
   def tasks_section

@@ -452,4 +452,89 @@ RSpec.describe DailyNote do
       end
     end
   end
+
+  describe "#update_tasks" do
+    subject(:updated) { note.update_tasks(tasks) }
+
+    let(:content) do
+      <<~MARKDOWN
+        ## Tasks
+
+        ### Personal
+
+        - [ ] Do me
+        - [x] Already done
+
+        ### Work
+
+        - [<] Rolling task
+      MARKDOWN
+    end
+
+    context "when a task matches" do
+      let(:tasks) { [Task.new(type: "x", text: "Do me", subheader: "Personal")] }
+
+      it "replaces the matching task in place" do
+        expect(Markdown.section(updated.content, "Personal", 3)).to include("- [x] Do me")
+      end
+
+      it "leaves the other tasks untouched" do
+        expect(updated.content).to include("- [x] Already done")
+      end
+
+      it "leaves other subheaders untouched" do
+        expect(Markdown.section(updated.content, "Work", 3)).to include("- [<] Rolling task")
+      end
+    end
+
+    context "when a task's subtask changed" do
+      let(:content) do
+        <<~MARKDOWN
+          ## Tasks
+
+          ### Personal
+
+          - [x] Parent task
+            - [ ] Sub-item
+
+          ### Work
+        MARKDOWN
+      end
+
+      let(:tasks) do
+        [
+          Task.new(
+            type: "x",
+            text: "Parent task",
+            subheader: "Personal",
+            children: [Task.new(type: "x", text: "Sub-item", subheader: "Personal")]
+          )
+        ]
+      end
+
+      it "replaces the subtask in place" do
+        expect(updated.content).to include("- [x] Parent task\n  - [x] Sub-item")
+      end
+    end
+
+    context "when a task matches nothing in the note" do
+      let(:tasks) { [Task.new(type: "x", text: "Not in the note", subheader: "Personal")] }
+
+      it "does not add the task" do
+        expect(updated.content).not_to include("Not in the note")
+      end
+
+      it "leaves the note untouched" do
+        expect(updated.content).to eq(content)
+      end
+    end
+
+    context "when there are no tasks" do
+      let(:tasks) { [] }
+
+      it "leaves the note untouched" do
+        expect(updated.content).to eq(content)
+      end
+    end
+  end
 end
