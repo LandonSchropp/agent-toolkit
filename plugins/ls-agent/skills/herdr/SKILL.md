@@ -23,7 +23,7 @@ Run `herdr-project --help` for the full reference.
 
 ## Listing Projects
 
-Run `herdr-project list` for a table with one row per open worktree — project name, branch, and checkout path — plus a single `N/A` row for a project with nothing open. Run `herdr-project list --json` instead for the same rows as a JSON array.
+Run `herdr-project list` for each configured project's name and path, as an aligned table at a terminal and tab-separated lines when piped. Run `herdr-project list --json` instead for the same projects as a JSON array, each with its tabs. Neither form says which workspaces or worktrees are open — `herdr workspace list` and `herdr worktree list` cover that.
 
 ## Closing a Tab
 
