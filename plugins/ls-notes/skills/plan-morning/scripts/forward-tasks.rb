@@ -1,59 +1,25 @@
 #!/usr/bin/env ruby
+
 # frozen_string_literal: true
 
-require "optparse"
+# Forwards the previous daily notes' forwardable tasks into today's note and the given scratch file.
+
 require_relative "lib/vault"
+require_relative "lib/daily_note"
 require_relative "lib/task_forwarder"
 
-def print_help
-  puts <<~HELP
-    Usage: forward-tasks [options]
+abort "Usage: forward-tasks <scratch-file>" if ARGV.length != 1
 
-    Forwards forwardable tasks (>, <, /) from the recent previous daily notes into
-    today's daily note. Forwarded and partial tasks become to-dos; scheduled tasks
-    keep their marker and are removed from their source. Work tasks stay put when
-    today is a weekend.
-
-    A subtask carries forward whatever its parent's marker is, nesting under a
-    matching parent already in today's note when there is one and bringing its own
-    parent along as a to-do when there isn't. Nothing is removed from a source note
-    without first being written into today's.
-
-    Exits 1 if any previous note still holds an incomplete (- [ ]) task it would
-    forward, or holds a task that is not under a subheader, naming the offending
-    notes on stderr.
-
-    Options:
-
-      --help    Show this help message and exit.
-  HELP
-end
-
-parser = OptionParser.new do |opts|
-  opts.on("--help") do
-    print_help
-    exit 0
-  end
-end
-
-begin
-  parser.parse!
-rescue OptionParser::InvalidOption => error
-  warn "Error: The option #{error.args.first} is invalid."
-  warn
-  print_help
-  exit 1
-end
-
+scratch_path = ARGV.first
 vault = Vault.new
 todays_daily_note = vault.find_or_create_todays_daily_note
 previous_daily_notes = vault.previous_daily_notes
+scratch_note = DailyNote.new(path: scratch_path, content: File.read(scratch_path))
 
 begin
-  TaskForwarder
-    .new(todays_daily_note, previous_daily_notes)
-    .forward
-    .each { vault.write(_1) }
+  forwarder = TaskForwarder.new(todays_daily_note, previous_daily_notes)
+  forwarder.forward.each { vault.write(_1) }
+  File.write(scratch_path, scratch_note.create_tasks(forwarder.forwarded_tasks).content)
 rescue TaskForwarder::IncompleteTasksError => error
   warn error.message
   exit 1
