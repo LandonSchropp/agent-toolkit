@@ -10,8 +10,8 @@ def print_help
     Usage: confirm.rb --prompt <text> [--affirmative <label>] [--negative <label>] [--output <file>]
 
     Renders a themed, centered approve/deny prompt in the current pane and blocks
-    until the user answers. Exits 0 for the affirmative choice, 1 for the negative
-    choice or quit.
+    until the user answers. The negative choice starts selected. Exits 0 for the
+    affirmative choice, 1 for the negative choice or quit.
 
     Assumes a pane with a TTY is already available. Call this inline from a
     script that already owns one. To open a fresh herdr tab instead (e.g. when
@@ -110,6 +110,7 @@ print CURSOR_UP % (box_height + 1)
 
 system(
   GUM, "confirm",
+  "--default=false",
   "--padding", "0 0 0 #{buttons_left}",
   "--no-show-help",
   "--prompt.foreground", "4",
