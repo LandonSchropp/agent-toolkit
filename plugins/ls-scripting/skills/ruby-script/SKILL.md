@@ -17,6 +17,7 @@ Two templates cover the two kinds of scripts. Copy the right one exactly and fil
 - Flag-based arguments using `--flag-name` (kebab-case). Only use positional args for very simple cases.
 - Arguments are always required. Never make script arguments optional unless the user _explicitly_ asks for it.
 - Full variable names (`directory`, not `dir`)
+- Call other commands with their long flags (`--session=main`, not `-s main`), so the call reads without knowing the command
 - Exit `0` for success, `1` for errors
 - stdout for primary output, stderr for errors/warnings/progress messages
 
