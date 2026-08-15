@@ -33,11 +33,6 @@
       "description": "Skills that let the user interact with the agent in a more user-friendly, intuitive way"
     },
     {
-      "name": "ls-planning",
-      "source": "./plugins/ls-planning",
-      "description": "Planning skills"
-    },
-    {
       "name": "ls-code",
       "source": "./plugins/ls-code",
       "description": "Language-agnostic coding skills"
@@ -56,11 +51,6 @@
       "name": "ls-notes",
       "source": "./plugins/ls-notes",
       "description": "Notes repository skills"
-    },
-    {
-      "name": "ls-project",
-      "source": "./plugins/ls-project",
-      "description": "Project setup and convention skills"
     },
     {
       "name": "ls-writing",
