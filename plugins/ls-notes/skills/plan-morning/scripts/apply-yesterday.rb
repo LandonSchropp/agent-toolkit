@@ -4,14 +4,14 @@
 
 # Applies the user's edits from the Yesterday scratch file back to each daily note it covers.
 
+require "date"
 require_relative "lib/vault"
 require_relative "lib/resolved_task_parser"
 
-abort "Usage: apply-yesterday <scratch-file>" if ARGV.length != 1
+SCRATCH_PATH = "/tmp/plan-morning-#{Date.today.iso8601}-yesterday.md".freeze
 
-scratch_path = ARGV.first
 vault = Vault.new
-parser = ResolvedTaskParser.new(File.read(scratch_path))
+parser = ResolvedTaskParser.new(File.read(SCRATCH_PATH))
 
 vault.previous_daily_notes.each do |note|
   next unless parser.covers?(note.date)
