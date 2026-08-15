@@ -53,7 +53,7 @@ Complete all of Phase 1 without stopping or asking the user for input.
 
 ### Yesterday's Content
 
-Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to its output path, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header, with yesterday's suffixed `(Yesterday)`. Forwardable markers (`>`, `<`, `/`) carry forward automatically during the editing pass, so the script leaves them out. Move its output to the dated Yesterday path.
+Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to the Yesterday scratch path, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header, with yesterday's suffixed `(Yesterday)`. Forwardable markers (`>`, `<`, `/`) carry forward automatically during the editing pass, so the script leaves them out.
 
 Check whether a daily note exists for yesterday (the literal previous calendar day) and whether its `### :LiStar: Highlights of the Day` and `### :LiVote: Identity Vote` sections (both under `## :LiMoon: Evening`) are empty or missing entirely — an older note may not have these headers at all. If either is empty or missing, add the relevant prompt(s) as `###` sections under yesterday's own day header, which the script's oldest-first order puts at the end of the file. Add that `## [Weekday, Month Day, Year] (Yesterday)` header yourself when yesterday had no unresolved tasks and the script therefore wrote no section for it, along with the `# Previous Daily Notes` title if the script wrote nothing at all.
 
