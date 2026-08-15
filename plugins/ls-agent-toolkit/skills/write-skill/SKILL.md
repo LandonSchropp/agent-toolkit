@@ -18,6 +18,15 @@ When asked to create or edit a skill:
 
 **You cannot create a good skill without understanding what you're building.**
 
+## New Plugins
+
+A skill in a new plugin stays invisible until the plugin is registered and enabled, so land that first, as its own commit, before writing the skill:
+
+1. Add `plugins/<plugin>/.claude-plugin/plugin.json` and the plugin's entry in the repository's root `.claude-plugin/marketplace.json`.
+2. Enable it in **both** Claude Code settings files, `~/.dotfiles/tag-personal/claude/settings.json` and `~/.dotfiles/tag-work/claude/settings.json`, as `"<plugin>@landonschropp": true`. Missing one leaves the plugin working on only half the machines.
+
+The dotfiles are a separate repository, so that step lands there. Claude Code reads the setting at startup, so the new skill only appears in sessions opened afterwards.
+
 ## Testing
 
 After writing a skill, ask the user: "Would you like me to test the skill?" (Skills are often manually tested by the user, or can't be tested in an automated way, so you should ask before proceeding.)
