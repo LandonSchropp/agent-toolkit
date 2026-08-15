@@ -14,7 +14,7 @@ Before doing anything else, read yesterday's and today's daily note files. (Toda
 
 ### Scratch File Paths
 
-Each window's content lives at `/tmp/plan-morning-<step>-<date>.md`, where `<step>` is `yesterday`, `today`, or `standup` and `<date>` is today's ISO date (e.g. `/tmp/plan-morning-yesterday-2026-08-06.md`). If a step's file already exists, don't rebuild its content — leave it as-is.
+Each window's content lives at `/tmp/plan-morning-<date>-<step>.md`, where `<date>` is today's ISO date and `<step>` is `yesterday`, `today`, or `standup` (e.g. `/tmp/plan-morning-2026-08-06-yesterday.md`). If a step's file already exists, don't rebuild its content — leave it as-is.
 
 ### Task List Format
 
@@ -53,7 +53,7 @@ Complete all of Phase 1 without stopping or asking the user for input.
 
 ### Yesterday's Content
 
-Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to its output path, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header, with yesterday's suffixed `(Yesterday)`. Forwardable markers (`>`, `<`, `/`) carry forward automatically in Phase 3, so the script leaves them out. Move its output to the dated Yesterday path.
+Run `scripts/resolve-tasks.rb`. It writes every recent prior note's unresolved (`- [ ]`) tasks to its output path, oldest-first in the **Task List Format**, each day under a `## [Weekday, Month Day, Year]` header, with yesterday's suffixed `(Yesterday)`. Forwardable markers (`>`, `<`, `/`) carry forward automatically during the editing pass, so the script leaves them out. Move its output to the dated Yesterday path.
 
 Check whether a daily note exists for yesterday (the literal previous calendar day) and whether its `### :LiStar: Highlights of the Day` and `### :LiVote: Identity Vote` sections (both under `## :LiMoon: Evening`) are empty or missing entirely — an older note may not have these headers at all. If either is empty or missing, add the relevant prompt(s) as `###` sections under yesterday's own day header, which the script's oldest-first order puts at the end of the file. Add that `## [Weekday, Month Day, Year] (Yesterday)` header yourself when yesterday had no unresolved tasks and the script therefore wrote no section for it, along with the `# Previous Daily Notes` title if the script wrote nothing at all.
 
@@ -101,8 +101,6 @@ _Every action is a vote for the person you're becoming. Yesterday, did you move 
 **Evidence:**
 ```
 
-Skip this window entirely if there are no unresolved tasks and both journaling sections are already filled.
-
 ### Today's Content
 
 Fetch the user's open non-draft pull requests from the `oysterhr` GitHub organization:
@@ -146,7 +144,7 @@ Merge each PR into today's note as an indented subtask under `- [ ] Update/merge
 - **Link-only task:** The task has no description beyond the link. Fetch the resource and derive a full, actionable task title following the daily-note formatting conventions. For Slack links, read the thread carefully — the body often references another resource that is the actual focus of the task, and the title should reflect that.
 - **Link within a task:** The task has descriptive text but one of its links has a generic label. Use the appropriate MCP server to look up the resource and replace only the link label with its real title.
 
-Build the Today scratch file from today's note's current Tasks section plus the journaling prompts. Include the Gratitude, Better Day, and Daily Affirmation prompts only for slots that are still empty in today's note. If the user asks for help writing the Daily Affirmation, see [Daily Affirmation](references/daily-affirmation.md). Add one line to the file's instructions: fill in the daily improvement focus by extending its line to `- [ ] Daily improvement: <focus>`.
+Build the Today scratch file from today's note's current Tasks section plus the journaling prompts. Leave out forwarded tasks: the editing pass adds them to the file before the Today window opens. Include the Gratitude, Better Day, and Daily Affirmation prompts only for slots that are still empty in today's note. If the user asks for help writing the Daily Affirmation, see [Daily Affirmation](references/daily-affirmation.md). Add one line to the file's instructions: fill in the daily improvement focus by extending its line to `- [ ] Daily improvement: <focus>`.
 
 ```markdown
 # Today
@@ -216,21 +214,23 @@ Search `#team-ai-standups` with `slack_search_public_and_private` (query: `from:
 
 ## Phase 2: The Editing Pass
 
-**REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill exactly once, with a single command that opens `nvim` on each window whose scratch file exists, in order:
+**REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill exactly once, with `scripts/plan-morning.rb` as the command and `plan-morning` as the tab name. Write the script's path out in full, since the command runs in a shell whose working directory is the session's, not the skill's.
 
-```bash
-nvim -- /tmp/plan-morning-yesterday-<date>.md; nvim -- /tmp/plan-morning-today-<date>.md; nvim -- /tmp/plan-morning-standup-<date>.md
-```
-
-Omit any window that Phase 1 skipped. Name the tab `plan-morning`.
+That script is the whole pass: it opens every window Phase 1 built, in order, and runs the steps that belong between them. Run it and nothing else — the pass is deliberately uninterrupted, so don't take control back between windows to run a step yourself.
 
 ## Phase 3: Post-Processing
 
-After the tab closes, read each scratch file that exists directly from its dated path and apply the results.
+After the pass finishes, read each scratch file that exists directly from its dated path and apply the results.
+
+Check the pass's exit status first. Zero means it applied the Yesterday scratch file's edits to their source notes — changed markers, tasks the user added, and tasks the user deleted — and forwarded every recent note's `>`, `<`, and `/` tasks into today's note and its scratch file. Nothing further is needed here.
+
+A non-zero status means a step failed and the pass stopped there. Read the tail of `/tmp/plan-morning-<date>.log` for the error, fix it per the cases below, then rerun `scripts/plan-morning.rb` until it exits zero. The log spans every run for the day, so read only the error at the end of it.
+
+- **A task not under a subheader:** A source note lost a header such as `### Personal`. Restore it in the note.
+- **Unresolved `- [ ]` items:** The pass refuses to forward while any recent note still holds one. Fix it in the **Yesterday scratch file**, not the source note, whenever that file covers the day: the file is the source of truth, and tasks are matched by text alone, so a marker fixed only in the note gets overwritten from the file on the next run and the same error repeats. Edit the source note directly only for a day the scratch file doesn't cover.
 
 ### From Yesterday
 
-- For each day section, apply the saved task markers to that day's source note: a task whose marker changed gets updated in place, and a task the user deleted from the file gets removed from the note. Leave untouched anything the file doesn't mention.
 - Write the Highlights answers into yesterday's note as a numbered list under `### :LiStar: Highlights of the Day`, if that section was included. Add the header (and its parent `## :LiMoon: Evening` header, per the template) if the note doesn't already have it.
 - For the Identity Vote, if it was included, read the single checked option and fill in yesterday's note's `### :LiVote: Identity Vote` section (adding the header, and its parent `## :LiMoon: Evening` header, if missing): a `**Vote:**` line with the checked emoji mapped to its signed score, and an `**Evidence:**` line with the evidence text.
 
@@ -260,16 +260,9 @@ The resulting section, whether it already existed or had to be added:
 **Evidence:** Kept iterating on plan-morning until it actually worked end to end.
 ```
 
-Then run `scripts/forward-tasks.rb`. It merges every `>`, `<`, and `/` task from the recent prior notes into today's note under the matching subheader, removing scheduled tasks from their source.
-
-If the script exits non-zero, it names the prior notes it can't proceed with. Fix the named problem and rerun until it exits 0:
-
-- **A task not under a subheader:** The note lost a header such as `### Personal`. Restore it directly.
-- **Unresolved `- [ ]` items:** Resolve it directly in the source note.
-
 ### From Today
 
-- Apply the saved task edits to today's note, the same way as Yesterday's: update changed markers/text in place, remove anything the user deleted, leave everything else untouched.
+- Apply the saved task edits to today's note: update changed markers/text in place, remove anything the user deleted, leave everything else untouched.
 - For each newly added Work task, search Linear for a matching issue in the user's teams. If a match is found, link to the Linear issue URL. If multiple candidates exist, ask which one matches. If none match, leave the task unlinked.
 - Apply the Gratitude, Better Day, and Daily Affirmation answers to their matching sections in today's note.
 
