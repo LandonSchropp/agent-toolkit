@@ -19,4 +19,4 @@ Before opening a review, check whether a `review` herdr tab is already open in t
 
 Close it automatically, without asking the user first, then open the new review normally. **REQUIRED:** Use the `ls-agent:herdr` skill for the close mechanics.
 
-One addition specific to this skill: if a background `interactive-review.sh` process for that tab is still running, kill that process instead of closing the tab directly — its own cleanup closes the tab.
+One addition specific to this skill: if you still hold the task id of an `interactive-review.sh` you started, `TaskStop` it instead of closing the tab directly — its own cleanup closes the tab. A tab left over from an earlier session has no task id, so close that one by tab id rather than hunting for its process; the herdr skill covers why.

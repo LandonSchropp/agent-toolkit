@@ -34,7 +34,12 @@ tab_id=$(herdr tab list --workspace "$HERDR_WORKSPACE_ID" | jq -r --arg label "<
 [[ -n "$tab_id" ]] && herdr tab close "$tab_id"
 ```
 
-If the tab was opened by a script that traps termination signals to close its own tab on exit (like `interactive-command.sh`), kill that background process instead of closing the tab directly — its own cleanup handles it.
+If the tab was opened by a script that traps termination signals to close its own tab on exit (like `interactive-command.sh`), end that script instead of closing the tab directly — its own cleanup handles closing the tab. Run such scripts with the Bash tool's `run_in_background` and stop yours with `TaskStop` on the task id it returns.
+
+- **Never background a script with `&`.** `run_in_background` gives you a task id to stop it by and tells you when it finishes. `&` gives you neither.
+- **Never hunt for a script's process.** `pkill -f`, `killall`, and `ps | grep | xargs kill` match every workspace and agent session on the machine, killing other sessions' tabs and the user's editors along with yours. A filter that looks scoped, like `grep "name review"`, is the worst: that label is identical in every workspace.
+
+A leftover tab from an earlier session has no task id. Close that one by tab id, scoped to `$HERDR_WORKSPACE_ID` as above.
 
 ## Closing a Workspace
 
