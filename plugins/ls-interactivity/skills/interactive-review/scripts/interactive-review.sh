@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function print_help() {
-  echo "Usage: interactive-review.sh <mode> [<sha>]"
+  echo "Usage: interactive-review.sh <mode> [<sha>] --directory <path>"
   echo
   echo "Opens revdiff in a new herdr tab named 'review', blocks until the tab"
   echo "closes, then prints the user's annotations to stdout (empty if they left"
@@ -23,9 +23,16 @@ function print_help() {
   echo
   echo "Options:"
   echo
-  echo "  --help           Show this help message and exit."
+  echo "  --directory <path>  Repository to review (required)."
+  echo "  --help              Show this help message and exit."
 }
 
+# Resolve the sibling scripts relative to this one, before changing directory.
+script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+inner="$script_directory/_interactive-review.sh"
+interactive_command="$script_directory/../../interactive-command/scripts/interactive-command.sh"
+
+directory=""
 positionals=()
 
 while [[ $# -gt 0 ]]; do
@@ -33,6 +40,10 @@ while [[ $# -gt 0 ]]; do
   --help)
     print_help
     exit 0
+    ;;
+  --directory)
+    directory="$2"
+    shift 2
     ;;
   -*)
     echo "Error: The option $1 is invalid." >&2
@@ -55,6 +66,15 @@ if [[ -z "$mode" ]]; then
   print_help >&2
   exit 1
 fi
+
+if [[ -z "$directory" ]]; then
+  echo "Error: The --directory flag is required." >&2
+  echo >&2
+  print_help >&2
+  exit 1
+fi
+
+cd "$directory"
 
 # Validate the mode and its arity here so bad arguments fail before a window
 # opens, rather than flashing a window that closes with empty output.
@@ -88,14 +108,6 @@ commit)
   exit 1
   ;;
 esac
-
-# Resolve the sibling scripts relative to this one. The private
-# _interactive-review.sh lives in this skill; interactive-command.sh ships in the
-# same ls-interactivity plugin, so both paths are fixed wherever the plugin is
-# installed.
-script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-inner="$script_directory/_interactive-review.sh"
-interactive_command="$script_directory/../../interactive-command/scripts/interactive-command.sh"
 
 # revdiff writes annotations to its own scratch file; we print them afterward.
 output="$(mktemp)"
