@@ -1,10 +1,10 @@
 ---
-description: Use when working with files in ~/Notes (Landon's Obsidian vault). Covers vault structure (PARA), file naming, frontmatter, icons, templates, kanban boards, and the obsidian CLI.
+description: Use when working with files in ~/Notes (the user's Obsidian vault). Covers vault structure (PARA), file naming, frontmatter, icons, templates, kanban boards, and the obsidian CLI.
 ---
 
 # Note
 
-Landon's Obsidian vault is at `~/Notes`.
+The user's Obsidian vault is at `~/Notes`.
 
 **REQUIRED:** Read all of the following references before reading from or writing to any file in the vault:
 

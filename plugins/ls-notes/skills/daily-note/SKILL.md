@@ -41,7 +41,7 @@ The daily note is filled in from `Templates/Periodic/Daily Note.md`. Each note h
     - **Offline:** Office cleanup, pill container, plant care.
   - **Quarterly** (first Sunday of the quarter)**:** Recurring quarterly chores: toothbrush heads, air filter.
 - **Morning:** Morning journaling, broken into:
-  - **Gratitude:** Three things Landon is grateful for.
+  - **Gratitude:** Three things the user is grateful for.
   - **Better Day:** Three things that would make today great.
   - **Daily Affirmation:** A short, encouraging affirmation for the day, written as prose.
 - **Evening:** Evening reflection, broken into:
