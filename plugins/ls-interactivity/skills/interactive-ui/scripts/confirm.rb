@@ -47,14 +47,14 @@ begin
   parser.parse!
 rescue OptionParser::InvalidOption => e
   warn "Error: The option #{e.args.first} is invalid."
-  warn
+  warn ""
   print_help
   exit 1
 end
 
 if prompt.nil? || prompt.empty?
   warn "Error: The --prompt flag is required."
-  warn
+  warn ""
   print_help
   exit 1
 end

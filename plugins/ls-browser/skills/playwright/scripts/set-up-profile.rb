@@ -36,14 +36,14 @@ begin
   parser.parse!
 rescue OptionParser::InvalidOption => error
   warn "Error: The option #{error.args.first} is invalid."
-  warn
+  warn ""
   print_help
   exit 1
 end
 
 if profile.nil? || profile.empty?
   warn "Error: The --profile flag is required."
-  warn
+  warn ""
   print_help
   exit 1
 end

@@ -33,14 +33,14 @@ begin
   parser.parse!
 rescue OptionParser::InvalidOption => e
   warn "Error: #{e.message}"
-  warn
+  warn ""
   print_help
   exit 1
 end
 
 if branch.nil? || branch.empty?
   warn "Error: --branch is required."
-  warn
+  warn ""
   print_help
   exit 1
 end
