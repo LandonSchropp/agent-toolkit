@@ -69,6 +69,10 @@ By default, both the user and the model can invoke a skill. Two Claude Code fron
 
 Set both to restrict a skill to neither invoker. Omit both (the default) when either should be able to invoke it.
 
+## Referring To The User
+
+Write "the user", never a personal name. A skill that names someone reads as being about that person rather than about whoever is running it, and it goes wrong the moment the skill is shared or the person changes. Package names, bundle identifiers, and marketplace handles are not references to a person and are fine as they are.
+
 ## Code Examples
 
 **One excellent example beats many mediocre ones.** One great example is enough. Choose the most relevant language for the example—TypeScript/JavaScript are a good fallback if the language is not obvious.
