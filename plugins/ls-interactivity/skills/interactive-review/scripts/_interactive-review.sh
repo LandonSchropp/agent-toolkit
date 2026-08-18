@@ -3,12 +3,12 @@
 set -euo pipefail
 
 # SQLite database of reviewed commits. The commit hook allows a commit when the current HEAD is
-# recorded here, marking the pending work on top of it as reviewed. This script is the only one
-# that creates the schema; everything else assumes it exists once a review has been recorded.
+# recorded here, marking the pending work on top of it as reviewed. This script is the only one that
+# creates the schema; everything else assumes it exists once a review has been recorded.
 DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
 
-# Resolve the sibling interactive-ui skill's confirm script relative to this one. Both skills
-# ship in the ls-interactivity plugin, so this layout is fixed wherever the plugin is installed.
+# Resolve the sibling interactive-ui skill's confirm script relative to this one. Both skills ship
+# in the ls-interactivity plugin, so this layout is fixed wherever the plugin is installed.
 script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 confirm="$script_directory/../../interactive-ui/scripts/confirm.rb"
 
@@ -32,8 +32,8 @@ function print_help() {
   echo "  --help           Show this help message and exit."
 }
 
-# Record the current HEAD as reviewed so the commit hook allows a commit built on
-# it. Skip when HEAD is unborn, since the first commit has nothing above it.
+# Record the current HEAD as reviewed so the commit hook allows a commit built on it. Skip when HEAD
+# is unborn, since the first commit has nothing above it.
 function record_review_approval() {
   local head
 
@@ -69,9 +69,9 @@ function is_review_disabled() {
 }
 
 # Prompts for an explicit approve/deny decision once revdiff closes. Its own exit status (0
-# approved, 1 denied) propagates as this script's exit status, so the caller can read the
-# decision directly. Approval also records the review, so the commit hook allows a commit
-# built on this HEAD as a backstop.
+# approved, 1 denied) propagates as this script's exit status, so the caller can read the decision
+# directly. Approval also records the review, so the commit hook allows a commit built on this HEAD
+# as a backstop.
 function confirm_review() {
   if "$confirm" --prompt "Approve these changes?"; then
     record_review_approval
@@ -81,9 +81,9 @@ function confirm_review() {
 }
 
 # An empty review is almost always the agent picking the wrong mode — the changes are staged but
-# working mode was requested, or the reverse. Report it instead of opening revdiff on nothing.
-# The message goes to $output rather than stderr, since this script's output dies with the tab
-# and only $output makes it back to the agent.
+# working mode was requested, or the reverse. Report it instead of opening revdiff on nothing. The
+# message goes to $output rather than stderr, since this script's output dies with the tab and only
+# $output makes it back to the agent.
 function require_changes_to_review() {
   case "$1" in
   working) if [[ -n "$(git status --porcelain)" ]]; then return 0; fi ;;
@@ -94,8 +94,8 @@ function require_changes_to_review() {
   exit 1
 }
 
-# revdiff's own exit status isn't meaningful here — its job is only to populate $output — so
-# don't let it gate whether the approval prompt even runs.
+# revdiff's own exit status isn't meaningful here — its job is only to populate $output — so don't
+# let it gate whether the approval prompt even runs.
 function review_working() {
   require_changes_to_review working
   revdiff --untracked --output "$output" || true
