@@ -92,7 +92,8 @@ function confirm_review() {
 function require_changes_to_review() {
   case "$1" in
   working) if [[ -n "$(git status --porcelain)" ]]; then return 0; fi ;;
-  staged) if ! git diff --cached --quiet; then return 0; fi ;;
+  staged | diff) if ! git diff --cached --quiet; then return 0; fi ;;
+  commit) if ! git diff --quiet "$2" "$3"; then return 0; fi ;;
   esac
 
   echo "Error: The '$1' mode has no changes to review. Double check the mode is correct." >"$output"
@@ -154,11 +155,7 @@ function review_diff() {
   copy_revision "$after"
   git add --all --force
 
-  if [[ -z "$(git status --porcelain)" ]]; then
-    echo "Error: The before and after paths hold the same content, so there is nothing to review." >"$output"
-    exit 1
-  fi
-
+  require_changes_to_review diff
   revdiff --staged --output "$output" || true
   confirm_review
 }
@@ -179,6 +176,7 @@ function review_commit() {
     base="$(git hash-object -t tree /dev/null)"
   fi
 
+  require_changes_to_review commit "$base" "$sha"
   revdiff "$base" "$sha" --output "$output"
 }
 
