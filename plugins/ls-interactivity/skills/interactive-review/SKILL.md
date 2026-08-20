@@ -5,11 +5,17 @@ user-invocable: false
 
 # Interactive Review
 
-Run `scripts/interactive-review.sh <mode> [<sha>] --directory <path>` in the background. It opens revdiff in a new herdr tab named `review`, blocks until the tab closes, and prints the user's annotations to stdout, empty if they left none. The modes are `working`, `staged`, and `commit <sha>`; run `scripts/interactive-review.sh --help` for details.
+Run `scripts/interactive-review.sh <mode> [<arguments>] [--directory <path>]` in the background. It opens revdiff in a new herdr tab named `review`, blocks until the tab closes, and prints the user's annotations to stdout, empty if they left none. The modes are `working`, `staged`, `commit <sha>`, and `diff <before> <after>`; run `scripts/interactive-review.sh --help` for details.
 
 `--directory` is the repository holding the changes, which is not always the one the session started in. Pass it explicitly every time rather than relying on where the command happens to run. When it isn't the session's own repository, commit with `git -C <same directory>`: the commit hook resolves the repository from that flag and can't see a `cd`, so it blocks an approved commit without one.
 
-For `working` and `staged` mode, the script's own exit code is the approve/deny decision: 0 if the user approved when prompted after closing revdiff, 1 if they denied (or closed the tab without answering). This is the only signal that matters — don't ask the user separately whether to commit or re-review. On approval, proceed to commit. On denial, address the annotations and invoke this skill again; do not attempt the commit in between, since the commit hook still blocks it either way. `commit` mode has nothing to approve and always exits 0.
+## Reviewing Files Outside A Repository
+
+`diff <before> <after>` reviews one path against another — two files, or two directories — neither of which needs to be in a repository. It takes no `--directory`.
+
+Nothing records the before-state for you, so copy the file or directory somewhere first, before the first edit. Without that copy there is nothing to diff against, and no way to make one after the fact.
+
+For every mode but `commit`, the script's own exit code is the approve/deny decision: 0 if the user approved when prompted after closing revdiff, 1 if they denied (or closed the tab without answering). This is the only signal that matters — don't ask the user separately whether to commit or re-review. On approval, proceed to commit. On denial, address the annotations and invoke this skill again; do not attempt the commit in between, since the commit hook still blocks it either way. `commit` mode has nothing to approve and always exits 0.
 
 ## Choosing Working vs. Staged Mode
 

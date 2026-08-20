@@ -3,27 +3,30 @@
 set -euo pipefail
 
 function print_help() {
-  echo "Usage: interactive-review.sh <mode> [<sha>] --directory <path>"
+  echo "Usage: interactive-review.sh <mode> [<arguments>] [--directory <path>]"
   echo
   echo "Opens revdiff in a new herdr tab named 'review', blocks until the tab"
   echo "closes, then prints the user's annotations to stdout (empty if they left"
-  echo "none). Must run inside herdr. See review.sh --help for what each mode diffs."
+  echo "none). Must run inside herdr."
   echo
-  echo "For 'working' and 'staged' mode, exits 0 if the user approved the"
-  echo "changes when prompted after closing revdiff, or 1 if they denied (or"
-  echo "closed the tab without answering). 'commit' mode has nothing to"
-  echo "approve and always exits 0. A mode with no changes to review prints an"
-  echo "error and exits 1 without opening a review."
+  echo "Every mode but 'commit' exits 0 if the user approved the changes when"
+  echo "prompted after closing revdiff, or 1 if they denied (or closed the tab"
+  echo "without answering). 'commit' mode has nothing to approve and always"
+  echo "exits 0. A mode with no changes to review prints an error and exits 1"
+  echo "without opening a review."
   echo
   echo "Modes:"
   echo
-  echo "  working          Review uncommitted changes, including untracked files."
-  echo "  staged           Review staged changes only."
-  echo "  commit <sha>     Review a single commit's diff (its parent to itself)."
+  echo "  working                 Review uncommitted changes, including untracked files."
+  echo "  staged                  Review staged changes only."
+  echo "  commit <sha>            Review a single commit's diff (its parent to itself)."
+  echo "  diff <before> <after>   Review one path against another. Both are files, or"
+  echo "                          both are directories, and neither needs to be in a"
+  echo "                          repository."
   echo
   echo "Options:"
   echo
-  echo "  --directory <path>  Repository to review (required)."
+  echo "  --directory <path>  Repository to review. Required by every mode but 'diff'."
   echo "  --help              Show this help message and exit."
 }
 
@@ -67,19 +70,21 @@ if [[ -z "$mode" ]]; then
   exit 1
 fi
 
-if [[ -z "$directory" ]]; then
-  echo "Error: The --directory flag is required." >&2
-  echo >&2
-  print_help >&2
-  exit 1
+# Ensure every mode (except for diff) includes a repository directory.
+if [[ "$mode" != "diff" ]]; then
+  if [[ -z "$directory" ]]; then
+    echo "Error: The --directory flag is required." >&2
+    echo >&2
+    print_help >&2
+    exit 1
+  fi
+
+  cd "$directory"
 fi
 
-cd "$directory"
-
-# Validate the mode and its arity here so bad arguments fail before a window
-# opens, rather than flashing a window that closes with empty output.
-# _interactive-review.sh repeats these checks as the source of truth for what it
-# accepts.
+# Validate here so bad arguments fail before a window opens, rather than flashing one that
+# closes with empty output. _interactive-review.sh's stderr dies with its tab, so this is the
+# only place an argument error is visible.
 case "$mode" in
 working | staged)
   if [[ "${#positionals[@]}" -gt 1 ]]; then
@@ -101,6 +106,29 @@ commit)
     exit 1
   fi
   ;;
+diff)
+  if [[ "${#positionals[@]}" -ne 3 ]]; then
+    echo "Error: The diff mode requires a before path and an after path." >&2
+    echo >&2
+    print_help >&2
+    exit 1
+  fi
+
+  for path in "${positionals[1]}" "${positionals[2]}"; do
+    if [[ ! -e "$path" ]]; then
+      echo "Error: The path $path does not exist." >&2
+      exit 1
+    fi
+  done
+
+  [[ -d "${positionals[1]}" ]] && before_is_directory=true || before_is_directory=false
+  [[ -d "${positionals[2]}" ]] && after_is_directory=true || after_is_directory=false
+
+  if [[ "$before_is_directory" != "$after_is_directory" ]]; then
+    echo "Error: The before and after paths must both be files or both be directories." >&2
+    exit 1
+  fi
+  ;;
 *)
   echo "Error: The mode $mode is invalid." >&2
   echo >&2
@@ -112,13 +140,23 @@ esac
 # revdiff writes annotations to its own scratch file; we print them afterward.
 output="$(mktemp)"
 
+# A shell in the herdr tab evaluates this string, so every word is quoted for it. diff mode's
+# paths are the only arguments that can carry a space or a metacharacter.
+command="$(printf '%q' "$inner")"
+
+for positional in "${positionals[@]}"; do
+  command+=" $(printf '%q' "$positional")"
+done
+
+command+=" --output $(printf '%q' "$output")"
+
 # Open the review and wait for the tab to close. Run interactive-command in
 # the background and forward termination to it so that if the agent kills this
 # wrapper early, its cleanup still closes the herdr tab. interactive-command.sh
-# relays _interactive-review.sh's own exit code (0 approved, 1 denied for
-# working/staged mode; always 0 for commit mode), so capture it here without
-# letting `set -e` abort before the annotations are printed.
-"$interactive_command" --command "'$inner' ${positionals[*]} --output '$output'" --name review &
+# relays _interactive-review.sh's own exit code (0 approved, 1 denied for every
+# mode but commit, which is always 0), so capture it here without letting
+# `set -e` abort before the annotations are printed.
+"$interactive_command" --command "$command" --name review &
 command_pid=$!
 trap 'kill "$command_pid" 2>/dev/null || true' EXIT INT TERM HUP
 wait "$command_pid" || exit_code=$?

@@ -13,18 +13,19 @@ script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 confirm="$script_directory/../../interactive-ui/scripts/confirm.rb"
 
 function print_help() {
-  echo "Usage: _interactive-review.sh <mode> [<sha>] --output <file>"
+  echo "Usage: _interactive-review.sh <mode> [<arguments>] --output <file>"
   echo
-  echo "Opens revdiff to review changes and writes annotations to <file>. For"
-  echo "working and staged mode, exits 0 if the user approves when prompted"
-  echo "after closing revdiff, or 1 if they deny. commit mode has nothing to"
-  echo "approve and always exits 0."
+  echo "Opens revdiff to review changes and writes annotations to <file>. Every"
+  echo "mode but commit exits 0 if the user approves when prompted after closing"
+  echo "revdiff, or 1 if they deny. commit mode has nothing to approve and"
+  echo "always exits 0."
   echo
   echo "Modes:"
   echo
-  echo "  working          Review uncommitted changes, including untracked files."
-  echo "  staged           Review staged changes only."
-  echo "  commit <sha>     Review a single commit's diff (its parent to itself)."
+  echo "  working                Review uncommitted changes, including untracked files."
+  echo "  staged                 Review staged changes only."
+  echo "  commit <sha>           Review a single commit's diff (its parent to itself)."
+  echo "  diff <before> <after>  Review one path against another, neither in a repository."
   echo
   echo "Options:"
   echo
@@ -32,12 +33,16 @@ function print_help() {
   echo "  --help           Show this help message and exit."
 }
 
-# Record the current HEAD as reviewed so the commit hook allows a commit built on it. Skip when HEAD
-# is unborn, since the first commit has nothing above it.
+# Record the current HEAD as reviewed so the commit hook allows a commit built on it. Skip when no
+# commits exist.
 function record_review_approval() {
   local head
 
   if ! head="$(git rev-parse --verify --quiet HEAD)"; then
+    return 0
+  fi
+
+  if [[ "$(git config --get --local review.ephemeral)" == "true" ]]; then
     return 0
   fi
 
@@ -70,8 +75,8 @@ function is_review_disabled() {
 
 # Prompts for an explicit approve/deny decision once revdiff closes. Its own exit status (0
 # approved, 1 denied) propagates as this script's exit status, so the caller can read the decision
-# directly. Approval also records the review, so the commit hook allows a commit built on this HEAD
-# as a backstop.
+# directly. Approval also records the review, unless the repository is ephemeral, so the commit
+# hook allows a commit built on this HEAD as a backstop.
 function confirm_review() {
   if "$confirm" --prompt "Approve these changes?"; then
     record_review_approval
@@ -104,6 +109,56 @@ function review_working() {
 
 function review_staged() {
   require_changes_to_review staged
+  revdiff --staged --output "$output" || true
+  confirm_review
+}
+
+# Copy one revision's content into the ephemeral repository. Handles both individual files and
+# directories.
+function copy_revision() {
+  local source="$1" scratch
+  scratch="$(mktemp -d)"
+
+  if [[ -d "$source" ]]; then
+    cp -R "$source/." "$scratch"
+  else
+    cp "$source" "$scratch/$(basename "$source")"
+  fi
+
+  find "$scratch" -name .git -prune -exec rm -rf {} +
+  cp -R "$scratch/." .
+}
+
+# Review two paths that need not be in a repository at all.
+function review_diff() {
+  local before after
+
+  before="$(realpath "$1")"
+  after="$(realpath "$2")"
+
+  cd "$(mktemp -d)"
+  git init --quiet .
+
+  # These files are reviewed precisely because they are outside version control, so the global
+  # ignore list — .env, *.local.md, tmp/ — must not decide what the user gets to see.
+  git config --local core.excludesFile /dev/null
+
+  # Marks the repository as ephemeral, so approving the review records nothing.
+  git config --local review.ephemeral true
+
+  copy_revision "$before"
+  git add --all --force
+  git -c user.email=review@localhost -c user.name=review commit --quiet --message before
+
+  find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+  copy_revision "$after"
+  git add --all --force
+
+  if [[ -z "$(git status --porcelain)" ]]; then
+    echo "Error: The before and after paths hold the same content, so there is nothing to review." >"$output"
+    exit 1
+  fi
+
   revdiff --staged --output "$output" || true
   confirm_review
 }
@@ -192,6 +247,14 @@ commit)
     exit 1
   fi
   ;;
+diff)
+  if [[ "${#positionals[@]}" -ne 3 ]]; then
+    echo "Error: The diff mode requires a before path and an after path." >&2
+    echo >&2
+    print_help >&2
+    exit 1
+  fi
+  ;;
 *)
   echo "Error: The mode $mode is invalid." >&2
   echo >&2
@@ -216,5 +279,8 @@ staged)
   ;;
 commit)
   review_commit
+  ;;
+diff)
+  review_diff "${positionals[1]}" "${positionals[2]}"
   ;;
 esac
