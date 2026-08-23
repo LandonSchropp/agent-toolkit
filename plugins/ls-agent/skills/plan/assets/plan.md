@@ -1,5 +1,6 @@
 # {{ title }} Plan
 
+Worktree: `{{ worktree }}`
 Feature branch: `{{ feature-branch }}`
 Base branch: `{{ base-branch }}`
 Linear Issue ID: `{{ ABC-123 }}` <!-- Optional. Delete this line if there's no Linear issue. -->
