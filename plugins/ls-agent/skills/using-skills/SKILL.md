@@ -6,7 +6,6 @@ description: Use when the task involves checking whether a skill applies before 
 
 Before doing anything else, you **MUST** read the following reference files:
 
-- [Using skills](references/using-skills.md)
 - [Reviews](references/reviews.md)
 - [Test-driven development](references/test-driven-development.md)
 - [Skill scripts](references/scripts.md)
