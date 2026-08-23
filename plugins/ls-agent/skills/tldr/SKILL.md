@@ -3,13 +3,13 @@ description: Invoke when the agent's conversational replies have gotten too long
 disable-model-invocation: true
 ---
 
-# Concise Response
+# TL/DR
 
 The user invoked this because your prose has been too long. For the rest of this conversation, cut conversational text to the minimum: lead with the answer, drop preamble, restated questions, and trailing summaries. One or two sentences beats a paragraph.
 
 ## Rewrite the Last Response
 
-When the user typed the command directly (e.g. `/concise-response`), redo your immediately preceding response now, in the shorter style, instead of just acknowledging the change. The rewrite itself is the acknowledgment — don't preface it with "Noted" or "I'll be shorter from here on."
+When the user typed the command directly (e.g. `/tldr`), redo your immediately preceding response now, in the shorter style, instead of just acknowledging the change. The rewrite itself is the acknowledgment — don't preface it with "Noted" or "I'll be shorter from here on."
 
 Skip the rewrite only when:
 
