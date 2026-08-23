@@ -3,8 +3,7 @@
 # frozen_string_literal: true
 
 # Runs plan-morning's whole editing pass: the Yesterday, Today, and Standup
-# windows and the steps between them. Hand this to interactive-command, which
-# gives it the single herdr tab the windows need.
+# windows and the steps between them.
 #
 # HARD INVARIANT. DO NOT VIOLATE.
 #

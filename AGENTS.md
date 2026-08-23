@@ -21,17 +21,6 @@ This is a monorepo. Each plugin lives under `plugins/` as its own subdirectory. 
 
 When asked to edit a skill in this repository, always edit the skill under `plugins/<plugin-name>/skills/` here—not the installed copy in `~/.claude/skills/`.
 
-### Interactive Command Workflow
-
-Some skills need to hand control to the user in a separate window and block until they're done. That building block lives in `plugins/ls-interactivity`: `ls-interactivity:interactive-command` opens the given command in a new herdr tab and waits for it to close, and `ls-interactivity:interactive-edit` builds on it for its workflow.
-
-Not every prompt needs a fully executable window. `plugins/ls-interactivity/skills/interactive-ui` hosts small, themed TUI utilities for quick user interactions without having to write a full application.
-
-These utilities are located in `plugins/ls-interactivity/skills/interactive-ui/scripts` and come in two types:
-
-- `<utility>`: The bare utility script, intended to be called from other skill scripts directly.
-- `interactive-<utility>`: The interactive script that should be called by the agent.
-
 ## Documentation
 
 - **Never use real examples in documentation.** Real file names, project names, and note titles pulled from the vault or from actual repositories go stale as soon as the underlying content changes, and then the documentation is wrong. Use generic placeholders such as `<Project Name>` instead.

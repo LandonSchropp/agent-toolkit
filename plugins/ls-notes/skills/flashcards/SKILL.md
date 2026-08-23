@@ -27,7 +27,7 @@ Read [Card Design](references/card-design.md) and follow it exactly.
 
 ## 3. Prune
 
-Present every trivial card to the user and let the user choose what to keep. **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill with the candidates as a bulleted list. **The lines the user deletes are the cards to remove from the deck**, and anything left behind stays. Say so in the file itself.
+Present every trivial card to the user in a bulleted list. **The lines the user deletes are the cards to remove from the deck**, and anything left behind stays. Say so in the file itself.
 
 ## 4. Package
 

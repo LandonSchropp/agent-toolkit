@@ -214,7 +214,7 @@ Search `#team-ai-standups` with `slack_search_public_and_private` (query: `from:
 
 ## Phase 2: The Editing Pass
 
-**REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill exactly once, with `scripts/plan-morning.rb` as the command and `plan-morning` as the tab name. Write the script's path out in full, since the command runs in a shell whose working directory is the session's, not the skill's.
+Run the plan-morning script directly from the skill directory.
 
 That script is the whole pass: it opens every window Phase 1 built, in order, and runs the steps that belong between them. Run it and nothing else — the pass is deliberately uninterrupted, so don't take control back between windows to run a step yourself.
 
@@ -268,4 +268,4 @@ The resulting section, whether it already existed or had to be added:
 
 ### From Standup
 
-If the Standup window ran, parse its sections and hand off to `oyster-team-ai:standup`: "The user has already filled in their standup answers via an interactive editor — skip all context-gathering and question steps, compose the message, and post it directly without asking for confirmation. Yesterday: [bullets from file], Today: [bullets from file], Blockers: [content or none], Feeling: [content or none]."
+If the Standup window ran, parse its sections and hand off to `oyster-team-ai:standup`: "The user has already filled in their standup answers — skip all context-gathering and question steps, compose the message, and post it directly without asking for confirmation. Yesterday: [bullets from file], Today: [bullets from file], Blockers: [content or none], Feeling: [content or none]."

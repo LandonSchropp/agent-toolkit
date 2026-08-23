@@ -42,10 +42,6 @@ If the user opts for the agent to test the skill:
 
 When a skill includes executable scripts, **REQUIRED:** Use the `ls-scripting:script` skill for language selection and conventions.
 
-## Interactive File Editing
-
-If a skill needs the user to edit a file mid-workflow and hand the result back, add to its SKILL.md: **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill.
-
 ## Required Reading
 
 **STOP. Read these documents NOW. Not later. Not "as you go." Right now.**
