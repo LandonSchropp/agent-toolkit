@@ -1,10 +1,10 @@
 ---
-description: Use when a skill needs the user to interactively edit a file in Neovim mid-workflow, then read their changes back. Takes a window name and the file to edit.
+description: Use when a skill needs the user to interactively edit a file in VS Code mid-workflow, then read their changes back.
 user-invocable: false
 ---
 
 # Interactive Edit
 
-Run `scripts/interactive-edit.sh --file <file> --name <name>`. It opens `<file>` in Neovim in a new herdr tab, blocks until the tab closes, and prints the user's saved edits to stdout — no separate read needed.
+Run `code --reuse-window --wait <file>` in the background. It opens `<file>` in VS Code and blocks until the editor window closes. Afterward, read the file to get the user's saved edits.
 
-Run it in the background; it blocks until the tab closes. To present generated content for editing, write it to a scratch file first and pass that as `<file>`.
+To present generated content for editing, write it to a scratch file first and pass that as `<file>`.
