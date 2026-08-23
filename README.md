@@ -44,6 +44,5 @@ copilot plugin install ls-ruby@landonschropp
 copilot plugin install ls-code@landonschropp
 copilot plugin install ls-agent@landonschropp
 copilot plugin install ls-agent-toolkit@landonschropp
-copilot plugin install ls-writing@landonschropp
 copilot plugin install ls-browser@landonschropp
 ```

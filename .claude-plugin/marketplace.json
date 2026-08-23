@@ -43,11 +43,6 @@
       "description": "Agent toolkit meta-skills"
     },
     {
-      "name": "ls-writing",
-      "source": "./plugins/ls-writing",
-      "description": "Writing toolkit skills"
-    },
-    {
       "name": "ls-browser",
       "source": "./plugins/ls-browser",
       "description": "Browser automation skills"
