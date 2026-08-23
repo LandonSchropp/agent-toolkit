@@ -26,4 +26,6 @@ Each item is one atomic commit, in order.
 
 Invoke the following skills:
 
+- `ls-agent:using-skills`
 - `ls-git:git-atomic-commit`
+- `ls-code:pre-review`
