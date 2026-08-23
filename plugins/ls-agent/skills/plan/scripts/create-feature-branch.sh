@@ -4,7 +4,7 @@ set -euo pipefail
 function print_help() {
   echo "Usage: create-feature-branch.sh [options]"
   echo
-  echo "Create or switch to a feature branch, with Git Town support."
+  echo "Create or switch to a feature branch."
   echo
   echo "Options:"
   echo
@@ -64,13 +64,6 @@ fi
 # Check if branch already exists
 if git show-ref --verify --quiet "refs/heads/$feature_branch"; then
   git switch "$feature_branch"
-  exit 0
-fi
-
-# Check if repository is using Git Town
-if [ -f "git-town.toml" ] || [ -f ".git-town.toml" ] || [ -f ".git-branches.toml" ]; then
-  git switch "$base_branch"
-  git town append "$feature_branch"
   exit 0
 fi
 
