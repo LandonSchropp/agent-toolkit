@@ -1,13 +1,9 @@
 # {{ title }} Plan
 
-Feature branch: `{{ featureBranch }}`
-Base branch: `{{ baseBranch }}`
-{% if linearIssueId -%}
-Linear Issue ID: `{{ linearIssueId }}`
-{% endif -%}
-{% if sentryIssueUrl -%}
-Sentry Issue: {{ sentryIssueUrl }}
-{% endif -%}
+Feature branch: `{{ feature-branch }}`
+Base branch: `{{ base-branch }}`
+Linear Issue ID: `{{ ABC-123 }}` <!-- Optional. Delete this line if there's no Linear issue. -->
+Sentry Issue: {{ sentry-url }} <!-- Optional. Delete this line if there's no Sentry issue. -->
 
 ## Overview
 
@@ -21,7 +17,7 @@ Break the work into atomic commits using the `ls-git:git-atomic-commit` principl
 
 Each item is one atomic commit, in order.
 
-1. **[Commit title]:** [Contents].
+1. **{{ commit title }}:** {{ contents }}.
 
 ## Skills
 
