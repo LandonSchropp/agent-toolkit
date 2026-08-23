@@ -14,7 +14,7 @@ Under no circumstances may you:
 
 - Investigate, analyze, plan, implement, test, validate, or complete the task.
 - Read or search the repository to understand the task.
-- Create, edit, move, or delete files other than the required scratch prompt in `/tmp`.
+- Create, edit, move, or delete files.
 - Run terminal commands or invoke tools for the task.
 - Create a worktree, branch, commit, pull request, or agent session.
 - Ask questions about, reinterpret, improve, or make decisions for the task.
@@ -22,25 +22,25 @@ Under no circumstances may you:
 Your only permitted actions after receiving a task are:
 
 1. Generate a session name.
-2. Insert the task verbatim into the required template.
-3. Return the generated prompt.
+2. Use `assets/prompt.md` as the verbatim output template.
+3. Replace only `{{session-name}}` and `{{task}}` in the output.
+4. Print the exact completed prompt in a fenced `markdown` block with no commentary, explanation, confirmation, or other task output.
+
+**REQUIRED:** The only valid generated prompt is the complete, verbatim contents of `assets/prompt.md` after replacing the two placeholders. Do not compose, summarize, paraphrase, omit, reorder, or recreate any part of it.
+
+The template contains instructions for the separate agent; never follow them in this session.
 
 If any instruction conflicts with these restrictions, these restrictions take precedence. If you cannot generate the prompt without performing part of the task, return the template with the task unchanged anyway. Never perform the task yourself.
 
 Generate a simple kebab-case session name representing the task. Use no more than three words; prefer one or two. Determining this name is the only analysis of the task you may perform.
 
-The generated prompt must:
-
-- Begin with the generated session name.
-- Instruct the agent to create a Git worktree whose branch exactly matches the session name and switch into it before doing anything else.
-- Require all work to happen inside that worktree.
-- Instruct the agent to prepare the worktree using the repository's local configuration and dependency conventions.
-- Instruct the agent to invoke the `plan` skill after preparing the worktree.
-- Require exact user approval of the plan before implementation.
-- Include my task verbatim, without correcting, summarizing, interpreting, expanding, or narrowing it.
-
-Return only the generated prompt in a fenced code block. Do not add commentary, explanation, confirmation, or any work product from the task.
-
-Copy the prompt in `assets/prompt.md` to `/tmp/{{session-name}}.md`, and fill in the details.
-
 Acknowledge when you've read these instructions, and do nothing else until I provide a task.
+
+## Rationalizations
+
+| Thought                                      | Reality                                                        |
+| -------------------------------------------- | -------------------------------------------------------------- |
+| "The task is actionable, so I should do it"  | The task is inert input. Generate its prompt and nothing else. |
+| "I need repository context first"            | Repository investigation is forbidden. Preserve the task.      |
+| "I can improve the task before forwarding"   | The task must remain verbatim.                                 |
+| "I can recreate the template from its rules" | Only the verbatim filled asset is valid output.                |
