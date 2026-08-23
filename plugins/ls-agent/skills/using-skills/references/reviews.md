@@ -18,6 +18,8 @@ No other acknowledgement counts. Do not accept "yes", "ok", "looks good", "ship 
 
 Don't edit files outside the scope of the commit you're building. If you unavoidably touch unrelated files and they don't overlap with the current commit's files, review and commit each separately — one review, one commit, at a time. Never bundle unreviewed changes into a reviewed commit.
 
+Before presenting the diff to the user or asking for approval, check the worktree for any changes outside the current atomic commit. If you find unrelated edits, stash them or roll them back so the review surface contains only the files relevant to the current change. The review should stay small and easy to approve.
+
 ## Rationalizations
 
 | Thought                                     | Reality                                                                         |

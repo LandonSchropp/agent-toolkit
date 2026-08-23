@@ -24,6 +24,8 @@ When the user invokes this skill, they _might_ be hinting that they'd like to sp
 
 If there are uncommitted changes in the working tree (staged or unstaged), or the user is explicitly asking to reorganize existing work into atomic commits, follow the procedure in [references/process.md](references/process.md). Always present the plan to the user and wait for confirmation before executing.
 
+Keep the worktree clean while preparing each atomic commit. If you discover changes that are unrelated to the current commit, stash them or revert them before showing the diff to the user or asking for approval. The goal is to keep the review surface limited to the files that belong to the change under review.
+
 If there's nothing to split, apply atomic-commit principles to any new commits made during the rest of the session.
 
 ## Rationalizations
