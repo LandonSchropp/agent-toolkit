@@ -5,30 +5,12 @@ set -euo pipefail
 function print_help() {
   echo "Usage: show-stack-commits.sh [options]"
   echo
-  echo "Walks up the git-town parent chain from the current branch and prints"
-  echo "commits unique to each branch in the stack. Useful for atomic-commit"
-  echo "planning when an edit may target a commit on a parent branch."
-  echo
-  echo "Falls back to the repository's default branch if git-town is not"
-  echo "configured or returns no parent."
+  echo "Prints commits unique to the current branch compared with the default"
+  echo "branch. Useful for atomic-commit planning."
   echo
   echo "Options:"
   echo
   echo "  --help    Show this help message and exit."
-}
-
-function get_parent_branch() {
-  local branch="$1"
-  local parent
-
-  parent=$(git town config get-parent "$branch" 2>/dev/null || true)
-
-  if [[ -n "$parent" ]]; then
-    echo "$parent"
-    return 0
-  fi
-
-  git default-branch 2>/dev/null
 }
 
 # Parse arguments
@@ -47,7 +29,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-default_branch=$(git default-branch 2>/dev/null || echo main)
+default_branch=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##' || echo main)
 current_branch=$(git branch --show-current)
 
 if [[ -z "$current_branch" ]]; then
@@ -60,19 +42,5 @@ if [[ "$current_branch" == "$default_branch" ]]; then
   exit 0
 fi
 
-branch="$current_branch"
-
-while [[ -n "$branch" && "$branch" != "$default_branch" ]]; do
-  parent=$(get_parent_branch "$branch")
-
-  if [[ -z "$parent" ]]; then
-    echo "Error: Could not determine parent of $branch." >&2
-    exit 1
-  fi
-
-  echo "=== $branch (parent: $parent) ==="
-  git log --oneline "$parent..$branch"
-  echo
-
-  branch="$parent"
-done
+echo "=== $current_branch (relative to: $default_branch) ==="
+git log --oneline "$default_branch..$current_branch"

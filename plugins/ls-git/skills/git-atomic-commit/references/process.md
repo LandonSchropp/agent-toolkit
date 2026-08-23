@@ -4,7 +4,7 @@ This guide explain how to split changes into atomic commits.
 
 ## Step 1: Propose a Commit Plan
 
-Read the working tree and the branch stack before doing anything:
+Read the working tree and current branch before doing anything:
 
 ```bash
 git status
@@ -12,7 +12,7 @@ git diff
 scripts/show-stack-commits.sh
 ```
 
-`show-stack-commits.sh` walks up the git-town parent chain and prints commits unique to each branch in the stack. A change in the working tree might belong to a commit on a parent branch, not just the current one.
+`show-stack-commits.sh` prints commits unique to the current branch compared with the default branch.
 
 Group hunks by logical intent. For each group, decide:
 
@@ -31,7 +31,7 @@ Present the plan to the user as a table and wait for confirmation before executi
 
 Stage only the hunks belonging to the edit using the techniques in Step 3 and Step 4. **REQUIRED:** Invoke the `ls-git:git-edit-commit` skill and follow its instructions to edit existing commits.
 
-If the target commit lives on a different branch in the stack, stash the staged hunks (`git stash push --staged`), check out that branch, restore the stash, then invoke the `ls-git:git-edit-commit` skill there. After editing, return to the original branch and run `git town sync` so downstream branches pick up the change.
+If the target commit lives on a different branch, stash the staged hunks (`git stash push --staged`), check out that branch, restore the stash, then invoke the `ls-git:git-edit-commit` skill there. After editing, return to the original branch and rebase dependent branches as needed.
 
 ## Step 3: Split Within a Single File
 
