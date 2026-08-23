@@ -4,7 +4,7 @@ Before doing any work, create a new Git worktree using the branch `{{session-nam
 
 Prepare the worktree before planning or implementation:
 
-1. Copy applicable local configuration files from the main working directory into the worktree, including uncommitted or Git-ignored dotfiles such as `.env`, `.env.local`, and similar repository-specific files. Do not copy files already tracked by Git, and never copy `.git`. Do not read, display, parse, log, or expose the contents of copied configuration files. Only identify their paths and copy them while preserving permissions.
+1. Copy applicable local configuration files from the main working directory into the worktree, including uncommitted or Git-ignored dotfiles such as `.env`, `.env.local`, `.env.*.local`, `*.local.md`, and similar repository-specific files. Do not copy files already tracked by Git, and never copy `.git`. Do not read, display, parse, log, or expose the contents of copied configuration files. Only identify their paths and copy them while preserving permissions.
 2. Copy applicable repository-local dependency caches or installations, such as `node_modules`, `vendor/bundle`, or equivalent directories, when doing so can accelerate setup. Copy only files stored inside the repository. Do not copy globally installed packages or tools. Treat copied dependencies as a cache, not as a substitute for installation.
 3. Determine the repository's package managers and setup commands from its committed manifests, lockfiles, documentation, and existing scripts. Run the appropriate package, bundle, or dependency installers inside the worktree so its local dependencies are complete and consistent with the lockfiles. Do not install or update unrelated dependencies.
 
