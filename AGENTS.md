@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a personal toolkit for working with AI agents like Claude Code. The project uses Bun as the runtime and package manager. It contains skills following the [Agent Skills](https://agentskills.io/) specification and reusable documentation for agent workflows.
+This is a personal toolkit for working with AI coding agents, including GitHub Copilot and Claude Code. The project uses Bun as the runtime and package manager. It contains skills following the [Agent Skills](https://agentskills.io/) specification and reusable documentation for agent workflows.
 
 ## Commands
 
@@ -19,7 +19,7 @@ This is a monorepo. Each plugin lives under `plugins/` as its own subdirectory. 
 - **Plugins**: Individual plugins under `plugins/`, each with a `.claude-plugin/plugin.json`, `skills/`, and optionally `commands/`
 - **References**: Reusable documentation in `references/` directory
 
-When asked to edit a skill in this repository, always edit the skill under `plugins/<plugin-name>/skills/` here—not the installed copy in `~/.claude/skills/`.
+When asked to edit a skill in this repository, always edit the skill under `plugins/<plugin-name>/skills/` here—not an installed copy in an agent's user-level skills directory.
 
 ## Documentation
 
