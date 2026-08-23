@@ -8,7 +8,7 @@ No other acknowledgement counts. Do not accept "yes", "ok", "looks good", "ship 
 
 1. **REQUIRED:** Invoke the `ls-git:git-atomic-commit` skill before making changes, and follow its guidance. Group the work into atomic commits.
 2. Work one commit at a time. Keep your changes scoped to the single commit you're building.
-3. Review your own changes first. **REQUIRED:** Invoke the `ls-code:pre-review` skill, and fix what it finds before the user sees the diff.
+3. After making changes for the commit, and before asking the user to look at or approve them, you **MUST** invoke the `ls-code:pre-review` skill and fix what it finds.
 4. Ask the user for approval to commit.
 5. If the user says "approve" or "approved", ignoring case, create the commit. **REQUIRED:** Use the `ls-git:git-commit` skill.
 6. If the user does not say "approve" or "approved", ignoring case, **do not commit**. Address feedback or wait for the user.
