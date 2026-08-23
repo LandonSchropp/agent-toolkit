@@ -16,7 +16,6 @@ function printHelp() {
     Options:
 
       --title <title>                 Title of the plan (required).
-      --type <type>                   Type of plan: feature, bug-fix, or refactor (required).
       --featureBranch <branch>        Name of the feature branch (required).
       --baseBranch <branch>           Name of the base branch (required).
       --linearIssueId <id>            Linear issue ID in format ABC-123 (optional).
@@ -30,7 +29,6 @@ const { values } = parseArgs({
   args: process.argv.slice(2),
   options: {
     title: { type: "string" },
-    type: { type: "string" },
     featureBranch: { type: "string" },
     baseBranch: { type: "string" },
     linearIssueId: { type: "string" },
@@ -49,7 +47,6 @@ if (values.help) {
 // Define Zod schema for validation
 const argsSchema = z.object({
   title: z.string(),
-  type: z.enum(["feature", "bug-fix", "refactor"]),
   featureBranch: z.string(),
   baseBranch: z.string(),
   linearIssueId: z
@@ -82,10 +79,8 @@ const timestamp = new Date()
   .replace("T", "_");
 
 // Determine the paths
-const templatePath = join(import.meta.dir, "..", "assets", `${options.type}.md.liquid`);
-const planPath = resolve(
-  join(".agent/plans", options.featureBranch, `${timestamp}_${options.type}.md`),
-);
+const templatePath = join(import.meta.dir, "..", "assets", "plan.md.liquid");
+const planPath = resolve(join(".agent/plans", options.featureBranch, `${timestamp}.md`));
 
 // Render the template
 const liquid = new Liquid({
