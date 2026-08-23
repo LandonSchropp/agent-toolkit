@@ -14,15 +14,15 @@ agent: Plan
 
 3. If the current branch is the feature branch, move on to step 4. Otherwise, ask the user: "Would you like to use `{current_branch}` as the base branch?". Then call `scripts/create-feature-branch.sh` with the feature branch and the base branch.
 
-4. Create the plan file by copying `assets/plan.md` to `.agent/plans/{feature_branch}.md`. Fill in the title and branch fields in the header, and complete the Linear Issue ID and Sentry Issue lines or delete them if they don't apply.
+4. Create the plan file by copying `assets/plan.md` to `/tmp/{feature_branch}.md`. Fill in the title, worktree, and branch fields in the header, and complete the Linear Issue ID and Sentry Issue lines or delete them if they don't apply.
 
 5. The Skills section comes pre-filled with the always-required skills. Review the available skills and add any additional ones that apply to the work (e.g., `ls-typescript:testing-typescript`, `ls-ruby:rspec`), each on its own list item.
 
 6. Fill out each section of the plan one at a time. Follow the instructions in the template for each section.
-   - CRITICAL: DO NOT edit a plan file outside the current worktree, and don't edit the `assets/plan.md` template. Only edit the plan file you created.
+   - CRITICAL: DO NOT edit a Claude plan file in `.claude/plans`, and don't edit the `assets/plan.md` template. Only edit the scratch plan file you created in `/tmp`.
    - Research the plan and its implementation before filling in the Overview. Ask the user clarifying questions if needed to understand the task and what's required to implement it.
    - For the Commits section, invoke the `ls-git:git-atomic-commit` skill and apply its principles to decompose the implementation into ordered atomic commits, then fill in the list. Order the commits so the tree stays green at each step (pure refactors first, behavior changes on top). The plan file stores the commits as an ordered list, but when presenting the breakdown to the user in the conversation, render it as a table (columns: #, Commit, Contents).
 
-7. After the plan is complete and approved by the user, proceed with implementation.
+7. After completing the plan, notify the user that the plan is ready for review. This notification must be the last action before waiting for the user's approval. After approval, proceed with implementation.
 
 ultrathink
