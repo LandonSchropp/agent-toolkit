@@ -2,22 +2,25 @@
 
 If you think there is a chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
 
+Before committing, the user MUST say the words "approve" or "approved" exactly, ignoring case and allowing surrounding whitespace. No other acknowledgement counts. Do not accept "yes", "ok", "looks good", "ship it", implied consent, silence, prior approval for a plan, or any longer phrase as approval to commit.
+
 ## Rationalizations
 
-| Thought                             | Reality                                                |
-| ----------------------------------- | ------------------------------------------------------ |
-| "This is just a simple question"    | Questions are tasks. Check for skills.                 |
-| "I need more context first"         | Skill check comes BEFORE clarifying questions.         |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first.           |
-| "I can check git/files quickly"     | Files lack conversation context. Check for skills.     |
-| "Let me gather information first"   | Skills tell you HOW to gather information.             |
-| "This doesn't need a formal skill"  | If a skill exists, use it.                             |
-| "I remember this skill"             | Skills evolve. Read current version.                   |
-| "This doesn't count as a task"      | Action = task. Check for skills.                       |
-| "The skill is overkill"             | Simple things become complex. Use it.                  |
-| "I'll just do this one thing first" | Check BEFORE doing anything.                           |
-| "This feels productive"             | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means"            | Knowing the concept ≠ using the skill. Invoke it.      |
+| Thought                              | Reality                                                                                 |
+| ------------------------------------ | --------------------------------------------------------------------------------------- |
+| "This is just a simple question"     | Questions are tasks. Check for skills.                                                  |
+| "I need more context first"          | Skill check comes BEFORE clarifying questions.                                          |
+| "Let me explore the codebase first"  | Skills tell you HOW to explore. Check first.                                            |
+| "I can check git/files quickly"      | Files lack conversation context. Check for skills.                                      |
+| "Let me gather information first"    | Skills tell you HOW to gather information.                                              |
+| "This doesn't need a formal skill"   | If a skill exists, use it.                                                              |
+| "I remember this skill"              | Skills evolve. Read current version.                                                    |
+| "This doesn't count as a task"       | Action = task. Check for skills.                                                        |
+| "The skill is overkill"              | Simple things become complex. Use it.                                                   |
+| "I'll just do this one thing first"  | Check BEFORE doing anything.                                                            |
+| "This feels productive"              | Undisciplined action wastes time. Skills prevent this.                                  |
+| "I know what that means"             | Knowing the concept ≠ using the skill. Invoke it.                                       |
+| "They basically approved the commit" | Only an exact "approve" or "approved" response counts before committing, ignoring case. |
 
 ## Skill Scripts
 
