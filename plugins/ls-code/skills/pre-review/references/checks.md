@@ -2,7 +2,7 @@
 
 Review the diff adversarially. Assume it has a problem and go find it.
 
-**REQUIRED:** Invoke the `ponytail:ponytail-review` skill and fold its findings into your report.
+**REQUIRED:** In VS Code, invoke the `@ponytail` chat participant for a review and fold its findings into your report. In other clients, invoke the available Ponytail review integration; if none is available, report that limitation.
 
 ## Checks
 
