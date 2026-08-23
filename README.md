@@ -23,3 +23,29 @@ Then, you can install the `ls` plugin normally.
 ```sh
 claude plugin install ls
 ```
+
+### Copilot CLI
+
+To use this toolkit with the
+[GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/about-plugins), first add the
+marketplace.
+
+```sh
+copilot plugin marketplace add LandonSchropp/agent-toolkit
+```
+
+Then install the plugins you want by name.
+
+```sh
+copilot plugin install ls-git@landonschropp
+copilot plugin install ls-scripting@landonschropp
+copilot plugin install ls-typescript@landonschropp
+copilot plugin install ls-ruby@landonschropp
+copilot plugin install ls-interactivity@landonschropp
+copilot plugin install ls-code@landonschropp
+copilot plugin install ls-agent@landonschropp
+copilot plugin install ls-agent-toolkit@landonschropp
+copilot plugin install ls-notes@landonschropp
+copilot plugin install ls-writing@landonschropp
+copilot plugin install ls-browser@landonschropp
+```
