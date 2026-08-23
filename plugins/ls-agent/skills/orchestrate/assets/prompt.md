@@ -1,5 +1,7 @@
 Session name: {{session-name}}
 
+Before doing anything else, you MUST invoke the `ls-agent:using-skills` skill and follow its instructions.
+
 Before doing any work, create a new Git worktree using the branch `{{session-name}}` and switch into it. The branch name must exactly match the session name above. All work must happen inside that worktree. Do not modify files in the main working directory.
 
 Prepare the worktree before planning or implementation:
@@ -8,7 +10,7 @@ Prepare the worktree before planning or implementation:
 2. Copy applicable repository-local dependency caches or installations, such as `node_modules`, `vendor/bundle`, or equivalent directories, when doing so can accelerate setup. Copy only files stored inside the repository. Do not copy globally installed packages or tools. Treat copied dependencies as a cache, not as a substitute for installation.
 3. Determine the repository's package managers and setup commands from its committed manifests, lockfiles, documentation, and existing scripts. Run the appropriate package, bundle, or dependency installers inside the worktree so its local dependencies are complete and consistent with the lockfiles. Do not install or update unrelated dependencies.
 
-Once the worktree is prepared, you MUST invoke the `plan` skill and follow its instructions.
+Once the worktree is prepared, you MUST invoke the `ls-agent:plan` skill and follow its instructions.
 
 After completing the plan, present it to the user and wait for explicit approval before starting implementation.
 
