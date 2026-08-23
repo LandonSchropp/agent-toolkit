@@ -62,7 +62,7 @@ description: Use when using React Router and handling authentication redirects
 
 ## Invocation Control
 
-By default, both the user and the model can invoke a skill. Two Claude Code frontmatter fields (an extension to the Agent Skills standard) restrict this:
+By default, both the user and the model can invoke a skill. Platform-specific frontmatter fields may restrict this:
 
 - `disable-model-invocation: true`: Only the user can invoke it, via `/skill-name`. The model never triggers it automatically, and its description is kept out of context. Use for skills with side effects or where the user controls timing — deploying, committing, syncing, sending messages.
 - `user-invocable: false`: Only the model can invoke it, when another skill or the conversation calls for it. There is no `/skill-name` command. Use for background knowledge or skills that exist only to be invoked by other skills.

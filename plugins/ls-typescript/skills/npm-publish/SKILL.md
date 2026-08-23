@@ -7,7 +7,7 @@ description: Use when publishing or releasing a new version of an npm/pnpm/yarn/
 
 Do these BEFORE bumping the version — fail before creating a commit and tag, not after.
 
-1. **Authenticated.** Run `npm whoami`. A `401` means you're not logged in: STOP and resolve it before anything else. `npm login` is interactive (browser-based), so you cannot run it for the user — ask them to (in Claude Code, `! npm login`), then re-check `npm whoami`. Don't bump or commit until this passes.
+1. **Authenticated.** Run `npm whoami`. A `401` means you're not logged in: STOP and resolve it before anything else. `npm login` is interactive (browser-based), so you cannot run it for the user — ask them to run `npm login`, then re-check `npm whoami`. Don't bump or commit until this passes.
 2. **Clean working tree.** Run `git status`. Commit or stash changes first.
 3. **Tests and lint pass.** Run the project's test and lint scripts. NEVER publish a red build.
 4. **Right branch, up to date.** Releases normally happen from `main`.

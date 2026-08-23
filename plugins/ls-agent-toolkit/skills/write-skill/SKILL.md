@@ -22,10 +22,7 @@ When asked to create or edit a skill:
 
 A skill in a new plugin stays invisible until the plugin is registered and enabled, so land that first, as its own commit, before writing the skill:
 
-1. Add `plugins/<plugin>/.claude-plugin/plugin.json` and the plugin's entry in the repository's root `.claude-plugin/marketplace.json`.
-2. Enable it in **both** Claude Code settings files, `~/.dotfiles/tag-personal/claude/settings.json` and `~/.dotfiles/tag-work/claude/settings.json`, as `"<plugin>@landonschropp": true`. Missing one leaves the plugin working on only half the machines.
-
-The dotfiles are a separate repository, so that step lands there. Claude Code reads the setting at startup, so the new skill only appears in sessions opened afterwards.
+1. Add the plugin metadata file and the plugin's entry in the repository's marketplace manifest.
 
 ## Testing
 
@@ -34,7 +31,7 @@ After writing a skill, ask the user: "Would you like me to test the skill?" (Ski
 If the user opts for the agent to test the skill:
 
 1. **Design a scenario** that exercises the skill's core purpose. Describe it to the user and get approval before running it.
-2. **Run the scenario** with a subagent. Document exactly what the agent did—what choices it made, what worked, what didn't.
+2. **Run the scenario** with an agent. Document exactly what it did—what choices it made, what worked, what didn't.
 3. **If the agent failed or rationalized away the skill's intent**, identify the gap, add an explicit counter to the skill, and re-test.
 4. **Repeat** until the skill reliably produces the intended behavior.
 
@@ -48,7 +45,5 @@ When a skill includes executable scripts, **REQUIRED:** Use the `ls-scripting:sc
 
 - [Format Guide](references/format-guide.md)
 - [Getting Agents to Follow Instructions](references/getting-agents-to-follow-instructions.md)
-- [Agent Skills](https://code.claude.com/docs/en/skills.md)
 - [Skill Specification](https://raw.githubusercontent.com/agentskills/agentskills/main/docs/specification.mdx)
-- [Skill Authoring Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices.md)
 - [Persuasion Principles](https://raw.githubusercontent.com/obra/superpowers/main/skills/writing-skills/persuasion-principles.md)
