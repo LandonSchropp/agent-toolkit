@@ -23,7 +23,6 @@ agent: Plan
    - If this is a new branch with no existing work, remove the Context section entirely. If resuming work on an existing branch, summarize what has already been done by running `git log` and `git diff` to see commits and changes.
    - Research the plan and its implementation before filling in the descriptive sections (e.g. Requirements, Reproduction Steps, Scope, Implementation). Ask the user clarifying questions if needed to understand the task and what's required to implement it.
    - For the Commits section, invoke the `ls-git:git-atomic-commit` skill and apply its principles to decompose the implementation into ordered atomic commits, then fill in the list. Order the commits so the tree stays green at each step (pure refactors first, behavior changes on top). The plan file stores the commits as an ordered list, but when presenting the breakdown to the user in the conversation, render it as a table (columns: #, Commit, Contents).
-   - Do not modify sections that contain the comment "Copy this section exactly as written, without modification", but do delete the comment.
 
 7. After the plan is complete, invoke the `ls-interactivity:interactive-edit` skill with the plan file so the user can review and edit it, then read their changes back.
 

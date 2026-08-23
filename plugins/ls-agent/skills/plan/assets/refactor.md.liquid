@@ -16,14 +16,7 @@ Linear Issue ID: `{{ linearIssueId }}`
 
 ## Scope
 
-<!--
-Define what code is being refactored. Be succinct.
-
-Examples of what could be included:
-
-- What's being changed
-- What's explicitly NOT changing (only if it clarifies scope)
--->
+<!-- Define what code is being refactored. Be succinct. -->
 
 ## Commits
 
@@ -42,26 +35,3 @@ Each item is one atomic commit, in order.
 Invoke the following skills:
 
 - `ls-git:git-atomic-commit`
-
-## Safety
-
-<!-- Copy this Safety section exactly as written, without modification: -->
-
-To ensure safe refactoring:
-
-1. **Preserve existing tests:** Run tests related to the refactored code.
-2. **Maintain test coverage:** Keep tests passing throughout the refactoring process
-3. **Small incremental changes:** Make small, focused changes that can be easily reviewed and reverted
-4. **Validate after each commit:** Run tests for affected units and verify functionality after completing each commit
-5. **Document breaking changes:** If any API changes are needed, document them clearly
-
-## Process
-
-<!-- Copy this Process section exactly as written, without modification: -->
-
-Work through the commits in order. For each one:
-
-1. Refactoring preserves behavior, so keep the existing tests green throughout: run them before and after the change. Add tests only if the refactor improves testability or exposes untested behavior.
-2. Present the unstaged diff for review, then commit on approval using the `ls-git:git-commit` skill.
-3. If refactoring becomes blocked or tests start failing, STOP and seek guidance from the user.
-4. STOP and wait for user feedback before moving to the next commit.
