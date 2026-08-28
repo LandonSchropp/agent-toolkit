@@ -45,8 +45,8 @@ Agents can't use `git add -p` to interactively stage hunks (it requires a TTY). 
    ```bash
    git restore path/to/file.ts
    ```
-3. Use `Edit` to apply ONLY the changes for the current commit. Reference `/tmp/file.ts.full` to see what to add.
-4. Stage and commit. **REQUIRED:** Use the `ls-git:git-commit` skill.
+3. Use `Edit` to apply ONLY the changes for the current commit. Reference `/tmp/file.ts.full` to see what to add. Include everything that belongs to this commit's narrative even when it's scattered across the file — the new function, the helper it calls, and the docstring above it all land together.
+4. Stage the file, then check the size before committing: if `git diff --cached --stat` reports more than 200 insertions plus deletions, reconsider splitting further. **REQUIRED:** Use the `ls-git:git-commit` skill.
 5. Repeat step 3 and 4 for each intermediate commit.
 6. For the final commit, restore the full working version and commit:
    ```bash
@@ -60,7 +60,7 @@ Agents can't use `git add -p` to interactively stage hunks (it requires a TTY). 
 
 ## Step 4: Split Across Separate Files
 
-Stage selectively per commit. **REQUIRED:** Use the `ls-git:git-commit` skill for each.
+Stage selectively per commit, checking the size before each. **REQUIRED:** Use the `ls-git:git-commit` skill for each.
 
 ```bash
 git add path/to/first.ts path/to/second.ts
