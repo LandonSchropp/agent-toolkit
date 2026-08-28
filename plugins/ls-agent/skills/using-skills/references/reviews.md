@@ -39,3 +39,4 @@ Don't edit files outside the scope of the commit you're building. If you unavoid
 | "I'll commit now and let them review after"    | Review comes before the commit. Present first.            |
 | "No feedback last time, so skip it now"        | A new change is a new review. Present it.                 |
 | "I'll commit everything in one go"             | One atomic commit at a time, each reviewed separately.    |
+| "The worktree has unrelated edits too"         | Stage only this commit's files and review in staged mode. |
