@@ -15,7 +15,6 @@
     "cleye": "^2.6.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "liquidjs": "^10.24.0",
     "prettier": "^3.8.0",
     "prettier-plugin-jsdoc": "^1.8.0",
     "ts-dedent": "^2.2.0",

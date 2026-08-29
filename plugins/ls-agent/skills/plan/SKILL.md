@@ -14,16 +14,14 @@ agent: Plan
 
 3. If the current branch is the feature branch, move on to step 4. Otherwise, ask the user: "Would you like to use `{current_branch}` as the base branch?". Then call `scripts/create-feature-branch.sh` with the feature branch and the base branch.
 
-4. Create a plan file using `scripts/generate-plan-template.ts`. This will generate a pre-populated plan for you to fill out. Read the resulting file.
+4. Read `assets/plan.md` and write it to `/tmp/{feature_branch}.md`, replacing any `/` in the branch name with `-`. Fill in the title, worktree, and branch fields in the header, then complete the Linear Issue ID and Sentry Issue lines or delete them if they don't apply.
 
 5. The Skills section comes pre-filled with the always-required skills. Review the available skills and add any additional ones that apply to the work (e.g., `ls-typescript:testing-typescript`, `ls-ruby:rspec`), each on its own list item.
 
 6. Fill out each section of the plan one at a time. Follow the instructions in the template for each section.
-   - CRITICAL: DO NOT edit a Claude plan file in `.claude/plans`. Only edit the plan template file that was generated.
-   - If this is a new branch with no existing work, remove the Context section entirely. If resuming work on an existing branch, summarize what has already been done by running `git log` and `git diff` to see commits and changes.
-   - Research the plan and its implementation before filling in the descriptive sections (e.g. Requirements, Reproduction Steps, Scope, Implementation). Ask the user clarifying questions if needed to understand the task and what's required to implement it.
+   - CRITICAL: DO NOT edit a Claude plan file in `.claude/plans`, and don't edit `assets/plan.md` itself. Only edit the copy you made.
+   - Research the plan and its implementation before writing the Overview. Ask the user clarifying questions if needed to understand the task and what's required to implement it.
    - For the Commits section, invoke the `ls-git:git-atomic-commit` skill and apply its principles to decompose the implementation into ordered atomic commits, then fill in the list. Order the commits so the tree stays green at each step (pure refactors first, behavior changes on top). The plan file stores the commits as an ordered list, but when presenting the breakdown to the user in the conversation, render it as a table (columns: #, Commit, Contents).
-   - Do not modify sections that contain the comment "Copy this section exactly as written, without modification", but do delete the comment.
 
 7. After the plan is complete, invoke the `ls-interactivity:interactive-edit` skill with the plan file so the user can review and edit it, then read their changes back.
 
