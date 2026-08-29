@@ -18,7 +18,7 @@ This is a monorepo. Each plugin lives under `plugins/` as its own subdirectory. 
 - **TypeScript Config**: `tsconfig.json` at root validates the entire project
 - **Plugins**: Individual plugins under `plugins/`, each with a `.claude-plugin/plugin.json`, `skills/`, and optionally `commands/`
 
-When asked to edit a skill in this repository, always edit the skill under `plugins/<plugin-name>/skills/` here—not the installed copy in `~/.claude/skills/`.
+When asked to edit a skill in this repository, always edit the skill under `plugins/<plugin-name>/skills/` here—not an installed copy in an agent's own plugin or skills directory.
 
 ### Interactive Command Workflow
 
