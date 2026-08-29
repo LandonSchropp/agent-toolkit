@@ -6,7 +6,7 @@ description: Use when a finished, reviewed branch is committed and needs to be m
 
 Merges a finished branch into the default branch (e.g. `main`) by rebasing it on top, then fast-forwarding. For personal repos that integrate directly to `main` rather than through pull requests.
 
-This skill does no reviewing and creates no commits. It does not manage worktrees.
+This skill does no reviewing and creates no commits.
 
 ## Process
 
@@ -16,7 +16,11 @@ This skill does no reviewing and creates no commits. It does not manage worktree
 
 3. **Fast-forward and push:** Advance the default branch to the rebased branch with a fast-forward only (no merge commit), then push. If the default branch is checked out in another worktree, run the update from that worktree's directory — Git refuses to move a branch that is checked out elsewhere.
 
-4. **Delete the merged branch:** Once the default branch has the commits, delete the branch with `git branch -d <branch>` (the `-d` refuses if it isn't fully merged, so it's a safety check). Run it from the default-branch worktree. If the branch is still checked out in its own worktree, detach that worktree first with `git -C <branch-worktree> checkout --detach` — Git won't delete a branch that is checked out anywhere. If the branch was pushed, also delete the remote with `git push origin --delete <branch>`.
+4. **Delete the merged branch:** Once the default branch has the commits, delete the branch with `git branch -d <branch>` (the `-d` refuses if it isn't fully merged, so it's a safety check). Run it from the default-branch worktree, never from inside the branch's own worktree.
+
+   Git won't delete a branch that is checked out anywhere, so free it first. If the branch has a worktree that is no longer needed, remove it with `git worktree remove <branch-worktree>`. If something else owns that worktree's lifecycle — the `ls-agent:close-workspace` skill removes herdr worktrees itself — leave it in place and detach it instead with `git -C <branch-worktree> checkout --detach`.
+
+   If the branch was pushed, also delete the remote with `git push origin --delete <branch>`.
 
 ```bash
 default_branch=$(git default-branch)
@@ -25,7 +29,7 @@ git rebase "$default_branch"
 git -C <default-branch-worktree> merge --ff-only <branch>
 git -C <default-branch-worktree> push origin "$default_branch"
 
-git -C <branch-worktree> checkout --detach   # only if <branch> is checked out in a worktree
+git -C <default-branch-worktree> worktree remove <branch-worktree>   # or checkout --detach, if the worktree stays
 git -C <default-branch-worktree> branch -d <branch>
 ```
 
@@ -38,4 +42,6 @@ git -C <default-branch-worktree> branch -d <branch>
 | "I'll just merge it, a merge commit is fine"       | Fast-forward only. This skill keeps history linear.                         |
 | "`main` won't move, I'll update it from here"      | If it's checked out in another worktree, update it from that worktree.      |
 | "There are uncommitted changes, I'll merge anyway" | The branch must be committed and reviewed first. Stop.                      |
+| "I'll remove the worktree while I'm in it"         | Run the removal from the default-branch worktree, or you delete your cwd.   |
+| "Every merged branch's worktree should go"         | Leave the ones another skill owns. Detach those instead of removing them.   |
 | "I'll leave the merged branch lying around"        | Delete it after the push; `-d` keeps it safe by refusing unmerged branches. |
