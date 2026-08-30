@@ -3,12 +3,13 @@
 set -euo pipefail
 
 readonly TIMEOUT_SECONDS=30
+readonly SETTLE_SECONDS=8
 
 function print_help() {
   echo "Usage: open-workspace.sh --project <name> --worktree <branch>"
   echo
   echo "Opens a project's Git worktree as a herdr workspace, waits for its agent to become"
-  echo "ready, and prints the agent's pane id."
+  echo "ready, and prints the workspace id."
   echo
   echo "Options:"
   echo
@@ -17,8 +18,8 @@ function print_help() {
   echo "  --help               Show this help message and exit."
 }
 
-# Prints the pane id of the agent running in the project's worktree for the branch, if there is one.
-function find_agent_pane() {
+# Prints "<workspace id> <pane id>" for the project's worktree on the branch, if its agent is running.
+function find_agent() {
   local workspace_id checkout_path
 
   while read -r workspace_id checkout_path; do
@@ -27,7 +28,7 @@ function find_agent_pane() {
     fi
 
     herdr agent list | jq --raw-output --arg id "$workspace_id" \
-      'first(.result.agents[] | select(.workspace_id == $id) | .pane_id) // empty'
+      'first(.result.agents[] | select(.workspace_id == $id) | "\($id) \(.pane_id)") // empty'
 
     return 0
   done < <(herdr workspace list | jq --raw-output --arg root "$repo_root" '
@@ -89,27 +90,32 @@ fi
 
 herdr-project open "$project" --worktree "$worktree"
 
-pane_id=""
+agent=""
 
 for ((second = 0; second < TIMEOUT_SECONDS; second++)); do
-  pane_id=$(find_agent_pane)
+  agent=$(find_agent)
 
-  if [[ -n "$pane_id" ]]; then
+  if [[ -n "$agent" ]]; then
     break
   fi
 
   sleep 1
 done
 
-if [[ -z "$pane_id" ]]; then
+if [[ -z "$agent" ]]; then
   echo "Error: No agent started for $worktree in $project within ${TIMEOUT_SECONDS}s." >&2
   exit 1
 fi
 
-# A new agent reports `unknown` until its TUI settles, and cannot accept a prompt until then.
+read -r workspace_id pane_id <<< "$agent"
+
+# A new agent reports `unknown` until its TUI settles.
 if ! herdr agent wait "$pane_id" --until idle --timeout "$((TIMEOUT_SECONDS * 1000))" > /dev/null; then
   echo "Error: The agent in pane $pane_id was not ready within ${TIMEOUT_SECONDS}s." >&2
   exit 1
 fi
 
-echo "$pane_id"
+# herdr reports idle before the agent can accept a prompt (herdrdev/herdr#3132).
+sleep "$SETTLE_SECONDS"
+
+echo "$workspace_id"

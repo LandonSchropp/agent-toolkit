@@ -10,7 +10,7 @@ Opens a project's Git worktree as a herdr workspace and waits until its agent is
 scripts/open-workspace.sh --project <name> --worktree <branch>
 ```
 
-It prints the agent's pane id, which is what a caller needs next: `herdr agent prompt <pane-id> <text>` sends the agent its first instruction. `herdr-project open` has no `--prompt` flag. The workspace id is the pane id's prefix, so `w5X:p3` belongs to workspace `w5X`.
+It prints the workspace id, which is what a caller needs next to send that agent its first instruction — `herdr-project open` has no `--prompt` flag. **REQUIRED:** Use the `ls-agent:delegate` skill to send it.
 
 Name the project as `herdr-project list` does. The branch does not need to exist.
 
@@ -24,9 +24,9 @@ Name the project as `herdr-project list` does. The branch does not need to exist
 
 ## Rationalizations
 
-| Thought                                          | Reality                                                                    |
-| ------------------------------------------------ | -------------------------------------------------------------------------- |
-| "I'll call `herdr-project open` directly"        | Then you have no pane id, and the agent may not be ready. Use the script.  |
-| "The agent is up as soon as the command returns" | It reports `unknown` until its TUI settles and rejects prompts until then. |
-| "Two workspaces opened, I should close one"      | Expected. The main workspace is the user's, not litter.                    |
-| "I'll find the workspace by its checkout path"   | herdr slugifies the branch into that path. The script asks Git instead.    |
+| Thought                                          | Reality                                                                        |
+| ------------------------------------------------ | ------------------------------------------------------------------------------ |
+| "I'll call `herdr-project open` directly"        | Then you have no workspace id, and the agent may not be ready. Use the script. |
+| "The agent is up as soon as the command returns" | It reports `unknown` until its TUI settles and rejects prompts until then.     |
+| "Two workspaces opened, I should close one"      | Expected. The main workspace is the user's, not litter.                        |
+| "I'll find the workspace by its checkout path"   | herdr slugifies the branch into that path. The script asks Git instead.        |
