@@ -20,7 +20,7 @@ Name the project as `herdr-project list` does. The branch does not need to exist
 
 ## Closing
 
-**REQUIRED:** Use the `ls-agent:close-workspace` skill. It merges the branch and verifies the work is safe to destroy first, which `herdr-project close` does not. `herdr-project close --worktree` also leaves the branch behind.
+The agent working in the workspace closes it, from inside. Don't invoke `ls-agent:close-workspace` from here: it closes whatever `$HERDR_WORKSPACE_ID` points at, which is your own workspace, not the one you just opened. `herdr-project close --worktree` is no better — it destroys the checkout without checking the work is merged and pushed, and leaves the branch behind.
 
 ## Rationalizations
 
