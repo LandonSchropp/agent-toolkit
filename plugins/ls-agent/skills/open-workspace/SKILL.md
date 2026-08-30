@@ -10,7 +10,7 @@ Opens a project's Git worktree as a herdr workspace and waits until its agent is
 scripts/open-workspace.sh --project <name> --worktree <branch>
 ```
 
-It prints the workspace id, which is what a caller needs next to send that agent its first instruction — `herdr-project open` has no `--prompt` flag. **REQUIRED:** Use the `ls-agent:delegate` skill to send it.
+It prints the workspace ID, the handle for prompting that agent.
 
 Name the project as `herdr-project list` does. The branch does not need to exist.
 
