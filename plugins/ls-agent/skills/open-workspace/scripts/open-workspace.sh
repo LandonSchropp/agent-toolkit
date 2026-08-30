@@ -88,7 +88,7 @@ if [[ -z "$repo_root" ]]; then
   exit 1
 fi
 
-herdr-project open "$project" --worktree "$worktree"
+herdr-project open "$project" --worktree "$worktree" --no-focus
 
 agent=""
 
