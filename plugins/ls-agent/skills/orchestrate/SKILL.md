@@ -18,18 +18,12 @@ Concretely: create no files, change no files, in any repository, including throu
 4. **STOP.** Do not start the next stage. The user watches the work land and tells you when they are ready.
 5. On their word, tear down the finished stage's workspaces — **REQUIRED:** use the `ls-agent:close-workspace` skill — then start the next stage.
 
-## Writing a Delegation Prompt
+## Task Prompts
 
-The receiving agent has none of this conversation and cannot ask you anything. A prompt that says "turn what we just did into a skill" is worthless to it.
+`ls-agent:delegate` covers what any delegation prompt needs. A run of several tasks adds two things:
 
-Each prompt states, in the task's own terms:
-
-- What the task is, in full. Where it came from a Linear issue, include the issue and its description rather than the title.
-- What already happened that the agent needs to know, and where — repository, files, commits.
-- What you have and have not already changed yourself, so it doesn't redo or undo work.
-- That it should follow its own repository's conventions and review process rather than anything inferred from your prompt.
-
-Pass the task through as the user gave it. Don't reinterpret it, improve it, or decide it needs less than it asks for.
+- **What earlier stages landed.** A task in stage two often depends on work from stage one that its own description predates. Say what shipped and where, or the agent plans around something that already exists.
+- **Nothing about its siblings.** Tasks in the same stage run independently and their prompts stay independent. Mention another running task only where they share ground the parallelization flagged as an overlap.
 
 ## Rationalizations
 
@@ -38,5 +32,4 @@ Pass the task through as the user gave it. Don't reinterpret it, improve it, or 
 | "It's a two-line change, delegating costs more" | The cost you're avoiding is the reason this session exists.               |
 | "Edit is gone but I can still use Bash"         | The rule is no edits, not no `Edit`. Delegate it.                         |
 | "I'll start the next stage, it looks done"      | You don't know it landed. The user says when.                             |
-| "I'll tighten up the task before sending it"    | Send it as given. Rewriting it loses what the user actually asked.        |
 | "I'll research the task before handing it off"  | Gather the handoff facts, then stop. Solving it is the other agent's job. |
