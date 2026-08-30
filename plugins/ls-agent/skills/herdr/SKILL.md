@@ -1,5 +1,5 @@
 ---
-description: Use when a skill needs to open a project as a new herdr workspace via herdr-project, or close a herdr tab it no longer needs. Covers herdr-project open's --worktree and --prompt flags, and finding a tab by label to close it.
+description: Use when a skill needs to close a herdr tab it no longer needs, or to list the configured herdr projects. Covers finding a tab by label and closing it safely.
 user-invocable: false
 ---
 
@@ -9,17 +9,7 @@ user-invocable: false
 
 ## Opening a New Workspace
 
-`herdr-project` opens one of your configured projects as a new herdr workspace, laying out that project's tabs:
-
-```bash
-herdr-project open <project> [--worktree <branch>] [--prompt <text>]
-```
-
-- Without `--worktree`, it opens the project's main workspace — this fails if that workspace is already open.
-- With `--worktree <branch>`, it creates a new Git worktree on `<branch>` and opens that instead, so the same project can run in several workspaces at once.
-- With `--prompt <text>`, it hands `<text>` to the project's agent tab through the `AGENT_PROMPT` environment variable, so the new agent starts already working instead of sitting idle.
-
-Run `herdr-project --help` for the full reference.
+**REQUIRED:** Use the `ls-agent:open-workspace` skill. It resolves the workspace herdr opened and waits for its agent, neither of which `herdr-project open` does on its own.
 
 ## Listing Projects
 
