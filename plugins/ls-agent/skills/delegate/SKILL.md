@@ -24,7 +24,7 @@ This returns as soon as the prompt is delivered, which is what you want: a deleg
 
 ## Writing the Prompt
 
-The receiving agent has none of this conversation. It did not see the task you are describing, and it cannot ask you about it. Everything it needs — what happened, where, and what to do about it — has to be in the prompt text.
+The receiving agent has none of this conversation and cannot ask you about it, so everything it needs has to be in the prompt text. **REQUIRED:** Use the `ls-agent:orchestrate` skill for what that means in practice.
 
 ## Rationalizations
 
