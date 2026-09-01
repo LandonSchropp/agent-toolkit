@@ -1,5 +1,5 @@
 ---
-description: Use when explicitly instructed to create an plan (feature, bug fix, or refactor). Not for automatic use—only when directly requested.
+description: Use when instructed to create a plan (feature, bug fix, or refactor).
 ---
 
 # Planning
