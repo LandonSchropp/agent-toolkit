@@ -4,13 +4,13 @@ description: Use when work belongs to a repository other than the one this sessi
 
 # Delegate
 
-Hand a task to an agent running in another project. The point is context: an agent in the target repository already has its `AGENTS.md`, conventions, and layout, and will make a better change there than this session can.
+Hand a task to an agent in another project. It has that repository's `AGENTS.md`, conventions, and layout, and will make a better change than this session can.
 
 ## Choosing the Target
 
-Run `herdr-project list` for the configured projects. Default to a fresh worktree so the work lands on its own branch. **REQUIRED:** Use the `ls-agent:open-workspace` skill; it returns the workspace id to send to.
+`herdr-project list` shows the configured projects. Default to a fresh worktree so the work lands on its own branch. **REQUIRED:** Use the `ls-agent:open-workspace` skill; it returns the workspace id.
 
-Send to an already-running agent only when the user asks for it, or when the task needs that session's state. Find its workspace with `herdr agent list`, matching an agent's `cwd`: the project path for its main checkout, or `~/.herdr/worktrees/<project>/` for a worktree, whose last segment is the branch name slugified.
+Send to an already-running agent only when the user asks, or when the task needs that session's state. Find its workspace with `herdr agent list`, matching an agent's `cwd`: the project path for its main checkout, or `~/.herdr/worktrees/<project>/` for a worktree, whose last segment is the branch name slugified.
 
 ## Sending
 
@@ -18,15 +18,19 @@ Send to an already-running agent only when the user asks for it, or when the tas
 scripts/prompt.sh --workspace <id> --prompt <text>
 ```
 
-Single-quote the prompt. Delegated prompts are long and routinely contain backticks and `$`, which a double-quoted shell argument expands before the agent ever sees it.
+Single-quote the prompt — prompts routinely contain backticks and `$`, which a double-quoted argument expands before the agent sees it.
 
-This returns as soon as the prompt is delivered. A delegated task usually outlasts the turn that sent it, so waiting on it strands this session for nothing; the script's `--wait` flag is for the rare short task whose result decides what you do next. Run `--help` before using it.
+This returns as soon as the prompt is delivered. A delegated task usually outlasts the turn that sent it, so waiting strands this session for nothing; `--wait` is for the rare short task whose result decides what you do next. Run `--help` on it first.
 
 ## Writing the Prompt
 
-The receiving agent has none of this conversation and cannot ask you anything. A prompt that says "turn what we just did into a skill" is worthless to it.
+The receiving agent has none of this conversation, and nothing it replies reaches you. A prompt saying "turn what we just did into a skill" is worthless to it.
 
-State, in the task's own terms:
+Open by naming where the prompt came from, or it reads as the user speaking and stalls waiting on an answer:
+
+> This comes from an agent working in `<project>`, sent through `ls-agent:delegate`. The user is not reading this channel, so proceed on your best judgment rather than waiting for a reply.
+
+Then state, in the task's own terms:
 
 - What the task is, in full. Where it came from a Linear issue, include the issue and its description rather than the title.
 - What already happened that the agent needs to know, and where — repository, files, commits.
@@ -42,4 +46,3 @@ Pass the task through as the user gave it. Don't reinterpret it, improve it, or 
 | "It's a two-line change, I'll just do it here" | Then it lands without the target repository's conventions. Delegate it.   |
 | "I'll reference what we just did"              | The receiving agent was not here. Spell it out.                           |
 | "I'll reuse the running agent, it's faster"    | A fresh worktree keeps the work on its own branch. Reuse only when asked. |
-| "I'll tighten up the task before sending it"   | Send it as given. Rewriting it loses what the user actually asked.        |
