@@ -128,15 +128,16 @@ Format each PR title:
 
 1. Strip any conventional commit type prefix (e.g., `feat: `, `fix(scope): `)
 2. Strip any Linear ticket ID (e.g., `[EX-123] `, `AI-456: `)
-3. Title case the remaining text
-4. Prepend the repository name followed by a colon — check `CLAUDE.local.md` for a repository abbreviation before falling back to the full name
+3. Prepend the repository name followed by a colon — check `CLAUDE.local.md` for a repository abbreviation before falling back to the full name
+
+Leave the remaining text's casing exactly as the PR title has it.
 
 Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader:
 
 ```markdown
 - [ ] Update/merge open pull requests
-  - [ ] [WIDGETS: Add Pagination to Widget List](https://github.com/example-org/widget-service/pull/42) 💬
-  - [ ] [webapp: Fix Login Redirect on Expired Session](https://github.com/example-org/webapp/pull/1234) ❌
+  - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) 💬
+  - [ ] [webapp: Fix login redirect on expired session](https://github.com/example-org/webapp/pull/1234) ❌
 ```
 
 **Resolve auto-titled links:** Obsidian automatically converts pasted URLs into markdown links, but its title-fetch often lacks permissions, leaving a generic site name as the label (`Slack`, `GitHub`, `Linear`, `Notion`, etc.). Scan today's note and the recent prior notes for tasks with these placeholder labels and fix each one in place:
@@ -161,7 +162,7 @@ _Add, edit, and remove tasks to plan today._
 ### Work
 
 - [ ] Update/merge open pull requests
-  - [ ] [WIDGETS: Add Pagination to Widget List](https://github.com/example-org/widget-service/pull/42) 💬
+  - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) 💬
 
 ## Gratitude
 
