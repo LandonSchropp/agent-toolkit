@@ -14,7 +14,7 @@ RSpec.describe "plan-morning" do
 
   # Undefines the constants the script sets, so reloading it doesn't warn.
   after do
-    %i[DATE YESTERDAY TODAY STANDUP LOG APPLY_YESTERDAY_SCRIPT FORWARD_TASKS_SCRIPT].each do
+    %i[DATE YESTERDAY TODAY STANDUP LOG APPLY_YESTERDAY_SCRIPT FORWARD_TASKS_SCRIPT SYNC_STANDUP_SCRIPT].each do
       Object.send(:remove_const, _1) if Object.const_defined?(_1)
     end
   end
@@ -51,15 +51,16 @@ RSpec.describe "plan-morning" do
         "#{scripts_directory}/apply-yesterday.rb",
         "#{scripts_directory}/forward-tasks.rb",
         "nvim -- #{today}",
+        "#{scripts_directory}/sync-standup.rb",
         "nvim -- #{standup}"
       ]
     )
   end
 
-  it "appends both scripts' output to the log rather than to the tab" do
+  it "appends every script's output to the log rather than to the tab" do
     run_script
     expect(redirects.compact.map { _1.slice(:out, :err) }.reject(&:empty?))
-      .to eq([{ out: [log, "a"], err: %i[child out] }] * 2)
+      .to eq([{ out: [log, "a"], err: %i[child out] }] * 3)
   end
 
   it "raises on any step that fails, rather than carrying on" do

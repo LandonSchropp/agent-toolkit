@@ -37,6 +37,7 @@ LOG = "/tmp/plan-morning-#{DATE}.log".freeze
 
 APPLY_YESTERDAY_SCRIPT = File.expand_path("apply-yesterday.rb", __dir__).freeze
 FORWARD_TASKS_SCRIPT = File.expand_path("forward-tasks.rb", __dir__).freeze
+SYNC_STANDUP_SCRIPT = File.expand_path("sync-standup.rb", __dir__).freeze
 
 abort "Error: Missing plan-morning scratch files for #{DATE}." unless File.exist?(YESTERDAY) && File.exist?(TODAY)
 
@@ -44,4 +45,8 @@ system("nvim", "--", YESTERDAY, exception: true)
 system(APPLY_YESTERDAY_SCRIPT, out: [LOG, "a"], err: %i[child out], exception: true)
 system(FORWARD_TASKS_SCRIPT, out: [LOG, "a"], err: %i[child out], exception: true)
 system("nvim", "--", TODAY, exception: true)
-system("nvim", "--", STANDUP, exception: true) if File.exist?(STANDUP)
+
+if File.exist?(STANDUP)
+  system(SYNC_STANDUP_SCRIPT, out: [LOG, "a"], err: %i[child out], exception: true)
+  system("nvim", "--", STANDUP, exception: true)
+end

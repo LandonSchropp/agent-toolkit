@@ -193,7 +193,7 @@ I am…
 
 Skip this window if the `oyster-team-ai:standup` skill isn't installed.
 
-Build the Standup scratch file. Leave Yesterday, Blockers, and Feeling blank for the user to fill in.
+Build the Standup scratch file. Leave Yesterday, Blockers, and Feeling blank for the user to fill in. Leave the Today section's comment as the placeholder below: the pass fills it in with today's Work tasks right before the Standup window opens, after forwarding and the Today edits are done.
 
 ```markdown
 # Daily Standup
@@ -202,10 +202,7 @@ Build the Standup scratch file. Leave Yesterday, Blockers, and Feeling blank for
 
 ## Today
 
-<!-- Work tasks from today's daily note (reference only — not included in standup):
-- [ ] Task A
-- [ ] Task B
--->
+<!-- Work tasks from today's daily note (reference only — not included in standup) -->
 
 ## Blockers
 
