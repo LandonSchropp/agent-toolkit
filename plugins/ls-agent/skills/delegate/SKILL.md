@@ -36,6 +36,7 @@ Then state, in the task's own terms:
 - What already happened that the agent needs to know, and where — repository, files, commits.
 - What you have and have not already changed yourself, so it doesn't redo or undo work.
 - That it should follow its own repository's conventions and review process rather than anything inferred from your prompt.
+- That it should run `ls-agent:plan` before starting on the task.
 
 Pass the task through as the user gave it. Don't reinterpret it, improve it, or decide it needs less than it asks for.
 
