@@ -193,15 +193,12 @@ I am…
 
 Skip this window if the `oyster-team-ai:standup` skill isn't installed.
 
-Search `#team-ai-standups` with `slack_search_public_and_private` (query: `from:@<user> in:#team-ai-standups`) to find the user's most recent post, and extract its **Today** section bullets. Build the Standup scratch file:
+Build the Standup scratch file. Leave Yesterday, Blockers, and Feeling blank for the user to fill in.
 
 ```markdown
 # Daily Standup
 
 ## Yesterday
-
-• Previous standup Today item 1
-• Previous standup Today item 2
 
 ## Today
 
@@ -271,4 +268,4 @@ The resulting section, whether it already existed or had to be added:
 
 ### From Standup
 
-If the Standup window ran, parse its sections and hand off to `oyster-team-ai:standup`: "The user has already filled in their standup answers via an interactive editor — skip all context-gathering and question steps, compose the message, and post it directly without asking for confirmation. Yesterday: [bullets from file], Today: [bullets from file], Blockers: [content or none], Feeling: [content or none]."
+If the Standup window ran, parse its sections and hand off to `oyster-team-ai:standup`: "The user has already filled in their standup answers via an interactive editor — skip all context-gathering and question steps, compose the message, and post it directly without asking for confirmation. Yesterday: [content, or `N/A` when blank], Today: [content from file], Blockers: [content or none], Feeling: [content or none]." A blank Yesterday means the user chose not to report one, so pass `N/A` rather than filling it in for them.
