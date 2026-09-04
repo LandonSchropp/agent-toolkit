@@ -103,19 +103,20 @@ _Every action is a vote for the person you're becoming. Yesterday, did you move 
 
 ### Today's Content
 
-Fetch the user's open non-draft pull requests from the `oysterhr` GitHub organization:
+Fetch the user's open non-draft pull requests from their work GitHub organization (the domain of their work email, without the TLD), plus any merged today:
 
 ```bash
-gh search prs --author=@me --owner=oysterhr --state=open --draft=false --json title,url,number,repository
+gh search prs --author=@me --owner=<organization> --state=open --draft=false --json title,url,number,repository
+gh search prs --author=@me --owner=<organization> --merged --merged-at=<today's ISO date> --json title,url,number,repository
 ```
 
-For each PR, fetch its review and CI status:
+For each open PR, fetch its review and CI status:
 
 ```bash
 gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeable
 ```
 
-Assign each PR a status emoji using this priority order:
+Assign each open PR a status emoji using this priority order:
 
 - 💬: `reviewDecision` is `CHANGES_REQUESTED`
 - ❌: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
@@ -132,12 +133,13 @@ Format each PR title:
 
 Leave the remaining text's casing exactly as the PR title has it.
 
-Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader:
+Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader. A PR merged today is checked off (`[x]`), with ` (merged)` in place of a status emoji:
 
 ```markdown
 - [ ] Update/merge open pull requests
   - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) 💬
   - [ ] [webapp: Fix login redirect on expired session](https://github.com/example-org/webapp/pull/1234) ❌
+  - [x] [payments: Add retry logic for failed charges](https://github.com/example-org/payments-service/pull/7) (merged)
 ```
 
 **Resolve auto-titled links:** Obsidian automatically converts pasted URLs into markdown links, but its title-fetch often lacks permissions, leaving a generic site name as the label (`Slack`, `GitHub`, `Linear`, `Notion`, etc.). Scan today's note and the recent prior notes for tasks with these placeholder labels and fix each one in place:
