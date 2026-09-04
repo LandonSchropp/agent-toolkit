@@ -32,7 +32,7 @@ Open by naming where the prompt came from, or it reads as the user speaking and 
 
 Then state, in the task's own terms:
 
-- What the task is, in full. Where it came from a Linear issue, include the issue and its description rather than the title.
+- What the task is, in full. Where it came from a Linear issue, give the issue's URL rather than repeating its contents.
 - What already happened that the agent needs to know, and where — repository, files, commits.
 - What you have and have not already changed yourself, so it doesn't redo or undo work.
 - That it should follow its own repository's conventions and review process rather than anything inferred from your prompt.
@@ -41,8 +41,9 @@ Pass the task through as the user gave it. Don't reinterpret it, improve it, or 
 
 ## Rationalizations
 
-| Thought                                        | Reality                                                                   |
-| ---------------------------------------------- | ------------------------------------------------------------------------- |
-| "It's a two-line change, I'll just do it here" | Then it lands without the target repository's conventions. Delegate it.   |
-| "I'll reference what we just did"              | The receiving agent was not here. Spell it out.                           |
-| "I'll reuse the running agent, it's faster"    | A fresh worktree keeps the work on its own branch. Reuse only when asked. |
+| Thought                                        | Reality                                                                           |
+| ---------------------------------------------- | --------------------------------------------------------------------------------- |
+| "It's a two-line change, I'll just do it here" | Then it lands without the target repository's conventions. Delegate it.           |
+| "I'll reference what we just did"              | The receiving agent was not here. Spell it out.                                   |
+| "I'll reuse the running agent, it's faster"    | A fresh worktree keeps the work on its own branch. Reuse only when asked.         |
+| "I'll paste in the Linear issue's description" | Give the URL. The agent reads the issue itself; the issue is the source of truth. |
