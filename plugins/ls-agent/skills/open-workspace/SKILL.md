@@ -7,12 +7,18 @@ description: Use when a task needs its own checkout of a project — delegating 
 Opens a project's Git worktree as a herdr workspace and waits until its agent is ready.
 
 ```bash
-scripts/open-workspace.sh --project <name> --worktree <branch>
+scripts/open-workspace.sh --project <name> --worktree <branch> --label <label>
 ```
 
 It prints the workspace ID, the handle for prompting that agent.
 
 Name the project as `herdr-project list` does. The branch does not need to exist.
+
+## Labeling the Workspace
+
+The label is what the herdr sidebar shows, and it truncates past sixteen characters. The branch name is usually too long for that, so give the workspace a shorter label of its own; the script rejects one that doesn't fit.
+
+Name the task in two or three hyphenated words. Drop everything the branch carries for Git's sake rather than the reader's, starting with the Linear issue key: `abc-123-collapse-duplicate-sessions` is a fine branch and a useless label, where `collapse-dupes` reads at a glance.
 
 ## Two Workspaces Open
 
@@ -30,3 +36,4 @@ The agent working in the workspace closes it, from inside. Don't invoke `ls-agen
 | "The agent is up as soon as the command returns" | It reports `unknown` until its TUI settles and rejects prompts until then.     |
 | "Two workspaces opened, I should close one"      | Expected. The main workspace is the user's, not litter.                        |
 | "I'll find the workspace by its checkout path"   | herdr slugifies the branch into that path. The script asks Git instead.        |
+| "I'll pass the branch name as the label"         | The sidebar truncates it mid-word. Give the task a short name of its own.      |

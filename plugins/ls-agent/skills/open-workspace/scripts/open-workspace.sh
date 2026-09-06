@@ -4,17 +4,19 @@ set -euo pipefail
 
 readonly TIMEOUT_SECONDS=30
 readonly SETTLE_SECONDS=8
+readonly MAX_LABEL_LENGTH=16
 
 function print_help() {
-  echo "Usage: open-workspace.sh --project <name> --worktree <branch>"
+  echo "Usage: open-workspace.sh --project <name> --worktree <branch> --label <label>"
   echo
-  echo "Opens a project's Git worktree as a herdr workspace, waits for its agent to become"
-  echo "ready, and prints the workspace id."
+  echo "Opens a project's Git worktree as a herdr workspace, labels the workspace, waits for"
+  echo "its agent to become ready, and prints the workspace id."
   echo
   echo "Options:"
   echo
   echo "  --project <name>     Project to open, as named by 'herdr-project list'."
   echo "  --worktree <branch>  Branch to create the worktree on."
+  echo "  --label <label>      Workspace label, at most $MAX_LABEL_LENGTH characters."
   echo "  --help               Show this help message and exit."
 }
 
@@ -41,6 +43,7 @@ function find_agent() {
 # Parse arguments
 project=""
 worktree=""
+label=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -54,6 +57,10 @@ while [[ $# -gt 0 ]]; do
     ;;
   --worktree)
     worktree="$2"
+    shift 2
+    ;;
+  --label)
+    label="$2"
     shift 2
     ;;
   *)
@@ -75,6 +82,20 @@ fi
 
 if [[ -z "$worktree" ]]; then
   echo "Error: The --worktree flag is required." >&2
+  echo >&2
+  print_help >&2
+  exit 1
+fi
+
+if [[ -z "$label" ]]; then
+  echo "Error: The --label flag is required." >&2
+  echo >&2
+  print_help >&2
+  exit 1
+fi
+
+if [[ "${#label}" -gt "$MAX_LABEL_LENGTH" ]]; then
+  echo "Error: The label $label is longer than $MAX_LABEL_LENGTH characters." >&2
   echo >&2
   print_help >&2
   exit 1
@@ -108,6 +129,8 @@ if [[ -z "$agent" ]]; then
 fi
 
 read -r workspace_id pane_id <<< "$agent"
+
+herdr workspace rename "$workspace_id" "$label" > /dev/null
 
 # A new agent reports `unknown` until its TUI settles.
 if ! herdr agent wait "$pane_id" --until idle --timeout "$((TIMEOUT_SECONDS * 1000))" > /dev/null; then
