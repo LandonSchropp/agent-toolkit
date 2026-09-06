@@ -24,6 +24,10 @@ See [Format Guide](skills/writing-skills/references/format-guide.md)
 Run the `example.ts` script.
 ```
 
+## Name
+
+Every skill sets a `name` property matching its directory name. In a plugin skill, `name` supplies the last segment of the command, so declaring it states what the skill answers to in the file itself rather than leaving it implied by the path. Rename the directory and the property together; a `name` left behind keeps the old command alive.
+
 ## Description
 
 Describe ONLY _when_ to use the skill, NOT what it does.
