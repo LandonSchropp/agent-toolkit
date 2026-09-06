@@ -20,7 +20,9 @@ For every mode but `commit`, the script's own exit code is the approve/deny deci
 
 ## Choosing Working vs. Staged Mode
 
-`working` mode reviews every uncommitted change in the worktree, including untracked files — not just the change under review. Before invoking the script, run `git status`. If the worktree has uncommitted changes unrelated to the commit being built, `working` mode would mix them into the review. In that case, stage only the files belonging to this commit (`git add <files>`) and invoke `staged` mode instead, so the review shows just the intended change.
+`working` mode reviews every unstaged change in the worktree, including untracked files, but nothing that is already staged.
+
+Before invoking the script, run `git status`, and pick the mode from what it reports. Anything already staged is invisible to `working` mode, so a fully staged worktree has nothing for it to show and the script refuses to open it. If the worktree has uncommitted changes unrelated to the commit being built, `working` mode would mix them into the review; stage only the files belonging to this commit (`git add <files>`) and invoke `staged` mode instead. Either way, don't leave the commit's changes split across the index and the worktree, since neither mode shows both halves.
 
 ## Handling a Stale Review
 

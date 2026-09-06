@@ -17,7 +17,7 @@ function print_help() {
   echo
   echo "Modes:"
   echo
-  echo "  working                 Review uncommitted changes, including untracked files."
+  echo "  working                 Review unstaged changes, including untracked files."
   echo "  staged                  Review staged changes only."
   echo "  commit <sha>            Review a single commit's diff (its parent to itself)."
   echo "  diff <before> <after>   Review one path against another. Both are files, or"

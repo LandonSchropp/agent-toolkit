@@ -22,7 +22,7 @@ function print_help() {
   echo
   echo "Modes:"
   echo
-  echo "  working                Review uncommitted changes, including untracked files."
+  echo "  working                Review unstaged changes, including untracked files."
   echo "  staged                 Review staged changes only."
   echo "  commit <sha>           Review a single commit's diff (its parent to itself)."
   echo "  diff <before> <after>  Review one path against another, neither in a repository."
@@ -85,13 +85,16 @@ function confirm_review() {
   fi
 }
 
-# An empty review is almost always the agent picking the wrong mode — the changes are staged but
-# working mode was requested, or the reverse. Report it instead of opening revdiff on nothing. The
-# message goes to $output rather than stderr, since this script's output dies with the tab and only
-# $output makes it back to the agent.
+# Refuse to open revdiff on nothing, which is almost always the wrong mode. Each check mirrors what
+# revdiff renders in that mode, not whether the repository is dirty. The message goes to $output
+# because this script's stderr dies with the tab.
 function require_changes_to_review() {
   case "$1" in
-  working) if [[ -n "$(git status --porcelain)" ]]; then return 0; fi ;;
+  working)
+    if ! git diff --quiet || [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+      return 0
+    fi
+    ;;
   staged | diff) if ! git diff --cached --quiet; then return 0; fi ;;
   commit) if ! git diff --quiet "$2" "$3"; then return 0; fi ;;
   esac
