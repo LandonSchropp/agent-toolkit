@@ -1,4 +1,5 @@
 ---
+name: schedule
 description: Use when creating or editing a macOS LaunchAgent for a recurring or scheduled script. Covers plist structure, PATH resolution, multiple trigger times, the reload workflow, and which behaviors launchd already handles so they don't need to be rebuilt.
 ---
 

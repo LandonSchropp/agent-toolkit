@@ -1,4 +1,5 @@
 ---
+name: git-merge-into-main
 description: Use when a finished, reviewed branch is committed and needs to be merged into the default branch in a repo that integrates directly to `main` (not via pull request).
 ---
 

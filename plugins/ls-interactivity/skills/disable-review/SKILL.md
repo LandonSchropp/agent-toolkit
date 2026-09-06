@@ -1,4 +1,5 @@
 ---
+name: disable-review
 description: Temporarily turn off the requirement that pending changes be reviewed before committing in the current herdr workspace.
 disable-model-invocation: true
 ---

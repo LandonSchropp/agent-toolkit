@@ -1,4 +1,5 @@
 ---
+name: interactive-edit
 description: Use when a skill needs the user to interactively edit a file in Neovim mid-workflow, then read their changes back. Takes a window name and the file to edit.
 user-invocable: false
 ---

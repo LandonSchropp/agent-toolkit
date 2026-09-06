@@ -1,4 +1,5 @@
 ---
+name: flashcards
 description: Use when the user wants flash cards, a spaced-repetition deck, or a Mochi deck built from a note, a course, a book or any other source material.
 ---
 

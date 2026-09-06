@@ -1,4 +1,5 @@
 ---
+name: plan-morning
 description: Use when the user says "plan my morning" or wants to fill out morning journaling (Gratitude, Better Day, Daily Affirmation) and personal/work tasks for today's daily note.
 ---
 

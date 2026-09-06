@@ -1,4 +1,5 @@
 ---
+name: comments-and-documentation
 description: Use when writing or editing a code comment or a documentation block, and when reviewing the comments and documentation in a diff before presenting it. Decides what stays in the source, what moves to reference documentation, and what gets deleted.
 ---
 

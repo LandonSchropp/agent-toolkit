@@ -1,4 +1,5 @@
 ---
+name: testing-ink
 description: Use when writing or modifying tests for Ink (terminal UI) components.
 ---
 

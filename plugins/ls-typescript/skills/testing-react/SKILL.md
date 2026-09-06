@@ -1,4 +1,5 @@
 ---
+name: testing-react
 description: Use when writing or modifying tests for React hooks.
 ---
 

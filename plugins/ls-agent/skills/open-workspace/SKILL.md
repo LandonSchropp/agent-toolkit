@@ -1,4 +1,5 @@
 ---
+name: open-workspace
 description: Use when a task needs its own checkout of a project — delegating work to another agent, or starting a branch that should run alongside the current one — and a herdr workspace has to be opened for it.
 ---
 

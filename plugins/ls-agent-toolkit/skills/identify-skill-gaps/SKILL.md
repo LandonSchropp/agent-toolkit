@@ -1,4 +1,5 @@
 ---
+name: identify-skill-gaps
 description: Use when analyzing Claude Code conversation logs to find patterns in repeated user instructions that could become skills. Ask for date range first.
 ---
 

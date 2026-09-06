@@ -1,4 +1,5 @@
 ---
+name: plan
 description: Use when instructed to create a plan (feature, bug fix, or refactor).
 ---
 

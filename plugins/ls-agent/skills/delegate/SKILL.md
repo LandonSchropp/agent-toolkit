@@ -1,4 +1,5 @@
 ---
+name: delegate
 description: Use when work belongs to a repository other than the one this session is in — turning a task just performed into a skill elsewhere, or propagating a change into a dependent repository — so an agent with that repository's context does it instead.
 ---
 

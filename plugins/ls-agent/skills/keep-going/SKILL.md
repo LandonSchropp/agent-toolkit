@@ -1,4 +1,5 @@
 ---
+name: keep-going
 description: Invoke after the agent has stopped, whether the user interrupted it or it paused on its own, to have it resume and stop asking for permission it doesn't need for the rest of the conversation.
 disable-model-invocation: true
 ---

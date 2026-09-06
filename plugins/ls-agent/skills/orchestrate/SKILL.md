@@ -1,4 +1,5 @@
 ---
+name: orchestrate
 description: Use when a session's job is to hand work out to other agents rather than do it — running a set of tasks across several projects or worktrees, a stage at a time.
 disable-model-invocation: true
 disallowed-tools: Edit, Write

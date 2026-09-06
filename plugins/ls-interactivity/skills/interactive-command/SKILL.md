@@ -1,4 +1,5 @@
 ---
+name: interactive-command
 description: Runs an interactive command in a separate window and waits for it to close, and covers closing a herdr tab safely. Invoked only when another skill explicitly calls for it, never on its own.
 user-invocable: false
 ---

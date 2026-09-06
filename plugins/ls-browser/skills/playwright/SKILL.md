@@ -1,4 +1,5 @@
 ---
+name: playwright
 description: Use when a task needs a browser — reading a page, filling a form, taking a look at something, or reaching anything behind a login. Always run this skill before the `playwright-cli` skill.
 ---
 

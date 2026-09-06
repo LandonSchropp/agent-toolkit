@@ -1,4 +1,5 @@
 ---
+name: note
 description: Use when working with files in ~/Notes (the user's Obsidian vault). Covers vault structure (PARA), file naming, frontmatter, icons, templates, kanban boards, and the obsidian CLI.
 ---
 

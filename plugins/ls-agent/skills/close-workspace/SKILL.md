@@ -1,4 +1,5 @@
 ---
+name: close-workspace
 description: Use when closing a herdr workspace or worktree. Merges the workspace's completed, reviewed branch into the default branch, confirms origin is in sync, then removes the worktree and closes the workspace.
 ---
 

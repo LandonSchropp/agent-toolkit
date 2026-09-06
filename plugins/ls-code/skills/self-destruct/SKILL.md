@@ -1,4 +1,5 @@
 ---
+name: self-destruct
 description: Use when creating a note, document, script or project that shouldn't outlive a known date — interview prep, a migration, a course, a time-boxed experiment — so it gets deleted on time instead of rotting in the repository.
 ---
 

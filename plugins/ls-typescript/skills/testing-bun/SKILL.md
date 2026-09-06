@@ -1,4 +1,5 @@
 ---
+name: testing-bun
 description: Use when writing or modifying tests in a Bun project
 ---
 

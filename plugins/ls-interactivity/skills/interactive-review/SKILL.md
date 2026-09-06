@@ -1,4 +1,5 @@
 ---
+name: interactive-review
 description: Use when a skill needs the user to interactively review code changes in revdiff mid-workflow — working changes, staged changes, or a specific commit — then read their annotations back. Takes a review mode.
 user-invocable: false
 ---

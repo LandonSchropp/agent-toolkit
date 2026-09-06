@@ -1,4 +1,5 @@
 ---
+name: pre-review
 description: Use when a commit's changes are finished and about to be presented for review. Runs the checks that catch the objections the user would otherwise raise, before they spend time reviewing.
 ---
 

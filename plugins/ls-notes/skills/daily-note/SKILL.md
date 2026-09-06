@@ -1,4 +1,5 @@
 ---
+name: daily-note
 description: Use when the user mentions a daily note, asks to add a task to today's daily todos, or reads or writes any file under ~/Notes/Daily Notes/. Covers location, section structure, and what each section is used for.
 ---
 

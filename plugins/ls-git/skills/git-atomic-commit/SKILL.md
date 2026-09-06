@@ -1,4 +1,5 @@
 ---
+name: git-atomic-commit
 description: Use when splitting a working tree into atomic commits, or when changes need to be distributed across new commits and/or edits to prior commits on the branch. Especially relevant when changes within a single file belong in different commits.
 ---
 

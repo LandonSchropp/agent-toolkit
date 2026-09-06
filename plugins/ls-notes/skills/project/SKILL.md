@@ -1,4 +1,5 @@
 ---
+name: project
 description: Use when reading or writing files under ~/Notes/Projects/, starting a new project, or archiving a finished one. Covers folder layout, the board file, supporting notes, and the project lifecycle across Future/, Projects/, and Archive/.
 ---
 

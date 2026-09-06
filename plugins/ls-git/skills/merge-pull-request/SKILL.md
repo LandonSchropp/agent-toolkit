@@ -1,4 +1,5 @@
 ---
+name: merge-pull-request
 description: Use when merging a single GitHub pull request. Handles pre-flight checks, waits for CI, and executes the merge with the repo's default method or merge queue.
 ---
 

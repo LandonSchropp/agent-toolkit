@@ -1,4 +1,5 @@
 ---
+name: parallelize
 description: Use when several tasks are going out to separate agents at once and the work needs splitting into what can run simultaneously and what has to wait, before any of it is kicked off.
 ---
 

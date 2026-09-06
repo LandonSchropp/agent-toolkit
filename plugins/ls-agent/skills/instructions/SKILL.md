@@ -1,4 +1,5 @@
 ---
+name: instructions
 description: Use at the start of any task, before taking action, to load the always-on workflow rules covering skill invocation, communication, test-driven development, reviews, and skill scripts.
 ---
 

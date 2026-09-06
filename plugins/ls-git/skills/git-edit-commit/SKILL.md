@@ -1,4 +1,5 @@
 ---
+name: git-edit-commit
 description: Use when needing to fixup, squash, drop, reword, reorder, or edit commits in a branch's history. Handles the non-interactive approach agents need since `git rebase -i` requires a TTY.
 ---
 

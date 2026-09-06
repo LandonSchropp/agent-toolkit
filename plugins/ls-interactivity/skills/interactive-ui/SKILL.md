@@ -1,4 +1,5 @@
 ---
+name: interactive-ui
 description: Contains interactive interaction scripts. Use when another skill explicitly instructs invoking this one. Do not invoke on your own initiative.
 user-invocable: false
 ---

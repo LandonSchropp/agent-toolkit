@@ -1,4 +1,5 @@
 ---
+name: enable-review
 description: Turn interactive commit reviews back on for the current herdr workspace.
 disable-model-invocation: true
 ---

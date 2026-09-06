@@ -1,4 +1,5 @@
 ---
+name: rspec
 description: Use when writing tests for Ruby code in frameworks such as RSpec or Minitest.
 ---
 

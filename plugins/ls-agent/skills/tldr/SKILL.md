@@ -1,4 +1,5 @@
 ---
+name: tldr
 description: Invoke when the agent's conversational replies have gotten too long or wordy and the user wants shorter answers for the rest of the conversation.
 disable-model-invocation: true
 ---
