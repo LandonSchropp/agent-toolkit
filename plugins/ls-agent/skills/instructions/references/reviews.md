@@ -27,16 +27,30 @@ The exit code and the annotations are independent signals — read both. They co
 
 Don't edit files outside the scope of the commit you're building. If you unavoidably touch unrelated files and they don't overlap with the current commit's files, review and commit each separately — one review, one commit, at a time. Never bundle unreviewed changes into a reviewed commit.
 
+## Finishing a Workspace
+
+When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two.
+
+A main checkout closes the same way a linked worktree does; an agent closes itself out either way. The one exception is a main checkout whose child worktrees are still open, since closing it takes their tabs with it: leave that one open and say why.
+
+- **Repositories that merge directly into the default branch:** On approval, **REQUIRED:** invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
+- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack, then the `ls-agent:close-workspace` skill. The branch outlives the worktree in the main checkout, and the pull request merges from there.
+
 ## Rationalizations
 
-| Thought                                        | Reality                                                   |
-| ---------------------------------------------- | --------------------------------------------------------- |
-| "I'll ask if they're ready to commit"          | The exit code already answered that. Read it, don't ask.  |
-| "I'll ask if they want to re-review"           | Nonzero exit already answered that. Re-review, don't ask. |
-| "Exit code was 0, so there's nothing to check" | Approval and annotations are independent. Check both.     |
-| "Denied with no feedback — I'll retry anyway"  | No annotations means they weren't ready. Stop and wait.   |
-| "This change is trivial, skip the review"      | Every commit is reviewed. Present it.                     |
-| "I'll commit now and let them review after"    | Review comes before the commit. Present first.            |
-| "No feedback last time, so skip it now"        | A new change is a new review. Present it.                 |
-| "I'll commit everything in one go"             | One atomic commit at a time, each reviewed separately.    |
-| "The worktree has unrelated edits too"         | Stage only this commit's files and review in staged mode. |
+| Thought                                                | Reality                                                                    |
+| ------------------------------------------------------ | -------------------------------------------------------------------------- |
+| "I'll ask if they're ready to commit"                  | The exit code already answered that. Read it, don't ask.                   |
+| "I'll ask if they want to re-review"                   | Nonzero exit already answered that. Re-review, don't ask.                  |
+| "Exit code was 0, so there's nothing to check"         | Approval and annotations are independent. Check both.                      |
+| "Denied with no feedback — I'll retry anyway"          | No annotations means they weren't ready. Stop and wait.                    |
+| "This change is trivial, skip the review"              | Every commit is reviewed. Present it.                                      |
+| "I'll commit now and let them review after"            | Review comes before the commit. Present first.                             |
+| "No feedback last time, so skip it now"                | A new change is a new review. Present it.                                  |
+| "I'll commit everything in one go"                     | One atomic commit at a time, each reviewed separately.                     |
+| "The worktree has unrelated edits too"                 | Stage only this commit's files and review in staged mode.                  |
+| "I'll ask to merge now and to close later"             | One question covers both. Ask once, then do both.                          |
+| "The task is done, so the worktree can wait"           | An unmerged worktree is unfinished work. Offer to close it.                |
+| "This is the main checkout, not a worktree"            | It closes too, unless its child worktrees are still open.                  |
+| "I'll merge into main, it's simpler"                   | Only where the repository merges directly. Elsewhere, open a pull request. |
+| "The pull request hasn't merged, so keep the worktree" | The branch survives in the main checkout. Close the worktree anyway.       |
