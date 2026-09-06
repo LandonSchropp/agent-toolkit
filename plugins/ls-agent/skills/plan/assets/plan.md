@@ -22,6 +22,6 @@ Sentry Issue: [sentry-url] <!-- Optional. Delete this line if there's no Sentry 
 
 Invoke the following skills:
 
-- `ls-agent:using-skills`
+- `ls-agent:instructions`
 - `ls-git:git-atomic-commit`
 - `ls-code:pre-review`
