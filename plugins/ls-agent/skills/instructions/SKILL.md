@@ -1,11 +1,12 @@
 ---
-description: Use at the start of any task, before taking action, to load the always-on workflow rules covering skill invocation, test-driven development, reviews, and skill scripts.
+description: Use at the start of any task, before taking action, to load the always-on workflow rules covering skill invocation, communication, test-driven development, reviews, and skill scripts.
 ---
 
 # Instructions
 
 Before doing anything else, you **MUST** read the following reference files:
 
+- [Communication](references/communication.md)
 - [Reviews](references/reviews.md)
 - [Test-driven development](references/test-driven-development.md)
 - [Skill scripts](references/scripts.md)
