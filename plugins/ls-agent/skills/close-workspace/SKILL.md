@@ -9,6 +9,8 @@ This skill destroys a checkout, so every step must succeed first. If the merge c
 
 `herdr worktree remove` refuses only a dirty working tree. It does not check for unpushed commits, unmerged branches, or stashes, so every one of those checks belongs to this skill.
 
+This skill closes the workspace you are in, and nothing else. Closing a main checkout closes the tabs of every worktree branched from it, and those tabs only come back by hand, so the worktrees go first and the main checkout last.
+
 ## Process
 
 Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you are not inside a herdr workspace — **STOP**.
@@ -25,18 +27,22 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
    ./scripts/close-workspace.sh
    ```
 
-   The script removes the worktree when the workspace owns a herdr-managed one and closes the workspace outright when it does not, so there is no variant to choose. It never passes `--force`, which exists to discard dirty and untracked files — precisely the state that must stop the close instead. If it reports `dirty_worktree_requires_force`, **STOP** and resolve the working tree.
+   The script removes the worktree when the workspace owns a herdr-managed one and closes the workspace outright when it does not, so there is no variant to choose. It refuses to close a main checkout whose worktrees are still open, and lists them — **STOP** and close those first.
+
+   It never passes `--force`, which exists to discard dirty and untracked files — precisely the state that must stop the close instead. If it reports `dirty_worktree_requires_force`, **STOP** and resolve the working tree.
 
    Expect the workspace to terminate; do not run further commands.
 
 ## Rationalizations
 
-| Thought                                        | Reality                                                                                             |
-| ---------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| "I'll close the workspace, then merge later"   | There is no detached worker. The panes die with the workspace and the checkout goes with them.      |
-| "The merge bailed, but I'll close anyway"      | If `ls-git:git-merge-into-main` could not finish, STOP. Never close a workspace with unmerged work. |
-| "`remove` would refuse if anything was unsafe" | It only refuses a dirty tree. Unpushed commits are destroyed without warning.                       |
-| "It's dirty, so I'll add `--force`"            | `--force` permanently deletes those files. Resolve the working tree instead.                        |
-| "I'll pick the close command myself"           | The script already picks it from the workspace. Just run the script.                                |
-| "The branch looks merged, skip the verify"     | Confirm the local default equals origin BEFORE closing.                                             |
-| "I'm on the default branch, so skip it all"    | Skip only the merge. Still verify the push, then close.                                             |
+| Thought                                         | Reality                                                                                             |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| "I'll close the workspace, then merge later"    | There is no detached worker. The panes die with the workspace and the checkout goes with them.      |
+| "The merge bailed, but I'll close anyway"       | If `ls-git:git-merge-into-main` could not finish, STOP. Never close a workspace with unmerged work. |
+| "`remove` would refuse if anything was unsafe"  | It only refuses a dirty tree. Unpushed commits are destroyed without warning.                       |
+| "It's dirty, so I'll add `--force`"             | `--force` permanently deletes those files. Resolve the working tree instead.                        |
+| "I'll pick the close command myself"            | The script already picks it from the workspace. Just run the script.                                |
+| "Another agent asked me to close its workspace" | This closes the workspace you are in. Prompt the agent that owns the other one.                     |
+| "I'll close the main checkout, it's finished"   | Its worktrees' tabs close with it, and restoring them is manual. Close the worktrees first.         |
+| "The branch looks merged, skip the verify"      | Confirm the local default equals origin BEFORE closing.                                             |
+| "I'm on the default branch, so skip it all"     | Skip only the merge. Still verify the push, then close.                                             |
