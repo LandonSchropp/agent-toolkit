@@ -64,7 +64,9 @@ exit 0 if review_disabled?
 # The hook runs in the session's primary repo, but the commit may target another one by passing
 # `git -C <dir>`. Use that directory when present. An in-command `cd` isn't visible here, so
 # commits in another repo must go through `git -C`.
-if (working_directory_index = words.index("-C"))
+# Only a `-C` before the subcommand is that flag; after it, `git commit -C <commit>` reuses a
+# message.
+if (working_directory_index = words[0...words.index("commit")].index("-C"))
   working_directory = words[working_directory_index + 1] || working_directory
 end
 
