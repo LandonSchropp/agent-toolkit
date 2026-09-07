@@ -49,14 +49,15 @@ words = Shellwords.split(command)
 
 # We only care about git commit commands, so ignore the rest.
 simplified_command = words
-  .filter { |word| ["git", "commit", "--amend", "--fixup"].include?(word) }
+  .filter { |word| ["git", "commit"].include?(word) }
   .join(" ")
 
 # Only gate commands that create a commit; ignore everything else.
 exit 0 unless simplified_command.include?("git commit")
 
-# Amends and fixups edit existing history rather than adding new work, so leave them alone.
-exit 0 if simplified_command.end_with?("--amend") || simplified_command.end_with?("--fixup")
+# Amends, fixups and squashes edit existing history rather than adding new work, so leave them
+# alone.
+exit 0 if words[words.index("commit")..-1].grep(/\A--(amend|fixup|squash)(=|\z)/).any?
 
 # If the user has temporarily disabled the review requirement for this session, allow the commit.
 exit 0 if review_disabled?
