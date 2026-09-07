@@ -24,7 +24,7 @@ Nothing about this path depends on being inside Herdr. Both commands drive the r
 
 Open by naming where the prompt came from, or it reads as the user speaking and stalls waiting on an answer:
 
-> This comes from an agent working in `<project>`, sent through `ls-agent:delegate`. The user is not reading this channel, so proceed on your best judgment rather than waiting for a reply.
+> This comes from an agent working in `<project>`, sent through `ls-agent:delegate`. The user did not read this prompt, so proceed on your best judgment rather than waiting for a reply.
 
 Then, beyond what any delegation needs, tell the agent:
 
