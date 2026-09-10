@@ -49,6 +49,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+if [[ -z "${HERDR_ENV:-}" ]]; then
+  echo "Error: This command can only be run within herdr." >&2
+  exit 1
+fi
+
 if [[ -z "$command" ]]; then
   echo "Error: The --command flag is required." >&2
   echo >&2

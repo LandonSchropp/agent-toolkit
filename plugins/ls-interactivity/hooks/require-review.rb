@@ -59,6 +59,10 @@ exit 0 unless simplified_command.include?("git commit")
 # alone.
 exit 0 if words[words.index("commit")..-1].grep(/\A--(amend|fixup|squash)(=|\z)/).any?
 
+# Reviewing needs herdr, so outside it there is no user to review anything and no way to record
+# one. Blocking there would deny every commit an unattended run makes.
+exit 0 unless ENV.key?("HERDR_ENV")
+
 # If the user has temporarily disabled the review requirement for this session, allow the commit.
 exit 0 if review_disabled?
 

@@ -54,6 +54,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+if [[ -z "${HERDR_ENV:-}" ]]; then
+  echo "Error: This command can only be run within herdr." >&2
+  exit 1
+fi
+
 if [[ -z "$prompt" ]]; then
   echo "Error: The --prompt flag is required." >&2
   echo >&2
