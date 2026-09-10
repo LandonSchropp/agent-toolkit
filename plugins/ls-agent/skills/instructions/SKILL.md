@@ -8,7 +8,7 @@ description: Use at the start of any task, before taking action, to load the alw
 Before doing anything else, you **MUST** read the following reference files:
 
 - [Communication](references/communication.md)
-- [Skill scripts](references/scripts.md)
+- [Skill scripts](references/skill-scripts.md)
 
 Then, you **MUST** read the references for your environment, which the environment variable identifies.
 
