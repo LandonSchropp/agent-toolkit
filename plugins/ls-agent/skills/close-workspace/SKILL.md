@@ -7,7 +7,7 @@ description: Use when closing a herdr workspace or worktree. Confirms nothing in
 
 This skill destroys a checkout, so every step must succeed first. If anything in it would go with it — uncommitted changes, or commits that are neither merged nor pushed — **STOP** and leave the workspace intact.
 
-It does not integrate the branch. Merging into the default branch, or opening a pull request, is a separate task that happens before this one; the `ls-agent:instructions` skill's reviews reference covers which of the two a repository gets.
+It does not integrate the branch. Merging into the default branch, or opening a pull request, is a separate task that happens before this one; the `ls-agent:instructions` skill's Herdr reference covers which of the two a repository gets.
 
 `herdr worktree remove` refuses only a dirty working tree. It does not check for unpushed commits or unmerged branches, so both of those checks belong to this skill.
 
