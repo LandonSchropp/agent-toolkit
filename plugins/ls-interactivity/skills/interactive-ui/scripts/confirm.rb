@@ -27,6 +27,11 @@ def print_help
   HELP
 end
 
+unless ENV.key?("HERDR_ENV")
+  warn "Error: This command can only be run within herdr."
+  exit 1
+end
+
 prompt = nil
 affirmative = "Approve"
 negative = "Deny"

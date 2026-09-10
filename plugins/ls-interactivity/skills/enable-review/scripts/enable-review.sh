@@ -10,6 +10,11 @@ if [[ ! -f "$DATABASE" ]]; then
   exit 0
 fi
 
+if [[ -z "${HERDR_ENV:-}" ]]; then
+  echo "Error: This command can only be run within herdr." >&2
+  exit 1
+fi
+
 if [[ -z "${HERDR_WORKSPACE_ID:-}" ]]; then
   echo "Error: Not inside a herdr workspace." >&2
   exit 1
