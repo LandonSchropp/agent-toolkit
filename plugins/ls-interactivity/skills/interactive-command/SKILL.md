@@ -14,6 +14,10 @@ Always run the script in the background, with no timeout, so it can run until th
 
 ## Closing a Tab
 
+The tab you opened is yours. You put it on the user's screen, so you take it off again, and never end a turn asking them to close a window you opened.
+
+On the normal path there is nothing to do: the user closes the tab, and the script exits carrying the command's result. Close it yourself the moment you stop waiting on that result, whatever the reason — the user redirects the session, or the workflow it belongs to is abandoned. A result you have stopped waiting for is worth nothing, so losing it costs nothing.
+
 The script traps termination signals and closes its own tab on exit, so end the script rather than closing its tab: run it with the Bash tool's `run_in_background` and stop it with `TaskStop` on the task id it returns.
 
 - **Never background a script with `&`.** `run_in_background` gives you a task id to stop it by and tells you when it finishes. `&` gives you neither.
