@@ -24,6 +24,12 @@ For every mode but `commit`, the script's own exit code is the approve/deny deci
 
 Before invoking the script, run `git status`, and pick the mode from what it reports. Anything already staged is invisible to `working` mode, so a fully staged worktree has nothing for it to show and the script refuses to open it. If the worktree has uncommitted changes unrelated to the commit being built, `working` mode would mix them into the review; stage only the files belonging to this commit (`git add <files>`) and invoke `staged` mode instead. Either way, don't leave the commit's changes split across the index and the worktree, since neither mode shows both halves.
 
+## Closing the Review
+
+**REQUIRED:** Use the `ls-interactivity:interactive-command` skill, which covers when a tab gets closed and how.
+
+NEVER ask the user to close the tab for you. Always close it yourself.
+
 ## Handling a Stale Review
 
 Before opening a review, check whether a `review` herdr tab is already open in the current workspace. It's always a leftover from an earlier review that didn't close — e.g. its background process was killed before cleanup ran — since only one review runs at a time in a workspace.
