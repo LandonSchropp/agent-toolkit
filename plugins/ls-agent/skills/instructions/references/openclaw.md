@@ -1,6 +1,6 @@
 # OpenClaw
 
-Work that edits a repository under `~/Development` does not happen here. Hand it to the Developer agent with `sessions_send`; that agent owns development work and delegates it onward.
+Work that edits a repository under `~/Development` does not happen here. Hand it to the Developer agent with `sessions_send`; that agent owns development work and delegates it onward. A skill that lives in one of those repositories is repository work too.
 
 ## Skill Names
 

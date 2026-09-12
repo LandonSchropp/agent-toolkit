@@ -1,6 +1,6 @@
 ---
 name: delegate
-description: Use when work belongs somewhere other than this session: a different repository, a standing personal agent, or a visual design tool, so an agent with the right environment and context does it instead.
+description: Use when work belongs somewhere other than this session (a different repository, a standing personal agent, or a visual design tool), or before creating or changing a skill, to decide where it lives.
 ---
 
 # Delegate
@@ -14,6 +14,10 @@ Hand a task to an agent better placed to do it. Choose the platform first; it de
 - **Claude Design:** The task is visual design. See [Claude Design](references/claude-design.md).
 
 Route by the task, never by where this session happens to be running. `$HERDR_ENV` and `$OPENCLAW_SHELL` say which platform you are on, which changes how you reach a target and how you reach the user, never which target gets the task.
+
+## Skills
+
+A skill that lives in a repository goes to Herdr: the one it is already in, `personal-agent-toolkit` when it is personal, and `agent-toolkit` otherwise. OpenClaw's own skills are a separate ecosystem, built and maintained there rather than delegated. See [OpenClaw](references/openclaw.md#skills).
 
 ## Writing the Prompt
 
@@ -36,3 +40,4 @@ Pass the task through as the user gave it. Don't reinterpret it, improve it, or 
 | "I'll reference what we just did"              | The receiving agent was not here. Spell it out.                                   |
 | "I'll reuse the running agent, it's faster"    | A fresh worktree keeps the work on its own branch. Reuse only when asked.         |
 | "I'll paste in the Linear issue's description" | Give the URL. The agent reads the issue itself; the issue is the source of truth. |
+| "The skill is for one OpenClaw agent"          | It still lives in a repository, so it still goes to Herdr.                        |
