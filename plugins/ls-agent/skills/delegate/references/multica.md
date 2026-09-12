@@ -4,6 +4,10 @@ Multica runs an asynchronous queue across several agents. A delegation is one is
 
 The issue description is the prompt, and the user reads it, so it takes no preamble explaining where it came from.
 
+## Skills
+
+Multica agents own and maintain their own skills, which live in Multica rather than a repository and work nowhere else. An agent builds its own with `multica skill create`, `multica skill update`, and `multica agent skills add` instead of delegating them. Before creating or updating one, it posts the draft skill as a comment on its current issue and waits for the user to approve it; feedback means revising the draft and posting it again. A skill several agents need is one skill assigned to each of them. A skill for a different agent goes to that agent as an issue.
+
 ## Drafting
 
 **Draft the issue. Do not create it.** Show the user the title, description, assignee, and status, and create it only once they say to. An edit is not approval: revise the draft, show it again, and wait for a yes.

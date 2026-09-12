@@ -1,6 +1,6 @@
 ---
 name: delegate
-description: Use when work belongs somewhere other than this session: a different repository, an asynchronous task queue, or a visual design tool, so an agent with the right environment and context does it instead.
+description: Use when work belongs somewhere other than this session (a different repository, an asynchronous task queue, or a visual design tool), or before creating or changing a skill, to decide where it lives.
 ---
 
 # Delegate
@@ -14,6 +14,10 @@ Hand a task to an agent better placed to do it. Choose the platform first; it de
 - **Claude Design:** The task is visual design. See [Claude Design](references/claude-design.md).
 
 Route by the task, never by where this session happens to be running. `$HERDR_ENV` and `$MULTICA_AGENT_ID` say which platform you are on, which changes how you reach a target and how you reach the user, never which target gets the task.
+
+## Skills
+
+A skill goes to Herdr, in `agent-toolkit`, `personal-agent-toolkit`, or another repository under `~/Development`, only when it already lives there, needs the user's close oversight to build, or is meant for Claude Code or Herdr. Every other skill belongs to the Multica agents that use it. See [Multica](references/multica.md#skills).
 
 ## Writing the Prompt
 
@@ -37,3 +41,4 @@ Pass the task through as the user gave it. Don't reinterpret it, improve it, or 
 | "I'll reference what we just did"                 | The receiving agent was not here. Spell it out.                                   |
 | "I'll reuse the running agent, it's faster"       | A fresh worktree keeps the work on its own branch. Reuse only when asked.         |
 | "I'll paste in the Linear issue's description"    | Give the URL. The agent reads the issue itself; the issue is the source of truth. |
+| "Skills live in `agent-toolkit`"                  | Only those already there, overseen by the user, or used outside Multica.          |
