@@ -13,7 +13,8 @@ is_bash_file() {
     return 0
   fi
 
-  first_line=$(read -r first_line <"$(readlink -f "$file")" 2>/dev/null)
+  local first_line=""
+  read -r first_line 2>/dev/null <"$file" || true
   [[ "$first_line" =~ ^#!.*(bash|sh)($|[[:space:]]) ]]
 }
 
