@@ -1,0 +1,16 @@
+{
+  "description": "Runs git town commands without an interactive terminal.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/git-town.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
