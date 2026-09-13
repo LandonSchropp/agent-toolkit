@@ -1,6 +1,6 @@
 ---
 name: bash-script
-description: Use when writing a Bash script. Covers the template, conventions, and required patterns.
+description: Use when writing or editing a Bash script (a `.sh` file or one with a Bash shebang). Covers the template, conventions, and required patterns.
 ---
 
 ## Template
@@ -20,6 +20,7 @@ Two templates cover the two kinds of scripts. Copy the right one exactly and fil
 - Call other commands with their long flags (`--session=main`, not `-s main`), so the call reads without knowing the command
 - Exit `0` for success, `1` for errors
 - stdout for primary output, stderr for errors/warnings/progress messages
+- Run `shellcheck` on the script when you finish editing it, not after every change
 
 ## Required patterns
 
