@@ -1,0 +1,16 @@
+{
+  "description": "Autocorrects edited Ruby files with RuboCop.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/rubocop.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
