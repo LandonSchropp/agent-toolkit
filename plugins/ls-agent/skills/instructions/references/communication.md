@@ -10,6 +10,23 @@
 - When mentioning something that has an obvious URL (a GitHub repo, issue, or PR; a package; a documentation page), inline a Markdown link on the reference itself rather than leaving it as plain text.
 - Use title case for every title and heading: document titles, issue and task titles, Markdown headings at any level, and work product names. Body text stays in sentence case.
 
+## Status Footer
+
+When the user has something to act on, end your reply to them with a status footer so they can spot it at a glance. This applies only to replies the user reads directly, never to a subagent's report back to the agent that launched it. Put it last, one line per status, most urgent first, with the status in bold and title case. Keep each line to a few words; the details belong in the reply above:
+
+```markdown
+⏳ **Waiting on Pre-Review**
+```
+
+Use only these statuses:
+
+- 👀 Needs Review: Changes are waiting for the user to review them.
+- ✅ Ready to Close: The work is committed and ready to merge (or some other equivalent) and to close its workspace, worktree or task.
+- 🚧 Blocked by <Reason>: Work can't continue until the user answers a question, approves something or fixes a problem. Name the blocker.
+- ⏳ Waiting on <Task>: A background task is running and you'll report back when it finishes. Name the task.
+
+When none apply, leave the footer off. Never add a status that only describes what you did, like "Done" or "Updated the file". The footer is for the user's next move, not a recap.
+
 ## Rationalizations
 
 | Thought                                   | Reality                                                            |
@@ -22,3 +39,4 @@
 | "Bullets are easier to scan"              | Prose for explanations. Bullets only for 3+ parallel items.        |
 | "Everyone writes 'dir' and 'args'"        | Write the full word unless you'd say the short form out loud.      |
 | "A longer answer is a more complete one"  | Too long means skimmed, and skimmed means missed. Concision helps. |
+| "The status is obvious from the reply"    | The user scans the bottom first. If they have a next move, add it. |
