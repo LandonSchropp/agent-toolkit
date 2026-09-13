@@ -27,6 +27,10 @@ The exit code and the annotations are independent signals — read both. They co
 
 Don't edit files outside the scope of the commit you're building. If you unavoidably touch unrelated files and they don't overlap with the current commit's files, review and commit each separately — one review, one commit, at a time. Never bundle unreviewed changes into a reviewed commit.
 
+## Running Commands
+
+Run Bash commands one at a time. Don't chain commands together with `&&` or `;`. Each command is its own Bash tool call, so the user can review and approve them individually.
+
 ## Finishing a Workspace
 
 When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two.
@@ -49,6 +53,7 @@ A main checkout closes the same way a linked worktree does; an agent closes itse
 | "No feedback last time, so skip it now"                | A new change is a new review. Present it.                                  |
 | "I'll commit everything in one go"                     | One atomic commit at a time, each reviewed separately.                     |
 | "The worktree has unrelated edits too"                 | Stage only this commit's files and review in staged mode.                  |
+| "Chaining commands saves a round trip"                 | Each command needs its own approval. Run them one at a time.               |
 | "I'll ask to merge now and to close later"             | One question covers both. Ask once, then do both.                          |
 | "The task is done, so the worktree can wait"           | An unmerged worktree is unfinished work. Offer to close it.                |
 | "This is the main checkout, not a worktree"            | It closes too, unless its child worktrees are still open.                  |

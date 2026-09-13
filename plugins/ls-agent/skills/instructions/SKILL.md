@@ -20,6 +20,7 @@ Then, you **MUST** read ALL of the reference files applicable to your environmen
 | [Skill scripts](references/skill-scripts.md)                     | All         |
 | [Terminal](references/terminal.md)                               | All         |
 | [Herdr](references/herdr.md)                                     | Herdr       |
+| [Git](references/git.md)                                         | Herdr       |
 | [Test-driven development](references/test-driven-development.md) | Herdr       |
 | [Multica](references/multica.md)                                 | Multica     |
 
