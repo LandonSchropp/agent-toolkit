@@ -2,8 +2,6 @@
 
 For files with `kanban-plugin: board` in the frontmatter, follow these formatting conventions:
 
-**Never format a board with Prettier, and never remove `prettier: false` from a board's frontmatter.** Prettier rewrites the list and indentation structure the kanban plugin depends on, which corrupts the board. Add the key if a board is missing it.
-
 ## Card Formatting
 
 **Checkbox types:** Use specific checkbox types for top-level list items based on the header text. Preserve existing checkboxes in sub-lists.
@@ -61,7 +59,7 @@ Board files end with a `kanban:settings` block holding the board's JSON configur
 
 The category pill only renders when `category` is listed in `metadata-keys`, so a board that colors categories needs both settings. Other common keys are `list-collapse`, `show-relative-date`, `archive-with-date`, and `append-archive-date`.
 
-**Leave no blank lines inside the block.** The marker, the fence, and the closing `%%` sit on consecutive lines, and the file ends at `%%` with no trailing newline. Prettier inserts blank lines around the fence, which is one more reason boards keep `prettier: false`.
+Prettier adds blank lines around the fence and a trailing newline, and the plugin reads either layout.
 
 ````text
 %% kanban:settings

@@ -32,7 +32,6 @@ date: <YYYY-MM-DD>
 tags: []
 icon: LiKanbanSquare
 kanban-plugin: board
-prettier: false
 ---
 ```
 
