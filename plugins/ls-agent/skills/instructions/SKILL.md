@@ -18,6 +18,7 @@ Then, you **MUST** read ALL of the reference files applicable to your environmen
 | ---------------------------------------------------------------- | ----------- |
 | [Communication](references/communication.md)                     | All         |
 | [Skill scripts](references/skill-scripts.md)                     | All         |
+| [Terminal](references/terminal.md)                               | All         |
 | [Herdr](references/herdr.md)                                     | Herdr       |
 | [Test-driven development](references/test-driven-development.md) | Herdr       |
 | [OpenClaw](references/openclaw.md)                               | OpenClaw    |
