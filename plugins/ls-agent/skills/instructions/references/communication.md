@@ -20,7 +20,7 @@ When the user has something to act on, end your reply to them with a status foot
 
 Use only these statuses:
 
-- 👀 Needs Review: Changes are waiting for the user to review them.
+- 👀 Needs Review: A change is open in `interactive-review` waiting for the user's review. Never use this for a GitHub PR review request or any other kind of review.
 - 📋 Review the Plan: A plan is open and waiting for the user to read it and respond.
 - ✅ Ready to Close: The work is committed, the branch is ready to merge into main (or some other equivalent) and the workspace can be closed when done.
 - 🚧 Blocked by <Reason>: Work can't continue until the user answers a question, approves something or fixes a problem. Name the blocker. Approval to merge or close finished work is never a blocker; use Ready to Close.
@@ -30,15 +30,16 @@ When none apply, leave the footer off. Never add a status that only describes wh
 
 ## Rationalizations
 
-| Thought                                   | Reality                                                            |
-| ----------------------------------------- | ------------------------------------------------------------------ |
-| "The user will want to pick from options" | Ask directly. The AskUserQuestion tool is unwelcome.               |
-| "Agreeing warmly builds rapport"          | Sycophancy is noise. Skip it and answer.                           |
-| "The user needs the full context first"   | Lead with the answer. Offer to expand.                             |
-| "A recap of what I did is helpful"        | It's filler. The user reads the diff.                              |
-| "This list reads better with em dashes"   | Use colons. The user strongly dislikes em-dash separators.         |
-| "Bullets are easier to scan"              | Prose for explanations. Bullets only for 3+ parallel items.        |
-| "Everyone writes 'dir' and 'args'"        | Write the full word unless you'd say the short form out loud.      |
-| "A longer answer is a more complete one"  | Too long means skimmed, and skimmed means missed. Concision helps. |
-| "The status is obvious from the reply"    | The user scans the bottom first. If they have a next move, add it. |
-| "I'm waiting on approval to merge"        | That's Ready to Close, not Blocked by Merge Approval.              |
+| Thought                                    | Reality                                                                    |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| "The user will want to pick from options"  | Ask directly. The AskUserQuestion tool is unwelcome.                       |
+| "Agreeing warmly builds rapport"           | Sycophancy is noise. Skip it and answer.                                   |
+| "The user needs the full context first"    | Lead with the answer. Offer to expand.                                     |
+| "A recap of what I did is helpful"         | It's filler. The user reads the diff.                                      |
+| "This list reads better with em dashes"    | Use colons. The user strongly dislikes em-dash separators.                 |
+| "Bullets are easier to scan"               | Prose for explanations. Bullets only for 3+ parallel items.                |
+| "Everyone writes 'dir' and 'args'"         | Write the full word unless you'd say the short form out loud.              |
+| "A longer answer is a more complete one"   | Too long means skimmed, and skimmed means missed. Concision helps.         |
+| "The status is obvious from the reply"     | The user scans the bottom first. If they have a next move, add it.         |
+| "I'm waiting on approval to merge"         | That's Ready to Close, not Blocked by Merge Approval.                      |
+| "A PR is open for review, so Needs Review" | Needs Review is only for `interactive-review`. Use another status or none. |
