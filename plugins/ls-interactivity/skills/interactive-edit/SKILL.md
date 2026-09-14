@@ -14,6 +14,12 @@ Run it in the background; it blocks until the tab closes. To present generated c
 
 The file being open in Neovim is not a lock. If the user asks for a change while the tab is open, edit the file on disk with the normal file tools and tell the user it changed. Neovim reloads it automatically unless the user has unsaved edits in the buffer, in which case it prompts them to reconcile on their next write. Don't wait for the tab to close, ask the user to close it, or route the edit through Neovim.
 
+## Closing the Edit
+
+**REQUIRED:** Use the `ls-interactivity:interactive-command` skill, which covers when a tab gets closed and how.
+
+NEVER ask the user to close the tab for you. Always close it yourself.
+
 ## Rationalizations
 
 | Thought                                                  | Reality                                                          |
