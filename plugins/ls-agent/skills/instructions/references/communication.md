@@ -22,8 +22,8 @@ Use only these statuses:
 
 - 👀 Needs Review: Changes are waiting for the user to review them.
 - 📋 Review the Plan: A plan is open and waiting for the user to read it and respond.
-- ✅ Ready to Close: The work is committed and ready to merge (or some other equivalent) and to close its workspace, worktree or task.
-- 🚧 Blocked by <Reason>: Work can't continue until the user answers a question, approves something or fixes a problem. Name the blocker.
+- ✅ Ready to Close: The work is committed, the branch is ready to merge into main (or some other equivalent) and the workspace can be closed when done.
+- 🚧 Blocked by <Reason>: Work can't continue until the user answers a question, approves something or fixes a problem. Name the blocker. Approval to merge or close finished work is never a blocker; use Ready to Close.
 - ⏳ Waiting on <Task>: A background task is running and you'll report back when it finishes. Name the task.
 
 When none apply, leave the footer off. Never add a status that only describes what you did, like "Done" or "Updated the file". The footer is for the user's next move, not a recap.
@@ -41,3 +41,4 @@ When none apply, leave the footer off. Never add a status that only describes wh
 | "Everyone writes 'dir' and 'args'"        | Write the full word unless you'd say the short form out loud.      |
 | "A longer answer is a more complete one"  | Too long means skimmed, and skimmed means missed. Concision helps. |
 | "The status is obvious from the reply"    | The user scans the bottom first. If they have a next move, add it. |
+| "I'm waiting on approval to merge"        | That's Ready to Close, not Blocked by Merge Approval.              |
