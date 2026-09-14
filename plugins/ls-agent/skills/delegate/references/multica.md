@@ -20,7 +20,7 @@ Every issue delegated this way carries the `Delegated` label, wherever the deleg
 
 ## Handing Back
 
-Nothing beyond the issue keeps the finished work in front of the user. Multica already reserves `done` for a human confirmation: the receiving agent delivers into `in_review` and stops there. That is a convention its own instructions carry rather than something the server refuses, so a delegation leans on the receiving agent honoring it.
+Nothing beyond the issue keeps the finished work in front of the user. The receiving agent delivers into `in_review` and asks the user before marking the issue `done`. That is a convention its own instructions carry rather than something the server refuses, so a delegation leans on the receiving agent honoring it.
 
 ## From Inside Multica
 
