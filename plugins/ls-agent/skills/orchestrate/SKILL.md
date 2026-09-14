@@ -19,6 +19,10 @@ Concretely: create no files, change no files, in any repository, including throu
 4. **STOP.** Do not start the next stage. The user watches the work land and tells you when they are ready.
 5. On their word, tear down the finished stage's workspaces — **REQUIRED:** use the `ls-agent:close-workspace` skill — then start the next stage.
 
+## A Workspace Disappears
+
+If a tracked workspace is missing from `herdr workspace list`, the user closed it themselves — the same signal as step 5, just given directly instead of on their word. That task is done. Stop tracking it as outstanding. Never reopen it, re-delegate its task, or treat the disappearance as a crash to recover from.
+
 ## Task Prompts
 
 `ls-agent:delegate` covers what any delegation prompt needs. A run of several tasks adds two things:
@@ -28,9 +32,10 @@ Concretely: create no files, change no files, in any repository, including throu
 
 ## Rationalizations
 
-| Thought                                         | Reality                                                                   |
-| ----------------------------------------------- | ------------------------------------------------------------------------- |
-| "It's a two-line change, delegating costs more" | The cost you're avoiding is the reason this session exists.               |
-| "Edit is gone but I can still use Bash"         | The rule is no edits, not no `Edit`. Delegate it.                         |
-| "I'll start the next stage, it looks done"      | You don't know it landed. The user says when.                             |
-| "I'll research the task before handing it off"  | Gather the handoff facts, then stop. Solving it is the other agent's job. |
+| Thought                                               | Reality                                                                      |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------- |
+| "It's a two-line change, delegating costs more"       | The cost you're avoiding is the reason this session exists.                  |
+| "Edit is gone but I can still use Bash"               | The rule is no edits, not no `Edit`. Delegate it.                            |
+| "I'll start the next stage, it looks done"            | You don't know it landed. The user says when.                                |
+| "I'll research the task before handing it off"        | Gather the handoff facts, then stop. Solving it is the other agent's job.    |
+| "The workspace vanished, the agent must have crashed" | The user closed it. That's the task finishing, not failing. Don't reopen it. |
