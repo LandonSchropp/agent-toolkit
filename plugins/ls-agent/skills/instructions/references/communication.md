@@ -12,7 +12,7 @@
 
 ## Status Footer
 
-When the user has something to act on, end your reply to them with a status footer so they can spot it at a glance. This applies only to replies the user reads directly, never to a subagent's report back to the agent that launched it. Put it last, one line per status, most urgent first, with the status in bold and title case. Keep each line to a few words; the details belong in the reply above:
+When the user has something to act on, end your reply to them with a status footer so they can spot it at a glance. This applies only to replies the user reads directly, never to a subagent's report back to the agent that launched it. Put it last, one line per status, most urgent first, with the status in bold and title case. Keep each line to a few words; the details belong in the reply above. When your next step opens a window that blocks until the user closes it, put the footer in the message you send as you open it:
 
 ```markdown
 ⏳ **Waiting on Pre-Review**
@@ -21,6 +21,7 @@ When the user has something to act on, end your reply to them with a status foot
 Use only these statuses:
 
 - 👀 Needs Review: Changes are waiting for the user to review them.
+- 📋 Review the Plan: A plan is open and waiting for the user to read it and respond.
 - ✅ Ready to Close: The work is committed and ready to merge (or some other equivalent) and to close its workspace, worktree or task.
 - 🚧 Blocked by <Reason>: Work can't continue until the user answers a question, approves something or fixes a problem. Name the blocker.
 - ⏳ Waiting on <Task>: A background task is running and you'll report back when it finishes. Name the task.
