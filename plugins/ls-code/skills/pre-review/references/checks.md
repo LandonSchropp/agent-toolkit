@@ -9,6 +9,7 @@ Review the diff adversarially. Assume it has a problem and go find it.
 - **Tests:** Every test the diff adds or changes has to follow this environment's testing skill. Search the available skills for the one covering tests in this language, framework, or layer of the stack, invoke it, and read the tests against its guidelines. Report whatever diverges.
 - **Comments and documentation:** Rule on every comment and documentation block the diff touches, including the ones it already carried and any documentation that grew during a refactor that changed no behavior. **REQUIRED:** Invoke the `ls-code:comments-and-documentation` skill.
 - **Commit size:** Reviews happen a commit at a time, so a diff carrying more than one logical change is harder to review than it needs to be. If this one can be split, say so and name the split.
+- **Defensive error handling:** For every `try`/`catch`, `rescue`, or `if ! cmd; then` branch the diff adds, ask whether that failure is actually plausible here versus effectively impossible, like a config file that's always valid or a command the environment guarantees will succeed. Flag the impossible case: name what to delete and let the call fail loudly instead.
 
 ## Reporting
 

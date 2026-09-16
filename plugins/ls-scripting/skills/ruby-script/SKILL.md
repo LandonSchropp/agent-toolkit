@@ -20,6 +20,7 @@ Two templates cover the two kinds of scripts. Copy the right one exactly and fil
 - Call other commands with their long flags (`--session=main`, not `-s main`), so the call reads without knowing the command
 - Exit `0` for success, `1` for errors
 - stdout for primary output, stderr for errors/warnings/progress messages
+- Let a call raise and crash instead of wrapping it in `begin`/`rescue`. Only add explicit handling when the failure is actually likely or needs a clearer message than the default backtrace.
 
 ## Required patterns
 
