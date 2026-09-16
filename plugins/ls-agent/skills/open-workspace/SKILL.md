@@ -8,7 +8,7 @@ description: Use when a task needs its own checkout of a project — delegating 
 Opens a project's Git worktree as a herdr workspace and waits until its agent is ready.
 
 ```bash
-scripts/open-workspace.sh --project <name> --worktree <branch> --label <label>
+scripts/open-workspace.sh --project <name> --branch <branch> --label <label>
 ```
 
 It prints the workspace ID, the handle for prompting that agent.
