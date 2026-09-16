@@ -7,22 +7,22 @@ readonly SETTLE_SECONDS=8
 readonly MAX_LABEL_LENGTH=16
 
 function print_help() {
-  echo "Usage: open-workspace.sh --project <name> --worktree <branch> --label <label>"
+  echo "Usage: open-workspace.sh --project <name> --branch <branch> --label <label>"
   echo
   echo "Opens a project's Git worktree as a herdr workspace, labels the workspace, waits for"
   echo "its agent to become ready, and prints the workspace id."
   echo
   echo "Options:"
   echo
-  echo "  --project <name>     Project to open, as named by 'herdr-project list'."
-  echo "  --worktree <branch>  Branch to create the worktree on."
-  echo "  --label <label>      Workspace label, at most $MAX_LABEL_LENGTH characters."
-  echo "  --help               Show this help message and exit."
+  echo "  --project <name>   Project to open, as named by 'herdr-project list'."
+  echo "  --branch <branch>  Branch to create the worktree on."
+  echo "  --label <label>    Workspace label, at most $MAX_LABEL_LENGTH characters."
+  echo "  --help             Show this help message and exit."
 }
 
 # Prints the workspace id for the project's worktree on the branch, if one is open.
 function find_workspace() {
-  herdr worktree list --cwd "$repo_root" | jq --raw-output --arg branch "$worktree" \
+  herdr worktree list --cwd "$repo_root" | jq --raw-output --arg branch "$branch" \
     'first(.result.worktrees[] | select(.branch == $branch) | .open_workspace_id // empty) // empty'
 }
 
@@ -36,7 +36,7 @@ function find_agent() {
 
 # Parse arguments
 project=""
-worktree=""
+branch=""
 label=""
 
 while [[ $# -gt 0 ]]; do
@@ -49,8 +49,8 @@ while [[ $# -gt 0 ]]; do
     project="$2"
     shift 2
     ;;
-  --worktree)
-    worktree="$2"
+  --branch)
+    branch="$2"
     shift 2
     ;;
   --label)
@@ -74,8 +74,8 @@ if [[ -z "$project" ]]; then
   exit 1
 fi
 
-if [[ -z "$worktree" ]]; then
-  echo "Error: The --worktree flag is required." >&2
+if [[ -z "$branch" ]]; then
+  echo "Error: The --branch flag is required." >&2
   echo >&2
   print_help >&2
   exit 1
@@ -103,7 +103,7 @@ if [[ -z "$repo_root" ]]; then
   exit 1
 fi
 
-herdr-project open "$project" --worktree "$worktree" --no-focus
+herdr-project open "$project" --worktree "$branch" --no-focus
 
 workspace_id=""
 pane_id=""
@@ -123,12 +123,12 @@ for ((second = 0; second < TIMEOUT_SECONDS; second++)); do
 done
 
 if [[ -z "$workspace_id" ]]; then
-  echo "Error: No workspace opened for $worktree in $project within ${TIMEOUT_SECONDS}s." >&2
+  echo "Error: No workspace opened for $branch in $project within ${TIMEOUT_SECONDS}s." >&2
   exit 1
 fi
 
 if [[ -z "$pane_id" ]]; then
-  echo "Error: Workspace $workspace_id opened, but no agent started for $worktree in $project within ${TIMEOUT_SECONDS}s." >&2
+  echo "Error: Workspace $workspace_id opened, but no agent started for $branch in $project within ${TIMEOUT_SECONDS}s." >&2
   exit 1
 fi
 
