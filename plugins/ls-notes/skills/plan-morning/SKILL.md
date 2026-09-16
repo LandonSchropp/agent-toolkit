@@ -114,12 +114,12 @@ gh search prs --author=@me --owner=<organization> --merged --merged-at=<today's 
 For each open PR, fetch its review and CI status:
 
 ```bash
-gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeable
+gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeable,latestReviews
 ```
 
 Assign each open PR a status emoji using this priority order:
 
-- 💬: `reviewDecision` is `CHANGES_REQUESTED`
+- 💬: `reviewDecision` is `CHANGES_REQUESTED`, or `reviewDecision` is not `APPROVED` and any entry in `latestReviews` has `state` `COMMENTED` (a reviewer left feedback without approving)
 - ❌: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
 - 💔: `mergeable` is `CONFLICTING` (merge conflicts)
 - ⏱️: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
