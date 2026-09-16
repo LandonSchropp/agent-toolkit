@@ -31,10 +31,10 @@ The agent working in the workspace closes it, from inside. Don't invoke `ls-agen
 
 ## Rationalizations
 
-| Thought                                          | Reality                                                                        |
-| ------------------------------------------------ | ------------------------------------------------------------------------------ |
-| "I'll call `herdr-project open` directly"        | Then you have no workspace id, and the agent may not be ready. Use the script. |
-| "The agent is up as soon as the command returns" | It reports `unknown` until its TUI settles and rejects prompts until then.     |
-| "Two workspaces opened, I should close one"      | Expected. The main workspace is the user's, not litter.                        |
-| "I'll find the workspace by its checkout path"   | herdr slugifies the branch into that path. The script asks Git instead.        |
-| "I'll pass the branch name as the label"         | The sidebar truncates it mid-word. Give the task a short name of its own.      |
+| Thought                                          | Reality                                                                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| "I'll call `herdr-project open` directly"        | Then you have no workspace id, and the agent may not be ready. Use the script.                                |
+| "The agent is up as soon as the command returns" | It reports `unknown` until its TUI settles and rejects prompts until then.                                    |
+| "Two workspaces opened, I should close one"      | Expected. The main workspace is the user's, not litter.                                                       |
+| "I'll find the workspace by its checkout path"   | herdr slugifies the branch into that path. The script matches `herdr worktree list`'s `branch` field instead. |
+| "I'll pass the branch name as the label"         | The sidebar truncates it mid-word. Give the task a short name of its own.                                     |

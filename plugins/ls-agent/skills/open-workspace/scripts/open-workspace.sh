@@ -20,24 +20,18 @@ function print_help() {
   echo "  --help               Show this help message and exit."
 }
 
-# Prints "<workspace id> <pane id>" for the project's worktree on the branch, if its agent is running.
+# Prints the workspace id for the project's worktree on the branch, if one is open.
+function find_workspace() {
+  herdr worktree list --cwd "$repo_root" | jq --raw-output --arg branch "$worktree" \
+    'first(.result.worktrees[] | select(.branch == $branch) | .open_workspace_id // empty) // empty'
+}
+
+# Prints the pane id of the agent running in the given workspace, if any.
 function find_agent() {
-  local workspace_id checkout_path
+  local workspace_id="$1"
 
-  while read -r workspace_id checkout_path; do
-    if [[ "$(git -C "$checkout_path" rev-parse --abbrev-ref HEAD 2>/dev/null || true)" != "$worktree" ]]; then
-      continue
-    fi
-
-    herdr agent list | jq --raw-output --arg id "$workspace_id" \
-      'first(.result.agents[] | select(.workspace_id == $id) | "\($id) \(.pane_id)") // empty'
-
-    return 0
-  done < <(herdr workspace list | jq --raw-output --arg root "$repo_root" '
-    .result.workspaces[]
-    | select(.worktree.repo_root == $root and .worktree.is_linked_worktree == true)
-    | "\(.workspace_id) \(.worktree.checkout_path)"
-  ')
+  herdr agent list | jq --raw-output --arg id "$workspace_id" \
+    'first(.result.agents[] | select(.workspace_id == $id) | .pane_id) // empty'
 }
 
 # Parse arguments
@@ -111,29 +105,37 @@ fi
 
 herdr-project open "$project" --worktree "$worktree" --no-focus
 
-agent=""
+workspace_id=""
+pane_id=""
 
 for ((second = 0; second < TIMEOUT_SECONDS; second++)); do
-  agent=$(find_agent)
+  workspace_id=$(find_workspace)
 
-  if [[ -n "$agent" ]]; then
-    break
+  if [[ -n "$workspace_id" ]]; then
+    pane_id=$(find_agent "$workspace_id")
+
+    if [[ -n "$pane_id" ]]; then
+      break
+    fi
   fi
 
   sleep 1
 done
 
-if [[ -z "$agent" ]]; then
-  echo "Error: No agent started for $worktree in $project within ${TIMEOUT_SECONDS}s." >&2
+if [[ -z "$workspace_id" ]]; then
+  echo "Error: No workspace opened for $worktree in $project within ${TIMEOUT_SECONDS}s." >&2
   exit 1
 fi
 
-read -r workspace_id pane_id <<< "$agent"
+if [[ -z "$pane_id" ]]; then
+  echo "Error: Workspace $workspace_id opened, but no agent started for $worktree in $project within ${TIMEOUT_SECONDS}s." >&2
+  exit 1
+fi
 
-herdr workspace rename "$workspace_id" "$label" > /dev/null
+herdr workspace rename "$workspace_id" "$label" >/dev/null
 
 # A new agent reports `unknown` until its TUI settles.
-if ! herdr agent wait "$pane_id" --until idle --timeout "$((TIMEOUT_SECONDS * 1000))" > /dev/null; then
+if ! herdr agent wait "$pane_id" --until idle --timeout "$((TIMEOUT_SECONDS * 1000))" >/dev/null; then
   echo "Error: The agent in pane $pane_id was not ready within ${TIMEOUT_SECONDS}s." >&2
   exit 1
 fi
