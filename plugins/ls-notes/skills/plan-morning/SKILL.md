@@ -117,14 +117,14 @@ For each open PR, fetch its review and CI status:
 gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeable,latestReviews
 ```
 
-Assign each open PR a status emoji using this priority order:
+Assign each PR a status emoji and label. A PR merged today (from the merged-PR search) always gets 🚀 Merged; every other, open PR uses this priority order:
 
-- 💬: `reviewDecision` is `CHANGES_REQUESTED`, or `reviewDecision` is not `APPROVED` and any entry in `latestReviews` has `state` `COMMENTED` (a reviewer left feedback without approving)
-- ❌: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
-- 💔: `mergeable` is `CONFLICTING` (merge conflicts)
-- ⏱️: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
-- ❓: Any other merge-blocking condition, including `mergeable` being unresolved (`UNKNOWN`)
-- ✅: All CI checks pass, PR is approved, and no pending review requests
+- 💬 Feedback: `reviewDecision` is `CHANGES_REQUESTED`, or `reviewDecision` is not `APPROVED` and any entry in `latestReviews` has `state` `COMMENTED` (a reviewer left feedback without approving)
+- ☠️ CI Failing: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
+- 🥊 Conflict: `mergeable` is `CONFLICTING` (merge conflict)
+- ⏱️ Awaiting Review: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
+- 🚫 Blocked: Any other merge-blocking condition, including `mergeable` being unresolved (`UNKNOWN`)
+- ✅ Ready: All CI checks pass, PR is approved, and no pending review requests
 
 Format each PR title:
 
@@ -134,13 +134,13 @@ Format each PR title:
 
 Leave the remaining text's casing exactly as the PR title has it.
 
-Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader. A PR merged today is checked off (`[x]`), with ` (merged)` in place of a status emoji:
+Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader. End each line with its status emoji and label in parens. A PR merged today is checked off (`[x]`), with `(🚀 Merged)` in place of the status:
 
 ```markdown
 - [ ] Update/merge open pull requests
-  - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) 💬
-  - [ ] [webapp: Fix login redirect on expired session](https://github.com/example-org/webapp/pull/1234) ❌
-  - [x] [payments: Add retry logic for failed charges](https://github.com/example-org/payments-service/pull/7) (merged)
+  - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) (💬 Feedback)
+  - [ ] [webapp: Fix login redirect on expired session](https://github.com/example-org/webapp/pull/1234) (❌ CI Failing)
+  - [x] [payments: Add retry logic for failed charges](https://github.com/example-org/payments-service/pull/7) (🚀 Merged)
 ```
 
 **Resolve auto-titled links:** Obsidian automatically converts pasted URLs into markdown links, but its title-fetch often lacks permissions, leaving a generic site name as the label (`Slack`, `GitHub`, `Linear`, `Notion`, etc.). Scan today's note and the recent prior notes for tasks with these placeholder labels and fix each one in place:
@@ -165,7 +165,7 @@ _Add, edit, and remove tasks to plan today._
 ### Work
 
 - [ ] Update/merge open pull requests
-  - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) 💬
+  - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) (💬 Feedback)
 
 ## Gratitude
 
