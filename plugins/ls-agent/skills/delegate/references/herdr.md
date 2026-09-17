@@ -29,4 +29,4 @@ Open by naming where the prompt came from, or it reads as the user speaking and 
 Then, beyond what any delegation needs, tell the agent:
 
 - To follow its own repository's conventions and review process rather than anything inferred from your prompt.
-- To run `ls-agent:plan` before starting on the task, unless the task is trivial: a handful of lines with no design decision to make, like a copy fix or a one-line config change. Skip planning for those and implement directly.
+- To run `ls-agent:plan` before starting on the task, unless the task would fit in a single commit. Skip planning for those and implement directly.
