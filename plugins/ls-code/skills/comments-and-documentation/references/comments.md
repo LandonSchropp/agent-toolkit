@@ -19,13 +19,14 @@ This exists to stop you answering review pushback by writing the defense into th
 
 ## Rationalizations
 
-| Thought                                         | Reality                                                             |
-| ----------------------------------------------- | ------------------------------------------------------------------- |
-| "This documents why, not what"                  | Why is rationale. Rationale lives in a reference file.              |
-| "It's load-bearing institutional knowledge"     | Knowledge worth keeping is worth keeping where it's looked for.     |
-| "A future reader needs this warning right here" | They need it in the reference file, where it survives a copy-paste. |
-| "That incident was expensive to learn from"     | Expense is what makes it rationale, not what exempts it.            |
-| "Every sentence in it earns its place"          | Length is the test, not the defense. Past one line, it moves.       |
-| "Deleting it destroys the only record"          | Moving it is not deleting it. Write the reference file, then cut.   |
-| "This repository has nowhere to put it"         | Create `references/<topic>.md`. No destination is not an exemption. |
-| "I'll tighten the comment instead"              | Rewriting in place leaves rationale in the source. Move it.         |
+| Thought                                          | Reality                                                                                                                    |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| "This documents why, not what"                   | Why is rationale, and it leaves the source. Default to the commit message; a reference file only if durable and conventional. |
+| "It's load-bearing institutional knowledge"      | Institutional weight doesn't justify a new `references/` directory by itself. Even durable knowledge defaults to the commit message until the repo already keeps this kind of thing in `references/`. |
+| "A future reader needs this warning right here"  | They need it out of the source. The commit message is the default even for a durable warning, until the repo already has a reference-file convention. |
+| "That incident was expensive to learn from"      | Expense is what makes it rationale, not what decides where it goes.                                                       |
+| "Every sentence in it earns its place"           | Length is the test, not the defense. Past one line, it leaves.                                                            |
+| "Deleting it destroys the only record"           | The commit message or a reference file keeps the record. Only delete outright when nothing needs to survive.             |
+| "This repository has nowhere to put it"          | No destination is the common case, not a gap to fill. The commit message is always available.                            |
+| "I'll fold it into the commit message"           | Fine for a one-off. Not fine when the repo already keeps this kind of knowledge in `references/` — durable content still goes where readers look for it. |
+| "I'll tighten the comment instead"                | Rewriting in place leaves rationale in the source. It has to leave.                                                       |
