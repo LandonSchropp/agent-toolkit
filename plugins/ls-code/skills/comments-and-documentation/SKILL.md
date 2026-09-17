@@ -1,6 +1,6 @@
 ---
 name: comments-and-documentation
-description: Use when writing or editing a code comment or a documentation block, and when reviewing the comments and documentation in a diff before presenting it. Decides what stays in the source, what moves to reference documentation, and what gets deleted.
+description: Use when writing or editing a code comment or a documentation block, and when reviewing the comments and documentation in a diff before presenting it. Decides what stays in the source, what moves to the commit message or reference documentation, and what gets deleted.
 ---
 
 # Comments And Documentation
@@ -21,20 +21,25 @@ List every comment and every documentation block the diff touches, with its line
 - `label, kept`: A one-line comment naming what the code is.
 - `contract, kept`: Documentation already at the contract and no larger.
 - `trimmed`: Documentation cut down to the contract.
-- `moved to <path>`: Rationale, whose content now lives in a reference file and is gone from the source.
-- `deleted`: It restated the code, so the code already says it and nothing needs to survive.
+- `noted in commit message`: Rationale folded into the introducing commit, gone from the source.
+- `moved to <path>`: Durable rationale, now in a reference file and gone from the source.
+- `deleted`: It restated the code, or wasn't worth keeping anywhere.
 
-There is no sixth disposition. "Kept, because it explains something the code can't" is not one of these, and writing that sentence means the check did not run. An entry you never listed is an entry you never checked.
+There is no seventh disposition. "Kept, because it explains something the code can't" is not one of these, and writing that sentence means the check did not run. An entry you never listed is an entry you never checked.
 
-## Rationale Has One Destination
+## Rationale Has Three Homes
 
 Neither form argues. Rationale is why this approach, what broke last time, what not to do instead.
 
-Move it into the repository's reference documentation. When the repository has none, create `references/<topic>.md` and start it. Having no destination yet is not an exemption, and moving is not deleting: the content survives where a reader goes looking for it.
+Default to the commit message: it already answers "why", and most rationale is one-off, belonging to the change that prompted it. Fold it in, delete the comment.
 
-The documentation block above the code is not a destination. Rationale relocated there is the same essay six lines higher, now dressed as a contract.
+Reach for `references/<topic>.md` only when the repository already treats reference files as durable knowledge's home. Starting that convention is a deliberate call about the repo, not something one long comment should trigger on its own — so even genuinely durable rationale defaults to the commit message until the repo earns a reference file the normal way. Moving is not deleting: the content survives where a reader looks for it.
 
-Leave no pointer behind. Neither form may refer to anything outside its own file, because code gets copied out of its home and a path dangles the moment it moves.
+Rationale that's neither durable nor worth a commit-message note gets deleted outright.
+
+The documentation block above the code is not a destination for any of this — the same essay six lines higher, now dressed as a contract.
+
+Leave no pointer behind: neither form may refer to anything outside its own file, since code gets copied out of its home and a path dangles the moment it moves.
 
 ## Rationalizations
 

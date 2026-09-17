@@ -6,7 +6,7 @@ Documentation states the behavioral contract of the module it represents. For fu
 
 - Narration of the implementation: what it calls, what it awaits, what it loops over.
 - Type information the types already carry.
-- Rationale, which moves rather than dies.
+- Rationale, which leaves rather than dies.
 - Examples of the obvious call. Keep an example only where the calling shape is genuinely surprising.
 - Asides: history and performance notes.
 - Ceremony. "This method is responsible for" is four words before the sentence starts.
@@ -23,7 +23,7 @@ Growing a slim, clean documentation block while restructuring the code under it 
 
 | Thought                                         | Reality                                                          |
 | ----------------------------------------------- | ---------------------------------------------------------------- |
-| "I'll put it in the docstring instead"          | Same file, same essay. It goes to a reference file.              |
+| "I'll put it in the docstring instead"          | Same file, same essay. It leaves — usually into the commit message, a reference file only if durable and conventional. |
 | "I restructured this, so I'll document it more" | Same behavior, same documentation. Revert the expansion.         |
 | "The old docs were too sparse"                  | Sparse and correct is the target, not a defect to fix.           |
 | "The types are unclear, so I'll restate them"   | Fix the types. Documentation that mirrors them drifts from them. |
