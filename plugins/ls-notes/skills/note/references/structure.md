@@ -6,7 +6,7 @@ The vault uses the PARA method with extensions for periodic notes, knowledge cap
 - **Areas/**: Ongoing areas of responsibility (AI, Business, Development, PKMS, Personal, Work).
 - **Resources/**: Reference materials.
   - **Learning Notes/**: Notes from books, podcasts, talks, courses.
-  - **Today I Learned/**: Quick technical discoveries.
+  - **Today I Learned/**: Quick technical discoveries. **User-authored only: an agent must never write here.**
   - **Articles/**: Saved web articles.
   - **Ideas/**, **Thoughts/**, **Questions/**, **Lists/**, **Principles/**, **Saved Feedback/**.
 - **Archive/**: Completed or inactive items.
