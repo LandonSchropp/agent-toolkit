@@ -123,7 +123,8 @@ Assign each PR a status emoji and label. A PR merged today (from the merged-PR s
 - ☠️ CI Failing: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
 - 🥊 Conflict: `mergeable` is `CONFLICTING` (merge conflict)
 - ⏱️ Awaiting Review: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
-- 🚫 Blocked: Any other merge-blocking condition, including `mergeable` being unresolved (`UNKNOWN`)
+- ❓ Pending: `mergeable` is `UNKNOWN` (GitHub hasn't finished computing mergeability yet)
+- 🚫 Blocked: Any other merge-blocking condition
 - ✅ Ready: All CI checks pass, PR is approved, and no pending review requests
 
 Format each PR title:
