@@ -103,7 +103,7 @@ if [[ -z "$repo_root" ]]; then
   exit 1
 fi
 
-herdr-project open "$project" --worktree "$branch" --no-focus
+herdr-project open --project "$project" --worktree "$branch" --no-focus
 
 workspace_id=""
 pane_id=""
