@@ -41,7 +41,7 @@ The daily note is filled in from `Templates/Periodic/Daily Note.md`. Each note h
   - **Quarterly** (first Sunday of the quarter)**:** Recurring quarterly chores.
 - **Habits:** Daily habit tracking, broken into:
   - **Tracking:** One bullet per habit, each holding a Meta Bind toggle per slot (`` `INPUT[toggle:habits.<habit>.<slot>]` ``). See Habit Toggles below.
-  - **Identity Vote:** The day's identity vote. Filling it in belongs to the habit workflows, not this skill.
+  - **Identity Vote:** The day's identity vote. Filling it in belongs to the `ls-notes:plan-morning` skill, not this skill.
 - **Morning:** Morning journaling, broken into:
   - **Gratitude:** Three things the user is grateful for.
   - **Better Day:** Three things that would make today great.
