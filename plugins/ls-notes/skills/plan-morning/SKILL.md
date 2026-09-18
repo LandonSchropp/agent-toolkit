@@ -7,7 +7,7 @@ description: Use when the user says "plan my morning" or wants to fill out morni
 
 **REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
 
-This skill is split into 3 phases: pre-process the scratch files, run one editing pass through up to three windows (Yesterday, Today, Standup), then post-process the results.
+This skill is split into 4 phases: pre-process the scratch files, run one editing pass through up to three windows (Yesterday, Today, Standup), post-process the results, then hand off any PR that needs follow-up.
 
 Before doing anything else, read yesterday's and today's daily note files. (Today's note already having content is expected, not ambiguous.)
 
@@ -269,3 +269,19 @@ The resulting section, whether it already existed or had to be added:
 ### From Standup
 
 If the Standup window ran, parse its sections and hand off to `oyster-team-ai:standup`: "The user has already filled in their standup answers via an interactive editor — skip all context-gathering and question steps, compose the message, and post it directly without asking for confirmation. Yesterday: [content, or `N/A` when blank], Today: [content from file], Blockers: [content or none], Feeling: [content or none]." A blank Yesterday means the user chose not to report one, so pass `N/A` rather than filling it in for them.
+
+## Phase 4: Follow-Up Orchestration
+
+Look at the statuses already assigned in **Today's Content**. Every open PR carrying `💬 Feedback`, `☠️ CI Failing`, `🥊 Conflict`, `⏱️ Awaiting Review`, or `🚫 Blocked` needs a workspace to act on it. `❓ Pending` doesn't — GitHub hasn't finished computing it yet, so there's nothing to act on.
+
+Offer to hand off each flagged PR. On approval, build each PR's task from its status(es) — a PR carrying more than one status gets every matching task:
+
+- `☠️ CI Failing`: "Fix the failing CI checks on `<PR URL>`."
+- `💬 Feedback`: "Go through the review feedback on `<PR URL>` one point at a time. Quote each piece of feedback directly, verbatim, then wait for a decision on what to do about it before moving to the next point."
+- `🥊 Conflict`: "Resolve the merge conflict on `<PR URL>`."
+- `⏱️ Awaiting Review`: "Check whether `<PR URL>` was already posted in Slack for review. If it wasn't, post it there."
+- `🚫 Blocked`: "Investigate why `<PR URL>` is blocked (`mergeStateStatus` is `BLOCKED`) and resolve it."
+
+For each PR, check whether it already has a running agent on its branch first — per `ls-agent:delegate`'s guidance for finding one — and send the task there directly if so. Route everything else through **REQUIRED:** the `ls-agent:orchestrate` skill; these tasks are independent of each other and of everything else outstanding.
+
+Once every workspace from this hand-off is closed, or there was nothing to flag, or the user declined the offer, offer to close this plan-morning workspace. **REQUIRED:** invoke the `ls-agent:close-workspace` skill.
