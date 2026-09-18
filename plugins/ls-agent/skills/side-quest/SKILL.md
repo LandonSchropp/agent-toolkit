@@ -20,14 +20,14 @@ If the user's arguments already describe the side quest, that description is the
 
 ## Returning to the Main Thread
 
-Once the hand-off is done, say where the side quest went in one sentence and resume the main task where it left off. Don't keep working on the side quest here, even if it comes up again; point back to the agent that owns it. After that one mention, don't bring the side quest up again unless the user explicitly asks about it; it's the delegated agent's to report on now.
+Once the hand-off is done, say where the side quest went in one sentence and resume the main task where it left off. Don't keep working on the side quest here, even if it comes up again; point back to the agent that owns it. After that one mention, don't bring the side quest up again unless the user explicitly asks about it. Nothing comes back to this session to report — the user watches the delegated agent's own workspace directly.
 
 ## Rationalizations
 
-| Thought                                     | Reality                                                                      |
-| ------------------------------------------- | ---------------------------------------------------------------------------- |
-| "The side quest is obvious, skip the check" | Obvious from context still isn't the same as user-described. Outline and ask. |
-| "They gave a description, confirm anyway"   | The description already is the confirmation. Proceed.                       |
-| "It's nearly done, I'll just finish it"     | The user asked to split it out. Delegate it.                                 |
-| "The agent needs the main task for context" | Only what bears on the side quest. The rest pulls it off track the same way. |
-| "I'll check in on the side quest's progress" | It's delegated. Don't mention it again unless the user asks.                |
+| Thought                                      | Reality                                                                       |
+| -------------------------------------------- | ----------------------------------------------------------------------------- |
+| "The side quest is obvious, skip the check"  | Obvious from context still isn't the same as user-described. Outline and ask. |
+| "They gave a description, confirm anyway"    | The description already is the confirmation. Proceed.                         |
+| "It's nearly done, I'll just finish it"      | The user asked to split it out. Delegate it.                                  |
+| "The agent needs the main task for context"  | Only what bears on the side quest. The rest pulls it off track the same way.  |
+| "I'll check in on the side quest's progress" | It's delegated. Don't mention it again unless the user asks.                  |
