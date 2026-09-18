@@ -29,6 +29,10 @@ The receiving agent has none of this conversation, and nothing it replies reache
 
 Pass the task through as the user gave it. Don't reinterpret it, improve it, or decide it needs less than it asks for. Each platform's reference adds what its own prompts need on top of this.
 
+## Telling the User
+
+Delegation is final. Say what was sent and where, then stop — never tell the user the agent will "report back" or "let you know" when it's done. Nothing it does flows back through this session; the user checks its progress by watching its own workspace or issue directly.
+
 ## Rationalizations
 
 | Thought                                           | Reality                                                                           |
@@ -42,3 +46,4 @@ Pass the task through as the user gave it. Don't reinterpret it, improve it, or 
 | "I'll reuse the running agent, it's faster"       | A fresh worktree keeps the work on its own branch. Reuse only when asked.         |
 | "I'll paste in the Linear issue's description"    | Give the URL. The agent reads the issue itself; the issue is the source of truth. |
 | "Skills live in `agent-toolkit`"                  | Only those already there, overseen by the user, or used outside Multica.          |
+| "I'll say it'll report back when it's done"       | Delegation is final. Nothing reaches this session; the user checks the workspace. |
