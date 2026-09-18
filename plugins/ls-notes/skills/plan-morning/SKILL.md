@@ -114,18 +114,19 @@ gh search prs --author=@me --owner=<organization> --merged --merged-at=<today's 
 For each open PR, fetch its review and CI status:
 
 ```bash
-gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeable,latestReviews
+gh pr view <url> --json reviewDecision,statusCheckRollup,reviewRequests,mergeable,mergeStateStatus,latestReviews
 ```
 
-Assign each PR a status emoji and label. A PR merged today (from the merged-PR search) always gets 🚀 Merged; every other, open PR uses this priority order:
+Assign each PR every status emoji and label that applies. A PR merged today (from the merged-PR search) always gets `🚀 Merged` on its own, in place of the checks below. For every other, open PR, check each condition independently:
 
-- 💬 Feedback: `reviewDecision` is `CHANGES_REQUESTED`, or `reviewDecision` is not `APPROVED` and any entry in `latestReviews` has `state` `COMMENTED` (a reviewer left feedback without approving)
-- ☠️ CI Failing: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
-- 🥊 Conflict: `mergeable` is `CONFLICTING` (merge conflict)
-- ⏱️ Awaiting Review: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
-- ❓ Pending: `mergeable` is `UNKNOWN` (GitHub hasn't finished computing mergeability yet)
-- 🚫 Blocked: Any other merge-blocking condition
-- ✅ Ready: All CI checks pass, PR is approved, and no pending review requests
+- `💬 Feedback`: `reviewDecision` is `CHANGES_REQUESTED`, or `reviewDecision` is not `APPROVED` and any entry in `latestReviews` has `state` `COMMENTED` (a reviewer left feedback without approving)
+- `☠️ CI Failing`: Any entry in `statusCheckRollup` has `state` (or `conclusion`) of `FAILURE` or `ERROR`
+- `🥊 Conflict`: `mergeable` is `CONFLICTING` (merge conflict)
+- `⏱️ Awaiting Review`: `reviewRequests` is non-empty (one or more reviewers have been requested but haven't reviewed yet)
+- `❓ Pending`: `mergeable` is `UNKNOWN` (GitHub hasn't finished computing mergeability yet)
+- `🚫 Blocked`: `mergeStateStatus` is `BLOCKED`.
+
+If none of the above match, use `✅ Ready` on its own: all CI checks pass, the PR is approved, and no reviews are pending.
 
 Format each PR title:
 
@@ -135,12 +136,12 @@ Format each PR title:
 
 Leave the remaining text's casing exactly as the PR title has it.
 
-Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader. End each line with its status emoji and label in parens. A PR merged today is checked off (`[x]`), with `(🚀 Merged)` in place of the status:
+Merge each PR into today's note as an indented subtask under `- [ ] Update/merge open pull requests` in the Work subheader. End each line with its status emoji(s) and label(s) in parens, comma-separated when more than one applies. A PR merged today is checked off (`[x]`), with `(🚀 Merged)` in place of the status:
 
 ```markdown
 - [ ] Update/merge open pull requests
-  - [ ] [WIDGETS: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) (💬 Feedback)
-  - [ ] [webapp: Fix login redirect on expired session](https://github.com/example-org/webapp/pull/1234) (❌ CI Failing)
+  - [ ] [widget-service: Add pagination to widget list](https://github.com/example-org/widget-service/pull/42) (💬 Feedback, ☠️ CI Failing)
+  - [ ] [webapp: Fix login redirect on expired session](https://github.com/example-org/webapp/pull/1234) (☠️ CI Failing)
   - [x] [payments: Add retry logic for failed charges](https://github.com/example-org/payments-service/pull/7) (🚀 Merged)
 ```
 
