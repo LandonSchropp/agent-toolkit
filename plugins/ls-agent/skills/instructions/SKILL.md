@@ -5,24 +5,22 @@ description: Use at the start of any task, before taking action, to load the alw
 
 # Instructions
 
-Before doing anything else, check the following environment variables to determine which environment you're running in.
+Before doing anything else, check whether `$HERDR_ENV` is set to determine which environment you're running in.
 
-| Environment | Environment Variable |
-| ----------- | -------------------- |
-| Herdr       | `$HERDR_ENV`         |
-| OpenClaw    | `$OPENCLAW_SHELL`    |
+- Herdr: `$HERDR_ENV` is set. This is where all development work happens.
+- General-purpose: `$HERDR_ENV` is not set. You're a general-purpose agent, such as OpenClaw or Hermes.
 
 Then, you **MUST** read ALL of the reference files applicable to your environment.
 
-| Reference                                                        | Environment |
-| ---------------------------------------------------------------- | ----------- |
-| [Communication](references/communication.md)                     | All         |
-| [Skill scripts](references/skill-scripts.md)                     | All         |
-| [Terminal](references/terminal.md)                               | All         |
-| [Herdr](references/herdr.md)                                     | Herdr       |
-| [Git](references/git.md)                                         | Herdr       |
-| [Test-driven development](references/test-driven-development.md) | Herdr       |
-| [OpenClaw](references/openclaw.md)                               | OpenClaw    |
+| Reference                                                        | Environment     |
+| ---------------------------------------------------------------- | --------------- |
+| [Communication](references/communication.md)                     | All             |
+| [Skill scripts](references/skill-scripts.md)                     | All             |
+| [Terminal](references/terminal.md)                               | All             |
+| [Herdr](references/herdr.md)                                     | Herdr           |
+| [Git](references/git.md)                                         | Herdr           |
+| [Test-driven development](references/test-driven-development.md) | Herdr           |
+| [General-purpose](references/general-purpose.md)                 | General-purpose |
 
 ## EXTREMELY IMPORTANT
 

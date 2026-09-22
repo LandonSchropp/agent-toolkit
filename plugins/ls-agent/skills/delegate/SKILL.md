@@ -13,7 +13,7 @@ Hand a task to an agent better placed to do it. Choose the platform first; it de
 - **OpenClaw:** The task edits no repository and needs no development environment. It belongs to the standing personal agent whose domain it falls in, which keeps the context and follows up on its own schedule. See [OpenClaw](references/openclaw.md).
 - **Claude Design:** The task is visual design. See [Claude Design](references/claude-design.md).
 
-Route by the task, never by where this session happens to be running. `$HERDR_ENV` and `$OPENCLAW_SHELL` say which platform you are on, which changes how you reach a target and how you reach the user, never which target gets the task.
+Route by the task, never by where this session happens to be running. `$HERDR_ENV` says whether you are in Herdr or a general-purpose agent, which changes how you reach a target and how you reach the user, never which target gets the task.
 
 ## Skills
 
