@@ -35,7 +35,7 @@ Run Bash commands one at a time. Don't chain commands together with `&&` or `;`.
 
 When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two.
 
-A main checkout closes the same way a linked worktree does; an agent closes itself out either way. The one exception is a main checkout whose child worktrees are still open, since closing it takes their tabs with it: leave that one open and say why.
+A main checkout closes the same way a linked worktree does; an agent closes itself out either way, even when its child worktrees are still open.
 
 - **Repositories that merge directly into the default branch:** On approval, **REQUIRED:** invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
 - **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack, then the `ls-agent:close-workspace` skill. The branch outlives the worktree in the main checkout, and the pull request merges from there.
@@ -56,6 +56,6 @@ A main checkout closes the same way a linked worktree does; an agent closes itse
 | "Chaining commands saves a round trip"                 | Each command needs its own approval. Run them one at a time.               |
 | "I'll ask to merge now and to close later"             | One question covers both. Ask once, then do both.                          |
 | "The task is done, so the worktree can wait"           | An unmerged worktree is unfinished work. Offer to close it.                |
-| "This is the main checkout, not a worktree"            | It closes too, unless its child worktrees are still open.                  |
+| "This is the main checkout, not a worktree"            | It closes too, even with worktrees still open.                             |
 | "I'll merge into main, it's simpler"                   | Only where the repository merges directly. Elsewhere, open a pull request. |
 | "The pull request hasn't merged, so keep the worktree" | The branch survives in the main checkout. Close the worktree anyway.       |

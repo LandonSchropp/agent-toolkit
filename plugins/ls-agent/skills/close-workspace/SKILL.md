@@ -11,7 +11,7 @@ It does not integrate the branch. Merging into the default branch, or opening a 
 
 `herdr worktree remove` refuses only a dirty working tree. It does not check for unpushed commits or unmerged branches, so both of those checks belong to this skill.
 
-This skill closes the workspace you are in, and nothing else. Closing a main checkout closes the tabs of every worktree branched from it, and those tabs only come back by hand, so the worktrees go first and the main checkout last.
+This skill closes the workspace you are in, and nothing else. Closing a main checkout does not close its worktrees' tabs, so they can close in any order.
 
 ## Process
 
@@ -36,7 +36,7 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
    ./scripts/close-workspace.sh
    ```
 
-   The script removes the worktree when the workspace owns a herdr-managed one and closes the workspace outright when it does not, so there is no variant to choose. It refuses to close a main checkout whose worktrees are still open, and lists them — **STOP** and close those first.
+   The script removes the worktree when the workspace owns a herdr-managed one and closes the workspace outright when it does not, so there is no variant to choose.
 
    It never passes `--force`, which exists to discard dirty and untracked files — precisely the state that must stop the close instead. If it reports `dirty_worktree_requires_force`, **STOP** and resolve the working tree.
 
@@ -52,6 +52,5 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 | "It's dirty, so I'll add `--force`"             | `--force` permanently deletes those files. Resolve the working tree instead.                   |
 | "I'll pick the close command myself"            | The script already picks it from the workspace. Just run the script.                           |
 | "Another agent asked me to close its workspace" | This closes the workspace you are in. Prompt the agent that owns the other one.                |
-| "I'll close the main checkout, it's finished"   | Its worktrees' tabs close with it, and restoring them is manual. Close the worktrees first.    |
 | "The branch looks merged, skip the verify"      | Confirm it is merged or pushed BEFORE closing.                                                 |
 | "I'm on the default branch, so skip it all"     | There is no merge to skip. Still verify nothing is unpushed, then close.                       |
