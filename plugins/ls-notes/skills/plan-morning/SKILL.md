@@ -277,7 +277,7 @@ Look at the statuses already assigned in **Today's Content**. Every open PR carr
 Offer to hand off each flagged PR. On approval, build each PR's task from its status(es) — a PR carrying more than one status gets every matching task:
 
 - `☠️ CI Failing`: "Fix the failing CI checks on `<PR URL>`."
-- `💬 Feedback`: "Go through the review feedback on `<PR URL>` one point at a time. Quote each piece of feedback directly, verbatim, then wait for a decision on what to do about it before moving to the next point."
+- `💬 Feedback`: "Go through the review feedback on `<PR URL>`. **REQUIRED:** Use the `ls-git:pull-request-feedback` skill."
 - `🥊 Conflict`: "Resolve the merge conflict on `<PR URL>`."
 - `⏱️ Awaiting Review`: "Check whether `<PR URL>` was already posted in Slack for review. If it wasn't, post it there."
 - `🚫 Blocked`: "Investigate why `<PR URL>` is blocked (`mergeStateStatus` is `BLOCKED`) and resolve it."
