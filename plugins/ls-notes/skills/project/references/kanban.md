@@ -41,6 +41,29 @@ Example formatting:
   [category:: Development]
 ```
 
+## Agent Field
+
+The `[agent:: X]` field marks how much of a card an agent can take on. It goes in the trailing paragraph at the end of the card, one field per line, alongside the category tag if there is one. The value is always one of these three, in title case:
+
+| Value      | Meaning                                                                                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Auto`     | An agent can complete the whole card unattended. The user reviews the resulting code, pull request or note, and the card closes once they approve it. |
+| `Assisted` | An agent can do most of the card but needs the user mid-flight to answer questions or make a call.                                                    |
+| `Manual`   | There is nothing left for an agent to do: physical work, work that needs the user's taste, or work that needs the user specifically.                  |
+
+A card with no `agent` field has not been judged yet. That is a valid state, not an error to fix.
+
+**Preparatory work:** There is deliberately no value for groundwork such as research, pricing, or gathering that an agent could do but that wouldn't close the card. A card tagged as prep-only could never be closed by the agent that worked it, which leaves its state ambiguous. Instead, split the groundwork into its own card, mark the new card `[agent:: Auto]`, and link it from the original. The original keeps whatever value actually describes it. Every value except `Manual` describes work an agent can actually finish.
+
+```markdown
+- [ ] Task an agent can finish on its own
+
+  [category:: Development]
+  [agent:: Auto]
+```
+
+The field only renders as a pill on the board when `agent` is listed in `metadata-keys`, as shown in [The Settings Block](#the-settings-block). The values have no colors; `category-colors` applies to categories only.
+
 ## Category Colors
 
 A board can flavor its cards by category. The per-board `category-colors` setting maps `[category:: X]` values to named colors. A card whose category has a color gets a left stripe in that color, and the matching category pill gets a colored dot.
@@ -73,6 +96,12 @@ Prettier adds blank lines around the fence and a trailing newline, and the plugi
       "label": "Category",
       "shouldHideLabel": false,
       "containsMarkdown": false
+    },
+    {
+      "metadataKey": "agent",
+      "label": "Agent",
+      "shouldHideLabel": false,
+      "containsMarkdown": false
     }
   ],
   "category-colors": [
@@ -85,4 +114,4 @@ Prettier adds blank lines around the fence and a trailing newline, and the plugi
 %%
 ````
 
-That example shows both halves of the width rule: the `category-colors` entries fit on one line and stay inline, while the longer `metadata-keys` entry does not and expands.
+That example shows both halves of the width rule: the `category-colors` entries fit on one line and stay inline, while the longer `metadata-keys` entries do not and expand.

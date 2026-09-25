@@ -22,7 +22,7 @@ Supporting notes and assets are siblings of the board file. Don't nest them in s
 
 ## The Board File
 
-The board file is a kanban board. **REQUIRED:** Read [Kanban Boards](references/kanban.md) for checkbox types, indentation, category tags, category colors, and the settings block. Those rules apply to every board file in the vault, including the ones outside `Projects/`.
+The board file is a kanban board. **REQUIRED:** Read [Kanban Boards](references/kanban.md) for checkbox types, indentation, category tags, the agent field, category colors, and the settings block. Those rules apply to every board file in the vault, including the ones outside `Projects/`.
 
 Frontmatter:
 
