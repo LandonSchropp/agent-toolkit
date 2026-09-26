@@ -4,6 +4,8 @@ For files with `kanban-plugin: board` in the frontmatter, follow these formattin
 
 ## Card Formatting
 
+**Titles:** Start every card with a short, bold title on the checkbox line, and put the description in its own paragraph below it. A card that's only a wikilink uses the link as its title.
+
 **Checkbox types:** Use specific checkbox types for top-level list items based on the header text. Preserve existing checkboxes in sub-lists.
 
 | Header      | Checkbox Type |
@@ -23,15 +25,15 @@ For files with `kanban-plugin: board` in the frontmatter, follow these formattin
 Example formatting:
 
 ```markdown
-- [ ] Task with child content
+- [ ] **Task with child content**
 
   Additional description or notes about the task.
 
-- [ ] Task with category tag
+- [ ] **Task with category tag**
 
   [category:: Neovim]
 
-- [ ] Task with sub-list and category
+- [ ] **Task with sub-list and category**
 
   Fix ordering of results:
   - [ ] App files should come before spec files
@@ -56,7 +58,7 @@ A card with no `agent` field has not been judged yet. That is a valid state, not
 **Preparatory work:** There is deliberately no value for groundwork such as research, pricing, or gathering that an agent could do but that wouldn't close the card. A card tagged as prep-only could never be closed by the agent that worked it, which leaves its state ambiguous. Instead, split the groundwork into its own card, mark the new card `[agent:: Auto]`, and link it from the original. The original keeps whatever value actually describes it. Every value except `Manual` describes work an agent can actually finish.
 
 ```markdown
-- [ ] Task an agent can finish on its own
+- [ ] **Task an agent can finish on its own**
 
   [category:: Development]
   [agent:: Auto]
