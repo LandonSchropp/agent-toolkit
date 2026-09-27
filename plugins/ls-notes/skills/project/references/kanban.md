@@ -4,7 +4,7 @@ For files with `kanban-plugin: board` in the frontmatter, follow these formattin
 
 ## Card Formatting
 
-**Titles:** Start every card with a short, bold title on the checkbox line, and put the description in its own paragraph below it. A card that's only a wikilink uses the link as its title.
+**Titles:** Start every card with a bold title of a few words on the checkbox line, and put the description in its own paragraph below it. A card that's only a wikilink uses the link as its title.
 
 **Checkbox types:** Use specific checkbox types for top-level list items based on the header text. Preserve existing checkboxes in sub-lists.
 
