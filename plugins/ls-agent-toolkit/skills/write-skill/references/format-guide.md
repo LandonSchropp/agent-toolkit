@@ -116,7 +116,7 @@ wc -w skills/<skill-name>/SKILL.md
 - Move details to tool `--help` instead of documenting in skill
 - Reference other skills instead of repeating instructions
 - Compress examples to essentials
-- Don't repeat what's in cross-referenced skills
+- Don't repeat what's in cross-referenced skills (see [One Canonical Home](#one-canonical-home))
 - Don't explain what's obvious from the command
 
 ```markdown
@@ -127,8 +127,20 @@ wc -w skills/<skill-name>/SKILL.md
 <!-- GOOD: Reference help -->
 
 `search-conversations` supports multiple modes and filters. Run `--help` for details.
+```
 
-<!-- BAD: Repeat workflow from another skill -->
+## One Canonical Home
+
+Every rule, definition, and workflow has exactly one canonical home: the skill or reference file that owns it. Before writing anything into a skill, or editing one, find out whether it already lives somewhere else. Search the other skills and their references, and check the skills this one already requires.
+
+If it does, point to it with a requirement marker (see [Referencing Other Skills](#referencing-other-skills)) and write nothing more about it. A copy drifts: when the canonical home changes, the copy keeps teaching the old rule, and the agent can't tell which one is right. This includes partial copies, like a summary of what the other file covers or a restated list of allowed values.
+
+Point to another skill by requiring the skill itself, never one of its reference files. A skill only links to references in its own directory. The other skill decides which of its references to load, so it can reorganize them later without breaking anything that points to it.
+
+If it doesn't live anywhere yet, decide where it belongs before writing it. A rule that applies beyond this one skill belongs in the skill or reference that owns that broader subject, and this skill points to it.
+
+```markdown
+<!-- BAD: Restates the workflow another skill owns -->
 
 Before testing, commit your changes:
 
@@ -136,12 +148,26 @@ Before testing, commit your changes:
 2. Run `git diff` to see what changed
 3. Stage files with `git add`
 4. Create commit with descriptive message
-   [15 more lines of git workflow details]
+   [15 more lines of git workflow details that are repeated elsewhere]
 
-<!-- GOOD: Reference other skill -->
+<!-- BAD: Summarizes what the referenced file covers -->
 
-Before testing, commit your changes. REQUIRED: Use the `ls-git:git-commit` skill for the commit process.
+**REQUIRED:** Read [<Reference Name>](references/<reference>.md) for <topic A>, <topic B>, and <topic C>.
+
+<!-- GOOD: Points to the canonical home -->
+
+Before testing, commit your changes. **REQUIRED:** Use the `ls-git:git-commit` skill.
+
+**REQUIRED:** Read [<Reference Name>](references/<reference>.md).
 ```
+
+### Rationalizations
+
+| Thought                                          | Reality                                                              |
+| ------------------------------------------------ | -------------------------------------------------------------------- |
+| "A quick summary helps the agent"                | The summary goes stale when the source changes. Point to it instead. |
+| "Restating the values makes this skill complete" | The skill is complete once it points to where the values live.       |
+| "It's only one line"                             | One stale line is enough to contradict the source. Point to it.      |
 
 ## Referencing Other Skills
 
