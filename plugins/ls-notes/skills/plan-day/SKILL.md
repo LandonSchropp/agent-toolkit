@@ -19,8 +19,20 @@ A non-zero exit means `plan-day` failed, and its error is in the log. When the t
 
 Each comment is an instruction about its task. Carry out every one, editing the notes directly; ask the user only when a comment is ambiguous or needs a decision from them.
 
+## More Tasks
+
+Once every comment is carried out, ask the user whether there are any other tasks they'd like to add to today's daily note, and add them.
+
 ## Orchestration
 
-Once every comment is carried out, offer to hand off today's tasks to other agents. On approval, **REQUIRED:** invoke the `ls-agent:orchestrate` skill with the tasks the user picks.
+Once the user has no more tasks to add, offer to hand today's tasks to the orchestrator. It is only an offer: send nothing until the user approves.
 
-<!-- TODO: Expand on what orchestration looks like beyond running the orchestrate skill. -->
+On approval, **REQUIRED:** use the `ls-agent:delegate` skill to send this task to the agent in the `orchestrator` workspace:
+
+> The user just planned their day with another agent. Read today's daily note, then offer to coordinate and orchestrate its tasks. This is only an offer: ask the user which tasks to take on, and start nothing until they say so.
+
+Keep `delegate`'s line naming where the prompt came from, but drop its "proceed on your best judgment" clause and its instruction to run `ls-agent:plan`; this task waits on the user.
+
+If `herdr workspace list` has no workspace labeled `orchestrator`, open one instead of a new worktree, passing the prompt so it arrives once the agent starts: `herdr-project open --project orchestrate --name orchestrator --prompt '<prompt>'`.
+
+Once the handoff is sent or declined, **REQUIRED:** use the `ls-agent:close-workspace` skill to close this workspace.
