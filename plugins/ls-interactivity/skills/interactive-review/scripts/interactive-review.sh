@@ -2,18 +2,23 @@
 
 set -euo pipefail
 
+# SQLite database of reviewed commits and review overrides, shared with the commit hook.
+DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
+
 function print_help() {
   echo "Usage: interactive-review.sh <mode> [<arguments>] [--directory <path>]"
   echo
-  echo "Opens revdiff in a new herdr tab named 'review', blocks until the tab"
-  echo "closes, then prints the user's annotations to stdout (empty if they left"
-  echo "none). Must run inside herdr."
+  echo "Opens Hunk in a background herdr tab named 'review' and prints the repository"
+  echo "to listen to with 'hunk review listen --repo'. Returns right after starting"
+  echo "Hunk; it doesn't wait for a decision. Must run inside herdr."
   echo
-  echo "Every mode but 'commit' exits 0 if the user approved the changes when"
-  echo "prompted after closing revdiff, or 1 if they denied (or closed the tab"
-  echo "without answering). 'commit' mode has nothing to approve and always"
-  echo "exits 0. A mode with no changes to review prints an error and exits 1"
-  echo "without opening a review."
+  echo "If a review of the same repository is already open, reloads it in place,"
+  echo "keeping the user's comments. If a review of another repository is open,"
+  echo "refuses rather than closing it."
+  echo
+  echo "A mode with no changes to review prints an error and exits 1 without opening"
+  echo "a review. When review is disabled for this workspace, prints 'Review is"
+  echo "disabled for this workspace.' instead and exits 0."
   echo
   echo "Modes:"
   echo
@@ -30,10 +35,102 @@ function print_help() {
   echo "  --help              Show this help message and exit."
 }
 
-# Resolve the sibling scripts relative to this one, before changing directory.
-script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-inner="$script_directory/_interactive-review.sh"
-interactive_command="$script_directory/../../interactive-command/scripts/interactive-command.sh"
+# The disable-review skill suspends the review requirement for a herdr workspace by recording its
+# disable time. Treat the requirement as disabled while that time is within the last hour.
+function is_review_disabled() {
+  [[ -f "$DATABASE" ]] || return 1
+
+  [[ -n "$(sqlite3 "$DATABASE" \
+    "SELECT 1 FROM overrides
+     WHERE workspace = '$HERDR_WORKSPACE_ID'
+       AND disabled_at > strftime('%s', 'now') - 3600
+     LIMIT 1;" 2>/dev/null)" ]]
+}
+
+# Refuse to open Hunk on nothing, which is almost always the wrong mode. Each check mirrors what
+# Hunk shows in that mode, not whether the repository is dirty.
+function require_changes_to_review() {
+  case "$1" in
+  working)
+    if ! git diff --quiet || [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+      return 0
+    fi
+    ;;
+  staged | diff) if ! git diff --cached --quiet; then return 0; fi ;;
+  commit)
+    # A root commit has no parent, so compare it with the empty tree.
+    local base
+    base="$(git rev-parse --verify --quiet "$2^" || git hash-object -t tree /dev/null)"
+    if ! git diff --quiet "$base" "$2"; then return 0; fi
+    ;;
+  esac
+
+  echo "Error: The '$1' mode has no changes to review. Double check the mode is correct." >&2
+  exit 1
+}
+
+# Copy one revision's content into the ephemeral repository. Handles both individual files and
+# directories.
+function copy_revision() {
+  local source="$1" scratch
+  scratch="$(mktemp -d)"
+
+  if [[ -d "$source" ]]; then
+    cp -R "$source/." "$scratch"
+  else
+    cp "$source" "$scratch/$(basename "$source")"
+  fi
+
+  find "$scratch" -name .git -prune -exec rm -rf {} +
+  cp -R "$scratch/." .
+}
+
+# Stage two paths as the before and after of this workspace's ephemeral repository, and move into
+# it. While a review is open the repository is updated in place, so the review reloads rather than
+# starting over.
+function prepare_diff() {
+  local before after repository amend=(--amend)
+
+  before="$(realpath "$1")"
+  after="$(realpath "$2")"
+  repository="$(realpath "${TMPDIR:-/tmp}")/agent-toolkit/review-$HERDR_WORKSPACE_ID"
+
+  [[ -n "$(review_tab)" ]] || rm -rf "$repository"
+  mkdir -p "$repository"
+  cd "$repository"
+
+  if [[ ! -d .git ]]; then
+    git init --quiet .
+    amend=()
+
+    # Marks the repository as ephemeral, so approving the review records nothing.
+    git config --local review.ephemeral true
+  fi
+
+  # These files are reviewed precisely because they are outside version control, so the global
+  # ignore list — .env, *.local.md, tmp/ — must not decide what the user gets to see. Hence --force.
+  find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+  copy_revision "$before"
+  git add --all --force
+
+  git commit --quiet --allow-empty "${amend[@]}" --message before
+
+  find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+  copy_revision "$after"
+  git add --all --force
+}
+
+# The review tab open in this workspace, if any.
+function review_tab() {
+  herdr tab list --workspace "$HERDR_WORKSPACE_ID" |
+    jq --raw-output '.result.tabs[] | select(.label == "review") | .tab_id'
+}
+
+# The directory a review tab was opened in.
+function review_directory() {
+  herdr pane list --workspace "$HERDR_WORKSPACE_ID" |
+    jq --raw-output --arg tab "$1" 'first(.result.panes[] | select(.tab_id == $tab) | .cwd)'
+}
 
 directory=""
 positionals=()
@@ -75,7 +172,6 @@ if [[ -z "$mode" ]]; then
   exit 1
 fi
 
-# Ensure every mode (except for diff) includes a repository directory.
 if [[ "$mode" != "diff" ]]; then
   if [[ -z "$directory" ]]; then
     echo "Error: The --directory flag is required." >&2
@@ -87,9 +183,6 @@ if [[ "$mode" != "diff" ]]; then
   cd "$directory"
 fi
 
-# Validate here so bad arguments fail before a window opens, rather than flashing one that
-# closes with empty output. _interactive-review.sh's stderr dies with its tab, so this is the
-# only place an argument error is visible.
 case "$mode" in
 working | staged)
   if [[ "${#positionals[@]}" -gt 1 ]]; then
@@ -142,33 +235,60 @@ diff)
   ;;
 esac
 
-# revdiff writes annotations to its own scratch file; we print them afterward.
-output="$(mktemp)"
+# When review is disabled for this workspace the commit hook already allows commits, so there is
+# nothing to review.
+if is_review_disabled; then
+  echo "Review is disabled for this workspace."
+  exit 0
+fi
 
-# A shell in the herdr tab evaluates this string, so every word is quoted for it. diff mode's
-# paths are the only arguments that can carry a space or a metacharacter.
-command="$(printf '%q' "$inner")"
+# The arguments Hunk reviews each mode with.
+case "$mode" in
+working)
+  require_changes_to_review working
+  hunk_arguments=(diff --watch)
+  ;;
+staged)
+  require_changes_to_review staged
+  hunk_arguments=(diff --staged --watch)
+  ;;
+commit)
+  require_changes_to_review commit "${positionals[1]}"
+  hunk_arguments=(show --watch "${positionals[1]}")
+  ;;
+diff)
+  prepare_diff "${positionals[1]}" "${positionals[2]}"
+  require_changes_to_review diff
+  hunk_arguments=(diff --staged --watch)
+  ;;
+esac
 
-for positional in "${positionals[@]}"; do
-  command+=" $(printf '%q' "$positional")"
-done
+tab="$(review_tab)"
 
-command+=" --output $(printf '%q' "$output")"
+# When a review is already open, reload it with these changes rather than opening another.
+if [[ -n "$tab" ]]; then
+  open_directory="$(review_directory "$tab")"
 
-# Open the review and wait for the tab to close. Run interactive-command in
-# the background and forward termination to it so that if the agent kills this
-# wrapper early, its cleanup still closes the herdr tab. interactive-command.sh
-# relays _interactive-review.sh's own exit code (0 approved, 1 denied for every
-# mode but commit, which is always 0), so capture it here without letting
-# `set -e` abort before the annotations are printed.
-"$interactive_command" --command "$command" --name review &
-command_pid=$!
-trap 'kill "$command_pid" 2>/dev/null || true' EXIT INT TERM HUP
-wait "$command_pid" || exit_code=$?
-exit_code="${exit_code:-0}"
-trap - EXIT INT TERM HUP
+  if [[ "$open_directory" != "$(pwd -P)" ]]; then
+    echo "Error: A review of $open_directory is already open in this workspace. Close it first." >&2
+    exit 1
+  fi
 
-# The tab has closed; print the user's annotations, if any, then relay the
-# approve/deny outcome as this script's own exit code.
-cat -- "$output"
-exit "$exit_code"
+  # Reload the open review in place, which keeps the user's comments.
+  hunk session reload --repo "$PWD" -- "${hunk_arguments[@]}" >/dev/null
+# Otherwise, open Hunk in a new review tab.
+else
+  # A shell in the herdr tab evaluates this string, so every word is quoted for it.
+  printf -v command '%q ' hunk "${hunk_arguments[@]}"
+
+  pane="$(
+    herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd "$PWD" --label review --no-focus |
+      jq --raw-output '.result.root_pane.pane_id'
+  )"
+
+  # The trailing `exit` closes the tab when Hunk quits.
+  herdr pane run "$pane" "$command; exit" >/dev/null
+fi
+
+# Print the repository to listen to, which in diff mode is the temporary one.
+pwd
