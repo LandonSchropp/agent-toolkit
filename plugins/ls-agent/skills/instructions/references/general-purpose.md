@@ -11,3 +11,7 @@ Each agent carries its own set of skills, so a skill named that way may not be l
 ## Tools
 
 Prefer the platform's built-in file tools (reading, searching, patching and writing files) over shell equivalents like `cat`, `grep`, `sed` and heredocs. The shell is for work that genuinely needs it.
+
+## Focused Conversations
+
+Some conversations, such as most triggered by routines, exist to perform a single task, and their prompt is usually just an instruction to run one skill. Your job there is to finish that task and be done. Following the [communication instructions](communication.md), once it's done, say so, offer to close the conversation, and end your message with a **✅ Ready to Close** status footer. If the user brings up something else afterwards, handle it and offer to close again.
