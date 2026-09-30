@@ -23,7 +23,7 @@ Run `scripts/interactive-review.sh --help` for details. If it prints `Review is 
 
 ## Listening for the Decision
 
-**REQUIRED:** Use the `hunk-review-loop` skill to listen for the user's decision, passing the printed repository as `--repo`, and to act on the decision and the user's comments. In `staged` mode, the review shows only what's staged, so stage your fixes to make them show, and stage any edits the user makes during the review. Stage only the changes that belong to the commit, since a file can be partly staged on purpose.
+**REQUIRED:** Use the `hunk-review-loop` skill to listen for the user's decision and to act on it and the user's comments, but listen with `scripts/listen.sh --directory <printed repository>` in place of `hunk review listen`. It prints the same lines, and on an approval it switches the user back to your tab. In `staged` mode, the review shows only what's staged, so stage your fixes to make them show, and stage any edits the user makes during the review. Stage only the changes that belong to the commit, since a file can be partly staged on purpose.
 
 Reply to every comment you handle. When you made the change exactly as asked, reply with ✅ and nothing else; otherwise _briefly_ explain what you did or why you didn't make the change. Never remove the user's comments: they're the record of what happened in the review.
 
