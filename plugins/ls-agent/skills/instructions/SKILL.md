@@ -18,6 +18,7 @@ Then, you **MUST** read ALL of the reference files applicable to your environmen
 | [Skill scripts](references/skill-scripts.md)                     | All             |
 | [Terminal](references/terminal.md)                               | All             |
 | [Herdr](references/herdr.md)                                     | Herdr           |
+| [Status footer](references/status-footer.md)                     | Herdr           |
 | [Git](references/git.md)                                         | Herdr           |
 | [Test-driven development](references/test-driven-development.md) | Herdr           |
 | [General-purpose](references/general-purpose.md)                 | General-purpose |
