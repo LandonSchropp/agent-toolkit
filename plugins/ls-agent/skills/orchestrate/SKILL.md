@@ -15,7 +15,7 @@ Concretely: create no files, change no files, in any repository, including throu
 
 1. Get the parallelization, which lives at `/tmp/[slugified-title].md`. **REQUIRED:** Use the `ls-agent:parallelize` skill if there isn't one yet.
 2. Start the first stage. **REQUIRED:** Use the `ls-agent:delegate` skill once per task in it.
-3. Report what was started: the task, its project, and the workspace id.
+3. Report what was started: the task, its project, and the workspace label.
 4. **STOP.** Do not start the next stage. The user watches the work land and tells you when they are ready.
 5. On their word, tear down the finished stage's workspaces — **REQUIRED:** use the `ls-agent:close-workspace` skill — then start the next stage.
 

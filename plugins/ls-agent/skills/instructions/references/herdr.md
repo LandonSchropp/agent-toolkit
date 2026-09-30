@@ -31,6 +31,10 @@ Don't edit files outside the scope of the commit you're building. If you unavoid
 
 Run Bash commands one at a time. Don't chain commands together with `&&` or `;`. Each command is its own Bash tool call, so the user can review and approve them individually.
 
+## Referring to Workspaces
+
+When telling the user about a workspace, name it by the label shown in the herdr UI, never by its internal ID. The user never sees the IDs, so an ID tells them nothing. Keep IDs for herdr commands only; `herdr workspace list` maps them to labels.
+
 ## Finishing a Workspace
 
 When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two.
@@ -53,6 +57,7 @@ A main checkout closes the same way a linked worktree does; an agent closes itse
 | "No feedback last time, so skip it now"                | A new change is a new review. Present it.                                  |
 | "I'll commit everything in one go"                     | One atomic commit at a time, each reviewed separately.                     |
 | "The worktree has unrelated edits too"                 | Stage only this commit's files and review in staged mode.                  |
+| "The workspace ID is precise enough"                   | The user only sees labels. Name the workspace by its label.                |
 | "Chaining commands saves a round trip"                 | Each command needs its own approval. Run them one at a time.               |
 | "I'll ask to merge now and to close later"             | One question covers both. Ask once, then do both.                          |
 | "The task is done, so the worktree can wait"           | An unmerged worktree is unfinished work. Offer to close it.                |
