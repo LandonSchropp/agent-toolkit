@@ -60,17 +60,8 @@ working_directory = input["cwd"] || "."
 # Split the command into an array of words.
 words = Shellwords.split(command)
 
-# We only care about git commit commands, so ignore the rest.
-simplified_command = words
-  .filter { |word| ["git", "commit"].include?(word) }
-  .join(" ")
-
-# Only gate commands that create a commit; ignore everything else.
-exit 0 unless simplified_command.include?("git commit")
-
-# Amends, fixups and squashes edit existing history rather than adding new work, so leave them
-# alone.
-exit 0 if words[words.index("commit")..-1].grep(/\A--(amend|fixup|squash)(=|\z)/).any?
+# Only gate commands that mention a commit; ignore everything else.
+exit 0 unless [command, words.join(" ")].any? { |text| text.match?(/\bgit\b.*\bcommit\b/m) }
 
 # Reviewing needs herdr, so outside it there is no user to review anything and no way to record
 # one. Blocking there would deny every commit an unattended run makes.
@@ -79,13 +70,27 @@ exit 0 unless ENV.key?("HERDR_ENV")
 # If the user has temporarily disabled the review requirement for this session, allow the commit.
 exit 0 if review_disabled?
 
-# The hook runs in the session's primary repo, but the commit may target another one by passing
-# `git -C <dir>`. Use that directory when present. An in-command `cd` isn't visible here, so
-# commits in another repo must go through `git -C`.
-# Only a `-C` before the subcommand is that flag; after it, `git commit -C <commit>` reuses a
-# message.
-if (working_directory_index = words[0...words.index("commit")].index("-C"))
-  working_directory = words[working_directory_index + 1] || working_directory
+# A commit message can hold anything, so leave every `-m` or `--message` value out of the check.
+words = words.reject.with_index do |word, index|
+  word.match?(/\A(-[a-zA-Z]*m|--message)/) || (index.positive? && words[index - 1].match?(/\A(-[a-zA-Z]*m|--message)\z/))
+end
+
+# Only allow a lone `git commit`, so a chained `cd` can't move it into a repo this hook doesn't check.
+unless words.first == "git" && words.include?("commit") && words.none? { |word| word.match?(/[;&|]/) }
+  deny("Run `git commit` on its own, not chained or nested. Use `git -C <dir>` for another directory.")
+end
+
+commit_index = words.index("commit")
+
+# Amends, fixups and squashes edit existing history rather than adding new work, so leave them
+# alone.
+exit 0 if words[commit_index..-1].grep(/\A--(amend|fixup|squash)(=|\z)/).any?
+
+# The commit may target another repo by passing `git -C <dir>`, which git applies in order, each
+# relative to the last. Only a `-C` before the subcommand is that flag; after it,
+# `git commit -C <commit>` reuses a message.
+words[0...commit_index].each_with_index do |word, index|
+  working_directory = File.expand_path(words[index + 1], working_directory) if word == "-C"
 end
 
 # The commit builds on the target repo's HEAD. Before the first commit there is no HEAD to build
