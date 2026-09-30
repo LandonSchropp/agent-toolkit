@@ -22,7 +22,7 @@ When asked to edit a skill in this repository, always edit the skill under `plug
 
 ### Interactive Command Workflow
 
-Some skills need to hand control to the user in a separate window and block until they're done — running `revdiff` for a review, opening Neovim to edit a file, etc. That building block lives in `plugins/ls-interactivity`: `ls-interactivity:interactive-command` opens the given command in a new herdr tab and waits for it to close, and `ls-interactivity:interactive-review` and `ls-interactivity:interactive-edit` build on it for their respective workflows.
+Some skills need to hand control to the user in a separate window and block until they're done, such as opening Neovim to edit a file. That building block lives in `plugins/ls-interactivity`: `ls-interactivity:interactive-command` opens the given command in a new herdr tab and waits for it to close, and `ls-interactivity:interactive-edit` builds on it. `ls-interactivity:interactive-review` instead opens Hunk and returns immediately; decisions arrive through `hunk review listen`, from the [`hunk-review`](https://github.com/LandonSchropp/hunk-review) extension.
 
 Not every prompt needs a fully executable window. `plugins/ls-interactivity/skills/interactive-ui` hosts small, themed TUI utilities for quick user interactions without having to write a full application.
 

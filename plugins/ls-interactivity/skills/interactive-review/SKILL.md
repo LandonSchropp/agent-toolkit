@@ -1,14 +1,37 @@
 ---
 name: interactive-review
-description: Use when a skill needs the user to interactively review code changes in revdiff mid-workflow — working changes, staged changes, or a specific commit — then read their annotations back. Takes a review mode.
+description: Use when a skill needs the user to interactively review code changes in Hunk mid-workflow — working changes, staged changes, or a specific commit — then act on their decision and comments. Takes a review mode.
 user-invocable: false
 ---
 
 # Interactive Review
 
-Run `scripts/interactive-review.sh <mode> [<arguments>] [--directory <path>]` in the background. It opens revdiff in a new herdr tab named `review`, blocks until the tab closes, and prints the user's annotations to stdout, empty if they left none. The modes are `working`, `staged`, `commit <sha>`, and `diff <before> <after>`; run `scripts/interactive-review.sh --help` for details.
+## Opening the Review
+
+Run `scripts/interactive-review.sh <mode> [<arguments>] [--directory <path>]`. It opens Hunk in a background herdr tab named `review`, prints the repository to listen to, and returns right away. Running it again while that review is open reloads it in place, keeping the user's comments.
+
+The script supports several modes:
+
+- `working`: Unstaged changes only, including untracked files.
+- `staged`: Staged changes only.
+- `commit <sha>`: A single commit, compared with its parent.
+- `diff <before> <after>`: One path against another, neither of which needs to be in a repository. See [Reviewing Files Outside A Repository](#reviewing-files-outside-a-repository).
+
+Run `scripts/interactive-review.sh --help` for details. If it prints `Review is disabled for this workspace.` instead of a repository, skip the review.
 
 `--directory` is the repository holding the changes, which is not always the one the session started in. Pass it explicitly every time rather than relying on where the command happens to run. When it isn't the session's own repository, commit with `git -C <same directory>`: the commit hook resolves the repository from that flag and can't see a `cd`, so it blocks an approved commit without one.
+
+## Listening for the Decision
+
+**REQUIRED:** Use the `hunk-review-loop` skill to listen for the user's decision, passing the printed repository as `--repo`, and to act on the decision and the user's comments. In `staged` mode, the review shows only what's staged, so stage your fixes to make them show, and stage any edits the user makes during the review. Stage only the changes that belong to the commit, since a file can be partly staged on purpose.
+
+When the user approves, and before committing:
+
+1. Read the user's comments. Closing the tab ends the Hunk session, and its comments go with it.
+2. Run `scripts/record-approval.sh --directory <printed repository>`, so the commit hook allows the commit.
+3. Close the `review` tab. Closing Hunk also ends the listener.
+
+In `commit` mode the commit already exists, so skip `record-approval.sh`. The decision and comments still count.
 
 ## Reviewing Files Outside A Repository
 
@@ -16,7 +39,7 @@ Run `scripts/interactive-review.sh <mode> [<arguments>] [--directory <path>]` in
 
 Nothing records the before-state for you, so copy the file or directory somewhere first, before the first edit. Without that copy there is nothing to diff against, and no way to make one after the fact.
 
-For every mode but `commit`, the script's own exit code is the approve/deny decision: 0 if the user approved when prompted after closing revdiff, 1 if they denied (or closed the tab without answering). This is the only signal that matters — don't ask the user separately whether to commit or re-review. On approval, proceed to commit. On denial, address the annotations and invoke this skill again; do not attempt the commit in between, since the commit hook still blocks it either way. `commit` mode has nothing to approve and always exits 0.
+The review shows a copy of `<after>`, so it doesn't follow later edits. After revising, run the script again with the same paths to refresh the open review.
 
 ## Choosing Working vs. Staged Mode
 
@@ -26,12 +49,6 @@ Before invoking the script, run `git status`, and pick the mode from what it rep
 
 ## Closing the Review
 
-**REQUIRED:** Use the `ls-interactivity:interactive-command` skill, which covers when a tab gets closed and how.
+Once the user has approved and you've read their comments, close the `review` tab by its tab ID, the way the `ls-interactivity:interactive-command` skill closes a leftover tab. The tab has no script of its own to stop.
 
 NEVER ask the user to close the tab for you. Always close it yourself.
-
-## Handling a Stale Review
-
-Before opening a review, check whether a `review` herdr tab is already open in the current workspace. It's always a leftover from an earlier review that didn't close — e.g. its background process was killed before cleanup ran — since only one review runs at a time in a workspace.
-
-Close it automatically, without asking the user first, then open the new review normally. **REQUIRED:** Use the `ls-interactivity:interactive-command` skill for the close mechanics.

@@ -48,7 +48,7 @@ A person reads this. Include what a maintainer needs to act, and stop:
 
 Write the draft to a scratch file, plus an empty file to diff it against. **REQUIRED:** Use the `ls-interactivity:interactive-review` skill in `diff <empty file> <draft>` mode.
 
-Exit code 0 approves it. Nonzero means revise using the annotations and review again.
+When the user approves, create the issue, first making any small fixes their comments ask for. When they deny, revise the draft using their comments and review it again.
 
 CRITICAL: Never submit an issue without the user explicitly approving the draft!
 
@@ -70,7 +70,7 @@ Give the user the resulting URL.
 
 | Thought                                          | Reality                                                            |
 | ------------------------------------------------ | ------------------------------------------------------------------ |
-| "They said the draft looks good in chat"         | Only exit code 0 from the review approves it. Nothing else does.   |
+| "They said the draft looks good in chat"         | Approval in chat doesn't count. Wait for the review's decision.    |
 | "This repository's template doesn't fit"         | It's the maintainer's call, not yours. Use it or ask the user.     |
 | "More context helps the maintainer"              | It buries the report. Include what they need to act, and stop.     |
 | "A quick issue doesn't need the whole process"   | Every issue is drafted, reviewed and approved before it's created. |
