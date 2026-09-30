@@ -40,6 +40,19 @@ def reviewed?(head)
   !`sqlite3 #{DATABASE.shellescape} #{query.shellescape} 2>/dev/null`.strip.empty?
 end
 
+def deny(reason)
+  puts JSON.generate(
+    {
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "deny",
+        permissionDecisionReason: reason,
+      },
+    }
+  )
+  exit 0
+end
+
 input = JSON.parse($stdin.read)
 command = input.dig("tool_input", "command") || ""
 working_directory = input["cwd"] || "."
@@ -83,14 +96,4 @@ exit 0 if head.empty?
 # Allow the commit when the pending work on this base has already been reviewed.
 exit 0 if reviewed?(head)
 
-reason = "The user has not reviewed these changes. Invoke the ls-interactivity:interactive-review skill, present the changes to the user, and only commit once the user signs off."
-
-puts JSON.generate(
-  {
-    hookSpecificOutput: {
-      hookEventName: "PreToolUse",
-      permissionDecision: "deny",
-      permissionDecisionReason: reason,
-    },
-  }
-)
+deny("The user has not reviewed these changes. Invoke the ls-interactivity:interactive-review skill, present the changes to the user, and only commit once the user signs off.")
