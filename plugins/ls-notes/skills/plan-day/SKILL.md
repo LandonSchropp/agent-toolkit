@@ -1,9 +1,9 @@
 ---
-name: plan-morning
-description: Use when the user says "plan my morning" or wants to fill out morning journaling (Gratitude, Better Day, Daily Affirmation) and personal/work tasks for today's daily note.
+name: plan-day
+description: Use when the user says "plan my day" or "plan my morning", or wants to fill out morning journaling (Gratitude, Better Day, Daily Affirmation) and personal/work tasks for today's daily note.
 ---
 
-# Plan Morning
+# Plan Day
 
 **REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
 
@@ -11,7 +11,7 @@ The planning happens in `plan-day`, a terminal app on the user's `PATH` that wri
 
 ## Planning
 
-**REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill with `plan-day > /tmp/plan-morning-<date>.md 2> /tmp/plan-morning-<date>.log` as the command, where `<date>` is today's ISO date, and `plan-morning` as the tab name. With its output redirected, `plan-day` draws on the terminal and prints only a summary to the file.
+**REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill with `plan-day > /tmp/plan-day-<date>.md 2> /tmp/plan-day-<date>.log` as the command, where `<date>` is today's ISO date, and `plan-day` as the tab name. With its output redirected, `plan-day` draws on the terminal and prints only a summary to the file.
 
 A non-zero exit means `plan-day` failed, and its error is in the log. When the tab closes, read the summary.
 
