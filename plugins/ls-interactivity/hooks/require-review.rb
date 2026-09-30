@@ -14,8 +14,10 @@ require "shellwords"
 
 DATABASE = File.join(ENV["XDG_CACHE_HOME"] || File.join(ENV.fetch("HOME"), ".cache"), "agent-toolkit", "reviews.db")
 
-# The disable-review skill suspends the review requirement for a herdr workspace by recording its
-# disable time. Treat the requirement as disabled while that time is within the last hour.
+# Checks whether the review requirement is suspended for this herdr workspace. The disable-review
+# skill records a disable time, and the requirement stays suspended for an hour after it.
+#
+# @return [Boolean] True when the workspace disabled the review requirement within the last hour.
 def review_disabled?
   return false unless File.exist?(DATABASE)
 
@@ -31,8 +33,11 @@ def review_disabled?
   !`sqlite3 #{DATABASE.shellescape} #{query.shellescape} 2>/dev/null`.strip.empty?
 end
 
-# The pending work on this base has already been reviewed. Guard on the database file so a fresh
-# machine (no reviews recorded yet) doesn't create an empty one here.
+# Checks whether the pending work on a base has already been reviewed. Guard on the database file so
+# a fresh machine (no reviews recorded yet) doesn't create an empty one here.
+#
+# @param head [String] The SHA of the commit the pending work builds on.
+# @return [Boolean] True when a review is recorded for the head.
 def reviewed?(head)
   return false unless File.exist?(DATABASE)
 
@@ -40,6 +45,10 @@ def reviewed?(head)
   !`sqlite3 #{DATABASE.shellescape} #{query.shellescape} 2>/dev/null`.strip.empty?
 end
 
+# Denies the tool call and exits.
+#
+# @param reason [String] The explanation shown to the agent.
+# @return [void]
 def deny(reason)
   puts JSON.generate(
     {
