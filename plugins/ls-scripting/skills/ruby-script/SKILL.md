@@ -22,6 +22,25 @@ Two templates cover the two kinds of scripts. Copy the right one exactly and fil
 - stdout for primary output, stderr for errors/warnings/progress messages
 - Let a call raise and crash instead of wrapping it in `begin`/`rescue`. Only add explicit handling when the failure is actually likely or needs a clearer message than the default backtrace.
 
+## Gems
+
+When the repository has a Gemfile, add the script's gems to it.
+
+Otherwise, declare them with inline Bundler so the script installs its own environment. Nothing else installs the gems, so when the Ruby version changes, the script crashes with a `LoadError`.
+
+```ruby
+require "bundler/inline"
+
+gemfile do
+  source "https://rubygems.org"
+  gem "<gem-name>", "~> <major>.<minor>"
+end
+```
+
+- Pin each gem to its current major version with `~>`. There's no lockfile, so a fresh install of an unpinned gem pulls the newest release, breaking changes included.
+- Place the block before any `require` or `require_relative` that loads one of its gems.
+- Use `gemfile`, not `gemfile(true)`. It installs missing gems quietly and skips the network when they're already installed.
+
 ## Required patterns
 
 Always:
