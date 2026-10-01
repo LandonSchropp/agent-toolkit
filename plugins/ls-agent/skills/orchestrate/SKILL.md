@@ -28,13 +28,18 @@ When three tasks are active, name the task that's next and wait. Patience is the
 ## Workflow
 
 1. Get the parallelization, which lives at `/tmp/[slugified-title].md`. **REQUIRED:** Use the `ls-agent:parallelize` skill if there isn't one yet. A task is ready once every task it waits on has finished and fewer than three tasks are active.
-2. Propose the ready tasks to start, in stage order, without going past three active tasks. Start only the ones the user picks. **REQUIRED:** Use the `ls-agent:delegate` skill once per task.
-3. Report what was started: the task, its project, and the workspace label.
-4. **STOP.** Wait for a task to finish, then go back to step 2.
+2. Start the watcher (see [Watching Workspaces](#watching-workspaces)).
+3. Propose the ready tasks to start, in stage order, without going past three active tasks. Start only the ones the user picks. **REQUIRED:** Use the `ls-agent:delegate` skill once per task.
+4. Report what was started: the task, its project, and the workspace label.
+5. **STOP.** Wait for the watcher.
 
-## A Task Finishes
+## Watching Workspaces
 
-A task is done when its workspace is missing from `herdr workspace list`. Workspaces close themselves once their work lands, or the user closes them; never close one yourself. Stop tracking the task as outstanding. Never reopen it, re-delegate it, or treat the disappearance as a crash to recover from.
+Run `scripts/watch-workspaces.sh` with the `Monitor` tool, at its longest timeout. It prints a line whenever a workspace opens or closes. Re-arm it each time it expires, for as long as tasks remain.
+
+When a workspace closes, its task is done. Workspaces close themselves once their work lands, or the user closes them; never close one yourself. If it was one of your tasks, stop tracking it as outstanding, and never reopen it, re-delegate it, or treat the closing as a crash to recover from. Then go back to step 3.
+
+When a workspace opens, recount the active tasks. Say nothing unless that changes what you'd propose next.
 
 ## Task Prompts
 
