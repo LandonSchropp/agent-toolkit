@@ -36,7 +36,7 @@ When three tasks are active, wait. Patience is the job here.
 
 ## Watching Workspaces
 
-Run `scripts/watch-workspaces.sh` with the `Monitor` tool, at its longest timeout. It prints a line whenever a workspace opens or closes. Re-arm it each time it expires, for as long as tasks remain.
+Run `scripts/watch-workspaces.sh` with the `Monitor` tool, at its longest timeout. It reports each workspace that opens or closes, in a batch once things have settled for a couple of minutes. Re-arm it each time it expires, for as long as tasks remain. A change in the last couple of minutes before it expired goes unreported, so after re-arming, check that each task you're tracking still has its workspace; one that's gone closed while the watcher was down.
 
 When a workspace closes, its task is done. Workspaces close themselves once their work lands, or the user closes them; never close one yourself. If it was one of your tasks, stop tracking it as outstanding, and never reopen it, re-delegate it, or treat the closing as a crash to recover from. Then go back to step 3.
 

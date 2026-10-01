@@ -2,51 +2,40 @@
 
 set -euo pipefail
 
-function print_help() {
-  echo "Usage: watch-workspaces.sh"
-  echo
-  echo "Polls herdr every few seconds and prints a line each time a workspace opens or closes,"
-  echo "such as \"Closed: <label>\". Runs until it is killed."
-  echo
-  echo "Options:"
-  echo
-  echo "  --help              Show this help message and exit."
-}
-
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-  --help)
-    print_help
-    exit 0
-    ;;
-  *)
-    echo "Error: The option $1 is invalid." >&2
-    echo >&2
-    print_help >&2
-    exit 1
-    ;;
-  esac
-done
+# Polls herdr and prints a line for each workspace that opens or closes, such as
+# "herdr-workspace-closed:<label>". It reports only once the workspaces have gone two minutes
+# without changing, so a burst of changes arrives as one batch. Runs until it is killed.
 
 function list_workspaces() {
   herdr workspace list | jq --raw-output '.result.workspaces[] | "\(.workspace_id) \(.label)"' | sort --key=1,1
 }
 
-previous="$(list_workspaces)"
+function print_missing_workspaces() {
+  local workspaces="$1"
+  local other_workspaces="$2"
+  local event="$3"
+
+  join -v 1 <(echo "$workspaces") <(echo "$other_workspaces" | cut -d ' ' -f 1) |
+    cut -d ' ' -f 2- |
+    sed -n "/./s/^/$event:/p"
+}
+
+reported_workspaces="$(list_workspaces)"
+last_seen_workspaces="$reported_workspaces"
+last_change="$SECONDS"
 
 while true; do
   sleep 5
 
-  current="$(list_workspaces)" || continue
+  polled_workspaces="$(list_workspaces)" || continue
 
-  join -v 1 <(echo "$previous") <(echo "$current" | cut -d ' ' -f 1) |
-    cut -d ' ' -f 2- |
-    sed 's/^/Closed: /'
+  if [[ "$polled_workspaces" != "$last_seen_workspaces" ]]; then
+    last_seen_workspaces="$polled_workspaces"
+    last_change="$SECONDS"
+  elif [[ "$last_seen_workspaces" != "$reported_workspaces" ]] && ((SECONDS - last_change >= 120)); then
+    print_missing_workspaces "$reported_workspaces" "$last_seen_workspaces" herdr-workspace-closed
+    print_missing_workspaces "$last_seen_workspaces" "$reported_workspaces" herdr-workspace-opened
 
-  join -v 1 <(echo "$current") <(echo "$previous" | cut -d ' ' -f 1) |
-    cut -d ' ' -f 2- |
-    sed 's/^/Opened: /'
-
-  previous="$current"
+    reported_workspaces="$last_seen_workspaces"
+  fi
 done
