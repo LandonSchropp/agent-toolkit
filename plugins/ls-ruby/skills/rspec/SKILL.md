@@ -7,3 +7,4 @@ Read:
 
 - [Better Tests](references/better-specs.md)
 - [Personal Preferences](references/personal-preferences.md)
+- [Testing Scripts](references/testing-scripts.md), when testing a standalone script
