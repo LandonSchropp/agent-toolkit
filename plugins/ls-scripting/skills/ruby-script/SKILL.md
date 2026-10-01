@@ -26,9 +26,9 @@ Two templates cover the two kinds of scripts. Copy the right one exactly and fil
 
 ## Gems
 
-When the repository has a Gemfile, add the script's gems to it.
+When the script runs from inside a repository that has a Gemfile, add its gems to that Gemfile.
 
-Otherwise, declare them with inline Bundler so the script installs its own environment. Nothing else installs the gems, so when the Ruby version changes, the script crashes with a `LoadError`.
+Otherwise, such as a skill script that runs from an installed copy of its plugin, declare them with inline Bundler so the script installs its own environment. Nothing else installs the gems, so when the Ruby version changes, the script crashes with a `LoadError`.
 
 ```ruby
 require "bundler/inline"
