@@ -6,8 +6,8 @@ function print_help() {
   echo "Usage: listen.sh --directory <path>"
   echo
   echo "Prints each decision the user makes in the Hunk review of <path>, one line at a time, the way"
-  echo "'hunk review listen' does. On an approval or a denial made while the user is on the review"
-  echo "tab, it also switches them back to the calling agent's tab, leaving the review open."
+  echo "'hunk review listen' does. On an approval, a comment or a denial made while the user is on the"
+  echo "review tab, it also switches them back to the calling agent's tab, leaving the review open."
   echo
   echo "Options:"
   echo
@@ -63,7 +63,7 @@ function return_to_agent_tab() {
 hunk review listen --repo "$directory" | while IFS= read -r line; do
   echo "$line"
 
-  if [[ "$line" == "review-approved" || "$line" == "review-denied" ]]; then
+  if [[ "$line" == "review-approved" || "$line" == "review-commented" || "$line" == "review-denied" ]]; then
     return_to_agent_tab </dev/null
   fi
 done

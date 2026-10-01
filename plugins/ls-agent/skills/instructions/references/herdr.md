@@ -4,12 +4,13 @@
 
 Every commit is reviewed before it is created. Present each commit's changes for review and create the commit only after the user signs off. Drive the review yourself.
 
-The decision the `ls-interactivity:interactive-review` skill delivers, approve or deny, is the only signal that matters — never ask the user whether they're ready to commit or want another look. A commit hook also blocks `git commit` until an approved review is on record, as a backstop, but don't rely on hitting it to find out the answer; act on the decision directly.
+The decision the `ls-interactivity:interactive-review` skill delivers (approve, comment or deny) is the only signal that matters — never ask the user whether they're ready to commit or want another look. A commit hook also blocks `git commit` until an approved review is on record, as a backstop, but don't rely on hitting it to find out the answer; act on the decision directly.
 
-The decision and the user's comments are independent signals — read both. They combine into four cases:
+The decision and the user's comments are independent signals — read both. They combine into these cases:
 
 - **Approved / comments:** Minor fixes. Address them, then commit — already signed off, no re-review needed.
 - **Approved / no comments:** Ready to commit as-is.
+- **Commented:** Questions or notes, not a decision yet. Answer the questions in your replies, make any changes the comments ask for, then wait for the next decision. Never record an approval or commit on a comment.
 - **Denied / comments:** Real concerns. Address them, then wait for the next decision; the open review shows your changes.
 - **Denied / no comments:** The user wasn't ready to review this. Stop and wait for them rather than retrying.
 
@@ -52,6 +53,7 @@ A main checkout closes the same way a linked worktree does; an agent closes itse
 | "I'll ask if they want to re-review"                   | A denial already answered that. Address it, don't ask.                     |
 | "It was approved, so there's nothing to check"         | Approval and comments are independent. Check both.                         |
 | "Denied with no feedback — I'll retry anyway"          | No comments means they weren't ready. Stop and wait.                       |
+| "They only commented, so the rest is approved"         | A comment is not an approval. Reply, then wait for the next decision.      |
 | "This change is trivial, skip the review"              | Every commit is reviewed. Present it.                                      |
 | "I'll commit now and let them review after"            | Review comes before the commit. Present first.                             |
 | "No feedback last time, so skip it now"                | A new change is a new review. Present it.                                  |
