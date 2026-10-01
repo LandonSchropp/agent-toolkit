@@ -20,7 +20,7 @@ To count the active tasks, count the workspaces in `herdr workspace list`, leavi
 
 - **This session's own workspace:** The orchestrator isn't a task the user tracks.
 - **`plan-day`:** Planning, not work.
-- **Parked workspaces:** Any workspace whose label ends in `park` or `parked`.
+- **Parked workspaces:** Ones the user isn't ready to close but isn't actively working on. For now, they're the ones whose label ends in `-parked`.
 
 Workspaces the user opened themselves are active tasks too. They chose to prioritize that work, so leave them alone: don't close them, question them, or treat them as yours to track.
 
