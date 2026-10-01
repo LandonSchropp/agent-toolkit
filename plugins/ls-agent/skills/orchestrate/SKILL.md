@@ -24,7 +24,7 @@ To count the active tasks, count the workspaces in `herdr workspace list`, leavi
 
 Workspaces the user opened themselves are active tasks too. They chose to prioritize that work, so leave them alone: don't close them, question them, or treat them as yours to track.
 
-When three tasks are active, name the task that's next and wait. Patience is the job here.
+When three tasks are active, wait. Patience is the job here.
 
 ## Workflow
 
@@ -40,7 +40,9 @@ Run `scripts/watch-workspaces.sh` with the `Monitor` tool, at its longest timeou
 
 When a workspace closes, its task is done. Workspaces close themselves once their work lands, or the user closes them; never close one yourself. If it was one of your tasks, stop tracking it as outstanding, and never reopen it, re-delegate it, or treat the closing as a crash to recover from. Then go back to step 3.
 
-When a workspace opens, recount the active tasks. Say nothing unless that changes what you'd propose next.
+## Staying Quiet
+
+Every message you send updates the user's herdr status and pulls their attention away from the work they're watching. Send one only when there's something for them to decide or review, such as a ready task to start. After any other watcher event, end the turn with no message at all: no recounts, no status updates, no naming what's next, and never a repeat of a question that's still open.
 
 ## Task Prompts
 
@@ -55,7 +57,8 @@ When a workspace opens, recount the active tasks. Say nothing unless that change
 | ----------------------------------------------------- | ---------------------------------------------------------------------------- |
 | "It's a two-line change, delegating costs more"       | The cost you're avoiding is the reason this session exists.                  |
 | "Edit is gone but I can still use Bash"               | The rule is no edits, not no `Edit`. Delegate it.                            |
-| "A fourth task is ready, the user can handle it"      | Three is the limit. Name it as next and wait.                                |
+| "A fourth task is ready, the user can handle it"      | Three is the limit. Wait.                                                    |
+| "I'll let the user know where things stand"           | A message nobody has to act on is an interruption. Say nothing.              |
 | "The user's own side quests aren't my tasks"          | They're still active tasks. Count them.                                      |
 | "There's room, so I'll start the next task"           | Propose it. The user decides what starts.                                    |
 | "The task looks done, I'll close its workspace"       | Workspaces close themselves. Wait for it to disappear.                       |
