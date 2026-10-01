@@ -32,6 +32,8 @@ Fill in every field the chosen template asks for, and delete nothing but its ins
 
 Shape the draft as a bare title on the first line, a blank line, then the body, so the line maintainers read first goes through review too. The title is plain text, not a Markdown heading.
 
+Keep the title to five words or fewer, not counting any prefix the template sets. It names the problem or request and leaves the explanation to the body, so write "Crash on empty config", not "The app crashes on startup when the config file exists but is empty".
+
 **REQUIRED:** Use the `ls-writing:format` skill on the prose inside the fields. The template owns the headings; never restyle them.
 
 Never hard-wrap. In every field, write each paragraph and each list item as one unbroken line, however long, with blank lines only between blocks. GitHub renders every newline in an issue as a line break, so a wrap shows up as a ragged break mid-sentence. Fenced code blocks and quoted log output keep their own line breaks.
@@ -76,3 +78,4 @@ Give the user the resulting URL.
 | "A quick issue doesn't need the whole process"   | Every issue is drafted, reviewed and approved before it's created. |
 | "The search found something, but file it anyway" | A hit ends the task. Report the link instead of drafting.          |
 | "Long lines are hard to read, so I'll wrap them" | GitHub keeps every line break. One paragraph, one line.            |
+| "A full sentence makes the title precise"        | Five words at most. Name the problem; the body explains it.        |
