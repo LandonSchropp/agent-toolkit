@@ -21,7 +21,7 @@ Today's unchecked tasks are the queue. Skip `orchestrate`'s parallelization step
 
 Leave out tasks no agent can do, such as errands. Those stay with the user. Your goal is to be _helpful_, not intrusive or annoying.
 
-The queue grows as the user adds to the note. Alongside `orchestrate`'s watcher, run `scripts/watch-daily-note.sh` with the `Monitor` tool, at its longest timeout, and re-arm it each time it expires. It prints a line for each unchecked task that appears in today's note, including the whole new note when the day rolls over.
+The queue grows as the user adds to the note. Alongside `orchestrate`'s watcher, run `scripts/watch-daily-note.sh` with the `Monitor` tool, at its longest timeout, and re-arm it each time it expires. It prints a line for each unchecked task that appears in today's note, including the whole new note when the day rolls over. A task added in the last couple of minutes before it expired goes unreported, so after re-arming, read the note for unchecked tasks you haven't queued yet.
 
 A new task joins the queue: propose it if fewer than three tasks are active, and otherwise let it wait its turn. Ignore the tasks you added yourself, and any that are already active or queued, since editing a task reports it again.
 
