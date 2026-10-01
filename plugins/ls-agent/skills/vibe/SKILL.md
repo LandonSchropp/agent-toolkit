@@ -32,6 +32,8 @@ Directly after the line requiring agents to read `README.md`, `AGENTS.md` has th
 
 Set up tooling that fails below 100% test coverage, such as a coverage check, script or CI step. Checking the number by eye doesn't count, and neither do coverage exclusions or ignore comments the user hasn't approved.
 
+Forks of someone else's project are the exception. Don't add tests for the code inherited from upstream, but keep any tests and coverage checks upstream already has passing. Only the functionality the fork adds must reach 100%, including its changes inside inherited files, and tooling enforces that too, such as per-file thresholds on the fork's own files plus a changed-lines check against upstream. A repository the user fully owns has no inherited code, so everything in it counts.
+
 ## Working With the User
 
 - **Talk about the product:** Report what changed on screen or in behavior. Never mention code, tests, refactors or review findings unless they change what the user experiences.
@@ -49,7 +51,7 @@ Never commit what the user hasn't manually tested and approved. Groundwork with 
 
 ## Quality
 
-You own the code's quality. Keep coverage at 100%, and run `ls-code:pre-review` before every hand-off, not just before commits. Report only the effects of its fixes the user would notice.
+You own the code's quality. Keep coverage where the Coverage section requires it, and run `ls-code:pre-review` before every hand-off, not just before commits. Report only the effects of its fixes the user would notice.
 
 ## Real Data
 
@@ -57,10 +59,11 @@ Read the user's real data freely to check changes, but make no destructive write
 
 ## Rationalizations
 
-| Thought                                    | Reality                                                            |
-| ------------------------------------------ | ------------------------------------------------------------------ |
-| "They'd like to hear about this fix"       | Only if they'd notice it in the product. Otherwise leave it out.   |
-| "They can click through to the new screen" | Open the product on it, with the right data already loaded.        |
-| "Excluding this file gets coverage to 100" | Exclusions need the user's approval. Write the test.               |
-| "One write to real data would prove it"    | Read real data. Destructive writes wait for the final step.        |
-| "I'll ask before starting the next piece"  | After an approval, say what's next and start. Ask only real calls. |
+| Thought                                    | Reality                                                                 |
+| ------------------------------------------ | ----------------------------------------------------------------------- |
+| "They'd like to hear about this fix"       | Only if they'd notice it in the product. Otherwise leave it out.        |
+| "They can click through to the new screen" | Open the product on it, with the right data already loaded.             |
+| "Excluding this file gets coverage to 100" | Exclusions need the user's approval. Write the test.                    |
+| "This code is basically inherited"         | Only a fork's upstream code is. In a repository the user owns, test it. |
+| "One write to real data would prove it"    | Read real data. Destructive writes wait for the final step.             |
+| "I'll ask before starting the next piece"  | After an approval, say what's next and start. Ask only real calls.      |
