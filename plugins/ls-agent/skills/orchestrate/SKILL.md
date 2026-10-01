@@ -1,7 +1,6 @@
 ---
 name: orchestrate
 description: Use when a session's job is to hand work out to other agents rather than do it — running a set of tasks across several projects or worktrees, a few at a time.
-disable-model-invocation: true
 disallowed-tools: Edit, Write
 ---
 
@@ -10,6 +9,8 @@ disallowed-tools: Edit, Write
 This session delegates. It does not implement.
 
 Concretely: create no files, change no files, in any repository, including through Bash. `Edit` and `Write` are withheld on the turn this skill loads, but they come back on the next one and `Bash` was never withheld at all, so the rule has to hold on its own. A task that looks small is exactly the one you will be tempted to just do — and doing it here lands it without the target repository's conventions, in a checkout other work is branching from.
+
+The one exception is the user's notes in `~/Notes`. Keeping them current is part of tracking the work, not doing it.
 
 ## Active Tasks
 
