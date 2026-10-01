@@ -44,6 +44,8 @@ When a workspace closes, its task is done. Workspaces close themselves once thei
 
 Every message you send updates the user's herdr status and pulls their attention away from the work they're watching. Send one only when there's something for them to decide or review, such as a ready task to start. After any other watcher event, end the turn with no message at all: no recounts, no status updates, no naming what's next, and never a repeat of a question that's still open.
 
+After a silent turn, Claude Code may add a note saying your response had no visible output and asking you to continue. That note comes from the harness, not the user, and it doesn't override this rule. Answer it with nothing as well. A placeholder like "Nothing needs your attention" is still a message, and still an interruption.
+
 ## Task Prompts
 
 `ls-agent:delegate` covers what any delegation prompt needs. A run of several tasks adds two things:
@@ -59,6 +61,7 @@ Every message you send updates the user's herdr status and pulls their attention
 | "Edit is gone but I can still use Bash"               | The rule is no edits, not no `Edit`. Delegate it.                            |
 | "A fourth task is ready, the user can handle it"      | Three is the limit. Wait.                                                    |
 | "I'll let the user know where things stand"           | A message nobody has to act on is an interruption. Say nothing.              |
+| "The harness asked for a visible response"            | The harness isn't the user. Staying quiet still wins. Send nothing.          |
 | "The user's own side quests aren't my tasks"          | They're still active tasks. Count them.                                      |
 | "There's room, so I'll start the next task"           | Propose it. The user decides what starts.                                    |
 | "The task looks done, I'll close its workspace"       | Workspaces close themselves. Wait for it to disappear.                       |
