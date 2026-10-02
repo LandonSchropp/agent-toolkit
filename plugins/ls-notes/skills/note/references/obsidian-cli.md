@@ -27,6 +27,10 @@ These read the app's index, so they see aliases, frontmatter tags, and the link 
 - `obsidian daily:read` / `daily:append` / `daily:prepend`: Interact with the daily note.
 - `obsidian append`: Append content to an existing file.
 
+## When the CLI Can't Find Obsidian
+
+If a command fails with "The CLI is unable to find Obsidian" even though Obsidian appears to be running, the app has lost its CLI socket and only a restart restores it. Quit it with `osascript -e 'quit app "Obsidian"'`, reopen it in the background with `open -g -a Obsidian` and retry. Until the vault finishes loading, commands can briefly fail with the same message or with `Command "<name>" not found`, so retry a few times before giving up.
+
 ## Without Bash
 
 If the Bash tool is not available (for example, in Claude Desktop), fall back to direct file operations and apply the same vault conventions. Renames and moves will leave wikilinks across the vault dangling, and vault-graph queries are unavailable until Obsidian rescans, so flag both to the user instead of working around them silently.
