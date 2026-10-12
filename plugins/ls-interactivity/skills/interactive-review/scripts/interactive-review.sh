@@ -9,7 +9,7 @@ function print_help() {
   echo "Usage: interactive-review.sh <mode> [<arguments>] [--directory <path>]"
   echo
   echo "Opens Hunk in a background herdr tab named 'review' and prints the repository"
-  echo "to listen to with 'hunk review listen --repo'. Returns right after starting"
+  echo "to listen to with 'hunk verdict listen --repo'. Returns right after starting"
   echo "Hunk; it doesn't wait for a decision. Must run inside herdr."
   echo
   echo "If a review of the same repository is already open, reloads it in place,"

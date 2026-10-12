@@ -6,7 +6,7 @@ function print_help() {
   echo "Usage: listen.sh --directory <path>"
   echo
   echo "Prints each decision the user makes in the Hunk review of <path>, one line at a time, the way"
-  echo "'hunk review listen' does. On an approval, a comment or a denial made while the user is on the"
+  echo "'hunk verdict listen' does. On an approval, a comment or a denial made while the user is on the"
   echo "review tab, it also switches them back to the calling agent's tab, leaving the review open."
   echo
   echo "Options:"
@@ -60,7 +60,7 @@ function return_to_agent_tab() {
   herdr tab focus "$HERDR_TAB_ID" >/dev/null
 }
 
-hunk review listen --repo "$directory" | while IFS= read -r line; do
+hunk verdict listen --repo "$directory" | while IFS= read -r line; do
   echo "$line"
 
   if [[ "$line" == "review-approved" || "$line" == "review-commented" || "$line" == "review-denied" ]]; then
