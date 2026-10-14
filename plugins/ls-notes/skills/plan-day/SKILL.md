@@ -15,6 +15,8 @@ The planning happens in `plan-day`, a terminal app on the user's `PATH` that wri
 
 A non-zero exit means `plan-day` failed, and its error is in the log. When the tab closes, read the summary.
 
+**Never edit a daily note while the `plan-day` tab is open.** `plan-day` refuses to write any note that changed after it read it, so an edit made mid-session throws away everything the user planned in that note. This covers every daily note, not just today's, and every edit, even a one-character typo fix the user asked for. Tell the user each edit is queued, hold it until the tab closes, then apply it along with the comments.
+
 ## Comments
 
 Each comment is an instruction about its task. Carry out every one, editing the notes directly; ask the user only when a comment is ambiguous or needs a decision from them.
