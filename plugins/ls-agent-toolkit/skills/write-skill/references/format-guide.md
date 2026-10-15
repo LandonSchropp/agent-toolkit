@@ -64,6 +64,24 @@ description: Use when tests have race conditions, timing dependencies, or pass/f
 description: Use when using React Router and handling authentication redirects
 ```
 
+## Body
+
+The body contains only instructions. The agent reads the body only after the skill is loaded, so by then the triggering decision is over. A "Use this when" or "Not for" paragraph in the body does nothing; triggering belongs in the [description](#description).
+
+When an instruction points at another skill, say what that skill does, not what this skill doesn't do. "The `<skill>` skill logs meals" tells the agent where to go; "This skill isn't for logging meals" only tells it where not to look.
+
+```markdown
+<!-- BAD: Triggering conditions in the body -->
+
+Use this when the user asks to log a workout.
+
+Not for: logging meals. The `<skill>` skill does that.
+
+<!-- GOOD: The body starts with instructions -->
+
+Use the `<skill>` skill to find a matching workout before adding a new entry.
+```
+
 ## Invocation Control
 
 By default, both the user and the model can invoke a skill. Two Claude Code frontmatter fields (an extension to the Agent Skills standard) restrict this:
