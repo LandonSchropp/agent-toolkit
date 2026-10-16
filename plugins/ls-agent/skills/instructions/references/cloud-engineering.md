@@ -6,30 +6,33 @@ Personal engineering, work that needs the user's judgment as it goes (naming, UX
 
 ## Reviews
 
-The user reviews twice: the plan, then the pull request. Unlike Local Engineering, nobody reviews individual commits, so don't stop between them; all of the review happens on the pull request.
+The user reviews twice: the plan, then the stack's pull requests. Unlike Local Engineering, nobody reviews individual commits, so don't stop between them; all of the review happens on the pull requests.
 
 1. Unless the prompt already hands you a plan, such as one from a coordinating session or the Linear issue, **REQUIRED:** invoke the `ls-agent:plan` skill, and wait for the user to approve the plan.
 2. Build the work following [Commits](commits.md). Pre-review is its only review step here. If there's no subagent tool to hand pre-review's checks to, run them yourself.
-3. Push the feature branch and open a pull request.
+3. Push the feature branch and open the stack's pull requests.
 
-## Multiple Pull Requests
+## Stacks
 
-One session owns at most one pull request. When the work needs more than one, this session coordinates and doesn't implement any of it:
+One session owns one stack. A stack is a single pull request, or several that have to land in order because each builds on the one before. Stack only work that can't be parallelized, and build stacks with Devin's own stacked pull requests, not the `ls-git:stacked-pull-requests` skill.
 
-1. **REQUIRED:** Invoke the `ls-agent:parallelize` skill to sort the work into stages.
-2. Start a child session for every ready task in the stage at once, one pull request each.
-3. Wait for the children to archive. A child archiving means its pull request merged and its task is done. Until then, stay quiet: don't message the user as children start, progress or report back, unless one is blocked on a decision only the user can make.
+When the work needs more than one stack, this session coordinates and doesn't implement any of it:
+
+1. **REQUIRED:** Invoke the `ls-agent:parallelize` skill to sort the work into stages, treating each chain of pull requests that must land in order as a single task: one stack.
+2. Start a child session for every ready stack in the stage at once.
+3. Wait for the children to archive. A child archiving means its stack merged. Until then, stay quiet: don't message the user as children start, progress or report back, unless one is blocked on a decision only the user can make.
 4. Once a stage's children have all archived, start the next stage, and tell its children what the earlier stages landed.
 
 ## Archiving
 
-When this session's only pull request has merged, archive this session. A coordinating session archives itself once every child has archived and no work is left. Never archive a session that has an open pull request.
+When every pull request in this session's stack has merged, archive this session. A coordinating session archives itself once every child has archived and no work is left. Never archive a session that has an open pull request.
 
 ## Rationalizations
 
 | Thought                                          | Reality                                                       |
 | ------------------------------------------------ | ------------------------------------------------------------- |
-| "Two pull requests is manageable in one session" | It isn't to the user. Start a child session per pull request. |
+| "These two stacks are manageable in one session" | They aren't to the user. Start a child session per stack.     |
+| "I'll stack these to keep them together"         | Independent work runs in parallel. Stack only what must wait. |
 | "It's a small task, I'll do it while I wait"     | A coordinating session never implements. Hand it to a child.  |
-| "I'll leave the session open in case"            | A merged pull request ends the session. Archive it.           |
+| "I'll leave the session open in case"            | A merged stack ends the session. Archive it.                  |
 | "I'll tell the user the children have started"   | A message nobody has to act on is noise. Stay quiet.          |
