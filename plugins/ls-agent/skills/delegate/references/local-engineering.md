@@ -1,6 +1,6 @@
-# Herdr
+# Local Engineering
 
-Each workspace is a full development environment over its own checkout, so Herdr takes anything that edits a repository or needs to be talked to while it works.
+Local Engineering runs in Claude Code inside herdr, on the user's Mac. Each workspace is a full development environment over its own checkout, so it takes anything that edits a repository or needs to be talked to while it works.
 
 ## Choosing the Target
 
@@ -19,6 +19,8 @@ Single-quote the prompt. Prompts routinely contain backticks and `$`, which a do
 This returns as soon as the prompt is delivered. A delegated task usually outlasts the turn that sent it, so waiting strands this session for nothing; `--wait` is for the rare short task whose result decides what you do next. Run `--help` on it first.
 
 Nothing about this path depends on being inside Herdr. Both commands drive the running Herdr app over its socket from anywhere on the machine. `herdr` needs only that the app is running; `herdr-project` additionally needs `bun` on the `PATH`.
+
+Off the Mac, as in Devin or a cloud session of Claude Desktop, there is no route to herdr. Write the prompt and print it as a fenced code block for the user to carry over instead, without the preamble below, since the user has read it.
 
 ## The Prompt
 
