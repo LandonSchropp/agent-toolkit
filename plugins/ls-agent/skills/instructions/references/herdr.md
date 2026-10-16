@@ -14,19 +14,12 @@ The decision and the user's comments are independent signals — read both. They
 - **Denied / comments:** Real concerns. Address them, then wait for the next decision; the open review shows your changes.
 - **Denied / no comments:** The user wasn't ready to review this. Stop and wait for them rather than retrying.
 
-## The Process
+## The Review
 
-1. **REQUIRED:** Invoke the `ls-git:git-atomic-commit` skill before making changes, and follow its guidance. Group the work into atomic commits.
-2. Work one commit at a time. Keep your changes scoped to the single commit you're building.
-3. Review your own changes first. **REQUIRED:** Invoke the `ls-code:pre-review` skill, and fix what it finds before the user sees the diff.
-4. Present the changes for review. **REQUIRED:** Invoke the `ls-interactivity:interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
-5. Read the decision and the user's comments, and follow the matching case above.
-6. Create the commit. **REQUIRED:** Use the `ls-git:git-commit` skill.
-7. Repeat for the next commit.
+Follow [Commits](commits.md). Its review step is this one:
 
-## Staying In Scope
-
-Don't edit files outside the scope of the commit you're building. If you unavoidably touch unrelated files and they don't overlap with the current commit's files, review and commit each separately — one review, one commit, at a time. Never bundle unreviewed changes into a reviewed commit.
+1. Present the changes for review. **REQUIRED:** Invoke the `ls-interactivity:interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
+2. Read the decision and the user's comments, and follow the matching case above.
 
 ## Running Commands
 
@@ -57,7 +50,6 @@ A main checkout closes the same way a linked worktree does; an agent closes itse
 | "This change is trivial, skip the review"              | Every commit is reviewed. Present it.                                      |
 | "I'll commit now and let them review after"            | Review comes before the commit. Present first.                             |
 | "No feedback last time, so skip it now"                | A new change is a new review. Present it.                                  |
-| "I'll commit everything in one go"                     | One atomic commit at a time, each reviewed separately.                     |
 | "The worktree has unrelated edits too"                 | Stage only this commit's files and review in staged mode.                  |
 | "The workspace ID is precise enough"                   | The user only sees labels. Name the workspace by its label.                |
 | "Chaining commands saves a round trip"                 | Each command needs its own approval. Run them one at a time.               |
