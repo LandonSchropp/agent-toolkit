@@ -39,9 +39,7 @@ The daily note is filled in from `Templates/Periodic/Daily Note.md`. Each note h
   - **Work** (weekdays only)**:** Work tasks for the day.
   - **Chores** (Sundays only)**:** Recurring weekly chores.
   - **Quarterly** (first Sunday of the quarter)**:** Recurring quarterly chores.
-- **Habits:** Daily habit tracking, broken into:
-  - **Tracking:** One bullet per habit, each holding a Meta Bind toggle per slot (`` `INPUT[toggle:habits.<habit>.<slot>]` ``). See Habit Toggles below.
-  - **Identity Vote:** The day's identity vote. Filling it in belongs to the habit workflows, not this skill.
+- **Habits:** Daily habit tracking, broken into Steps, Calories, Sleep Log and Identity Vote. Filling these in belongs to the `ls-health` skills, not this one.
 - **Morning:** Morning journaling, broken into:
   - **Gratitude:** Three things the user is grateful for.
   - **Better Day:** Three things that would make today great.
@@ -50,9 +48,3 @@ The daily note is filled in from `Templates/Periodic/Daily Note.md`. Each note h
   - **Highlights of the Day:** Notable moments from the day.
 - **Journal:** Free-form journal prose for the day.
 - **Thoughts:** Stray observations and ideas captured during the day.
-
-## Habit Toggles
-
-Each toggle in Tracking is bound to a boolean in the note's frontmatter at `habits.<habit>.<slot>`. The template defines which habits and slots exist, all starting at `false`.
-
-To set a toggle, change its value in the nested `habits` YAML in the frontmatter. Never edit the `INPUT[toggle:...]` line in the body: it's the binding, not the value.
