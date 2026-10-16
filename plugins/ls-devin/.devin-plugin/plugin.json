@@ -1,0 +1,39 @@
+{
+  "name": "ls-devin",
+  "description": "Landon Schropp's personal agent toolkit",
+  "author": {
+    "name": "Landon Schropp"
+  },
+  "requiredPlugins": [
+    {
+      "source": "git-subdir",
+      "url": "https://github.com/LandonSchropp/agent-toolkit.git",
+      "path": "plugins/ls-agent"
+    },
+    {
+      "source": "git-subdir",
+      "url": "https://github.com/LandonSchropp/agent-toolkit.git",
+      "path": "plugins/ls-code"
+    },
+    {
+      "source": "git-subdir",
+      "url": "https://github.com/LandonSchropp/agent-toolkit.git",
+      "path": "plugins/ls-git"
+    },
+    {
+      "source": "git-subdir",
+      "url": "https://github.com/LandonSchropp/agent-toolkit.git",
+      "path": "plugins/ls-ruby"
+    },
+    {
+      "source": "git-subdir",
+      "url": "https://github.com/LandonSchropp/agent-toolkit.git",
+      "path": "plugins/ls-scripting"
+    },
+    {
+      "source": "git-subdir",
+      "url": "https://github.com/LandonSchropp/agent-toolkit.git",
+      "path": "plugins/ls-typescript"
+    }
+  ]
+}

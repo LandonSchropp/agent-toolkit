@@ -22,3 +22,7 @@ Then, you can install the `ls` plugin normally.
 ```sh
 claude plugin install ls
 ```
+
+### Devin
+
+Install `LandonSchropp/agent-toolkit` from Devin's Customize page, with the `plugins/ls-devin` subdirectory. It's a meta-plugin that pulls in only the plugins that work in Devin, and its `AGENTS.md` tells Devin it's in the Cloud Engineering environment.
