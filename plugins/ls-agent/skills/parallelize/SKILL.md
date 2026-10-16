@@ -14,7 +14,7 @@ Turn a set of tasks into an ordered set of stages: what can run at the same time
 3. Fill in the tasks, then sort them into stages. A task belongs in the earliest stage whose predecessors have all finished.
 4. Look for overlaps: two tasks that would edit the same files, or that both have to add the same thing before they can start. Split, merge, or sequence them so no two agents in the same stage collide.
 5. Present the stages to the user as a table (columns: Stage, Tasks, Waiting On).
-6. Invoke the `ls-interactivity:interactive-edit` skill with the file so the user can adjust it, then read their changes back.
+6. Invoke the `ls-interactivity:interactive-edit` skill with the file so the user can adjust it, then read their changes back. Where that skill isn't available, post the file's contents in the conversation instead, wait for the user's reply, and update the file with their changes.
 
 ## Rationalizations
 
