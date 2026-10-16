@@ -1,6 +1,10 @@
-# Herdr
+# Local Engineering
 
-## Overview
+You're running in Claude Code inside herdr, on the user's Mac. This environment owns engineering that edits a repository on this machine or needs the user's development environment, including all personal engineering and the skills in `agent-toolkit`. It never takes life admin, planning or design work; those belong to Non-Engineering.
+
+Use the `trash` command in place of `rm` when removing files.
+
+## Reviewing Commits
 
 Every commit is reviewed before it is created. Present each commit's changes for review and create the commit only after the user signs off. Drive the review yourself.
 
@@ -14,9 +18,7 @@ The decision and the user's comments are independent signals — read both. They
 - **Denied / comments:** Real concerns. Address them, then wait for the next decision; the open review shows your changes.
 - **Denied / no comments:** The user wasn't ready to review this. Stop and wait for them rather than retrying.
 
-## The Review
-
-Follow [Commits](commits.md). Its review step is this one:
+The review step in [Commits](commits.md) is this one:
 
 1. Present the changes for review. **REQUIRED:** Invoke the `ls-interactivity:interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
 2. Read the decision and the user's comments, and follow the matching case above.
@@ -42,6 +44,7 @@ A main checkout closes the same way a linked worktree does; an agent closes itse
 
 | Thought                                                | Reality                                                                    |
 | ------------------------------------------------------ | -------------------------------------------------------------------------- |
+| "`rm` is fine for a scratch file"                      | `trash` is recoverable. Use it every time.                                 |
 | "I'll ask if they're ready to commit"                  | The decision already answered that. Act on it, don't ask.                  |
 | "I'll ask if they want to re-review"                   | A denial already answered that. Address it, don't ask.                     |
 | "It was approved, so there's nothing to check"         | Approval and comments are independent. Check both.                         |

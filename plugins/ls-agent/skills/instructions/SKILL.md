@@ -5,24 +5,20 @@ description: Use at the start of any task, before taking action, to load the alw
 
 # Instructions
 
-Before doing anything else, check whether `$HERDR_ENV` is set to determine which environment you're running in.
+Your environment's own always-on instructions name the environment you're running in: Local Engineering, Cloud Engineering or Non-Engineering. You **MUST** read ALL of the reference files for that environment before doing anything else.
 
-- Herdr: `$HERDR_ENV` is set. This is where all development work happens.
-- General-purpose: `$HERDR_ENV` is not set. You're a general-purpose agent, such as OpenClaw or Hermes.
-
-Then, you **MUST** read ALL of the reference files applicable to your environment.
-
-| Reference                                                        | Environment     |
-| ---------------------------------------------------------------- | --------------- |
-| [Communication](references/communication.md)                     | All             |
-| [Skill scripts](references/skill-scripts.md)                     | All             |
-| [Terminal](references/terminal.md)                               | All             |
-| [Herdr](references/herdr.md)                                     | Herdr           |
-| [Commits](references/commits.md)                                 | Herdr           |
-| [Status footer](references/status-footer.md)                     | Herdr           |
-| [Git](references/git.md)                                         | Herdr           |
-| [Test-driven development](references/test-driven-development.md) | Herdr           |
-| [General-purpose](references/general-purpose.md)                 | General-purpose |
+| Reference                                                        | Environments                         |
+| ---------------------------------------------------------------- | ------------------------------------ |
+| [Communication](references/communication.md)                     | All                                  |
+| [Skill scripts](references/skill-scripts.md)                     | All                                  |
+| [Terminal](references/terminal.md)                               | Local Engineering, Cloud Engineering |
+| [Commits](references/commits.md)                                 | Local Engineering, Cloud Engineering |
+| [Git](references/git.md)                                         | Local Engineering, Cloud Engineering |
+| [Test-driven development](references/test-driven-development.md) | Local Engineering, Cloud Engineering |
+| [Status footer](references/status-footer.md)                     | Local Engineering, Non-Engineering   |
+| [Local Engineering](references/local-engineering.md)             | Local Engineering                    |
+| [Cloud Engineering](references/cloud-engineering.md)             | Cloud Engineering                    |
+| [Non-Engineering](references/non-engineering.md)                 | Non-Engineering                      |
 
 ## EXTREMELY IMPORTANT
 
