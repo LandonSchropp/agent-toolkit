@@ -12,6 +12,10 @@
 - Work repositories always use a feature branch.
 - In a linked worktree, stay on the worktree's own branch, even in a personal repository.
 
+## Updating a Branch
+
+Bring a branch up to date by rebasing it onto its parent branch, which is the default branch unless the branch is stacked. Never merge the parent branch into it. If the branch was already pushed, push the rebased branch with `--force-with-lease`.
+
 ## Pushing
 
 Push after committing: always on a feature branch, and on `main` only in personal repositories. Never push directly to `main` in a work repository.
@@ -22,3 +26,4 @@ Push after committing: always on a feature branch, and on `main` only in persona
 | ------------------------------------------- | ---------------------------------------------------------------------------- |
 | "The other checkout is the real repository" | The working directory is the one to edit. Stay in it.                        |
 | "A feature branch is always safer"          | Personal repositories default to `main`, unless you're in a linked worktree. |
+| "Merging main avoids a force push"          | Rebase anyway. `--force-with-lease` makes the push safe.                     |
