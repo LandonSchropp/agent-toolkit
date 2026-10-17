@@ -9,8 +9,12 @@ Personal engineering, work that needs the user's judgment as it goes (naming, UX
 The user reviews twice: the plan, then the stack's pull requests. Unlike Local Engineering, nobody reviews individual commits, so don't stop between them; all of the review happens on the pull requests.
 
 1. Unless the prompt already hands you a plan, such as one from a coordinating session or the Linear issue, **REQUIRED:** invoke the `ls-agent:plan` skill, and wait for the user to approve the plan.
-2. Build the work following [Commits](commits.md). Pre-review is its only review step here. If there's no subagent tool to hand pre-review's checks to, run them yourself.
+2. Build the work following [Commits](commits.md), but in a different order for each commit: create the commit, push it, then run its pre-review, and amend the commit with any fixes before pushing again with `--force-with-lease`.
 3. Push the feature branch and open the stack's pull requests.
+
+## Subagents
+
+Devin has no subagents. Wherever a skill says to launch one, start a child session instead. It clones from the remote, so it only sees pushed work. Tell it to report and stop rather than follow these instructions. Wait for its report, then archive it.
 
 ## Stacks
 
