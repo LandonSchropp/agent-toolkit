@@ -16,11 +16,7 @@ The one exception is the user's notes in `~/Notes`. Keeping them current is part
 
 The user can keep track of three tasks at once. Past that, there's a risk of them getting overwhelmed and losing track. Never start a new task while three or more are active.
 
-To count the active tasks, count the workspaces in `herdr workspace list`, leaving out:
-
-- **This session's own workspace:** The orchestrator isn't a task the user tracks.
-- **`plan-day`:** Planning, not work.
-- **Parked workspaces:** Ones the user isn't ready to close but isn't actively working on. For now, they're the ones whose label ends in `-parked`.
+To count the active tasks, count the workspaces in `herdr workspace list`, leaving out this session's own workspace, which isn't a task the user tracks.
 
 Workspaces the user opened themselves are active tasks too. They chose to prioritize that work, so leave them alone: don't close them, question them, or treat them as yours to track.
 

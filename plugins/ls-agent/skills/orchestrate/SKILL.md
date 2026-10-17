@@ -15,6 +15,13 @@ The daily note is the source of truth for what gets worked on today. This sessio
 
 Follow the `ls-agent:dispatch`'s instructions with the changes below.
 
+## Active Tasks
+
+Beyond `dispatch`'s count, also leave out:
+
+- **`plan-day`:** Planning, not work.
+- **Parked workspaces:** Ones the user isn't ready to close but isn't actively working on. For now, they're the ones whose label ends in `-parked`.
+
 ## The Queue
 
 Today's unchecked tasks are the queue. Skip `dispatch`'s parallelization step: the user picks the order, so propose tasks from the note and let them choose.
