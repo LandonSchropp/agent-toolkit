@@ -11,15 +11,17 @@ description: Use when the user mentions a daily note, asks to add a task to toda
 
 `Daily Notes/YYYY/YYYY-MM/YYYY-MM-DD - Daily Note.md` (e.g., `Daily Notes/2026/2026-05/2026-05-09 - Daily Note.md`).
 
-For reading or appending to today's note, use `obsidian daily:read`, `obsidian daily:append`, and `obsidian daily:prepend` — these resolve today's date automatically.
+With the `obsidian` CLI, read or append to today's note with `obsidian daily:read`, `obsidian daily:append`, and `obsidian daily:prepend` — these resolve today's date automatically.
 
 ## Ensure Today's Note Exists
 
-When this skill is invoked, run `obsidian daily:read`. It returns today's note content and creates the file from the daily-note template as a side effect if it does not already exist. Idempotent — running it twice does not produce a duplicate.
+When this skill is invoked with the `obsidian` CLI available, run `obsidian daily:read`. It returns today's note content and creates the file from the daily-note template as a side effect if it does not already exist. Idempotent — running it twice does not produce a duplicate.
 
 Skip this step only if the user is asking about a past or future daily note rather than today's.
 
 **Precondition:** Obsidian must be running. CLI commands dispatch to the running app via IPC; with no app open, they hang. Check via `pgrep -fl 'Obsidian.app/Contents/MacOS/Obsidian'` and ask the user to launch Obsidian if needed.
+
+Without the CLI, build the path from today's date in the user's time zone (Pacific), not the server's, and read the note there. If the note doesn't exist, create it from `Templates/Periodic/Daily Note.md`. Its Templater code doesn't run outside the app, so resolve it by hand as the `ls-notes:note` skill's template guidance describes, and never leave raw `<% %>` code in the note.
 
 ## Task Item Formatting
 
