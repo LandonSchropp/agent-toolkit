@@ -1,10 +1,10 @@
 ---
-name: orchestrate-day
+name: orchestrate
 description: Use when the orchestrator should work through the tasks in today's daily note.
 disable-model-invocation: true
 ---
 
-# Orchestrate Day
+# Orchestrate
 
 The daily note is the source of truth for what gets worked on today. This session hands its tasks out to other agents and keeps the note in step with the work.
 
