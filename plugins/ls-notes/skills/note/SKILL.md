@@ -5,7 +5,11 @@ description: Use when working with files in ~/Notes (the user's Obsidian vault).
 
 # Note
 
-The user's Obsidian vault is at `~/Notes`.
+The user's Obsidian vault is at `~/Notes`. Reach it with the first of these that's available:
+
+1. **The `obsidian` CLI:** See [Obsidian CLI](references/obsidian-cli.md).
+2. **The Obsidian MCP server:** Its `vault_*` tools take paths relative to the vault root. Change an existing note with `vault_edit`, never `vault_write`, which silently overwrites edits synced from the user's devices.
+3. **Direct file edits:** Edit the files in `~/Notes` directly.
 
 **REQUIRED:** Read all of the following references before reading from or writing to any file in the vault:
 
