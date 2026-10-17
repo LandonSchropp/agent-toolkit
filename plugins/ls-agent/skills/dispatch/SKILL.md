@@ -1,10 +1,10 @@
 ---
-name: orchestrate
+name: dispatch
 description: Use when a session's job is to hand work out to other agents rather than do it — running a set of tasks across several projects or worktrees, a few at a time.
 disallowed-tools: Edit, Write
 ---
 
-# Orchestrate
+# Dispatch
 
 This session delegates. It does not implement.
 
