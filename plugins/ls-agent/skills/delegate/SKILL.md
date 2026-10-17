@@ -19,7 +19,7 @@ Route by the task, never by where this session happens to be running. Your own e
 
 ## Skills
 
-A skill that lives in a repository goes to Local Engineering: the one it is already in, or else `personal-agent-toolkit` when it's personal, `agent-toolkit` when it's the user's own engineering tooling, and `babylist/claude-plugins` when it's for work. Non-Engineering's own skills are built and maintained there rather than delegated.
+A skill that lives in a repository goes to Local Engineering: the one it is already in, or else `personal-agent-toolkit` when it's about managing the user's personal life or shouldn't be in a public repository, `agent-toolkit` when it's the user's own engineering tooling, and `babylist/claude-plugins` when it's for work. Non-Engineering's own skills are built and maintained there rather than delegated.
 
 ## Writing the Prompt
 
