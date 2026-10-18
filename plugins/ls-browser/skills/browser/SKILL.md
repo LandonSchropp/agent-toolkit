@@ -1,9 +1,9 @@
 ---
-name: playwright
+name: browser
 description: Use when a task needs a browser — reading a page, filling a form, taking a look at something, or reaching anything behind a login. Always run this skill before the `playwright-cli` skill.
 ---
 
-# Playwright
+# Browser
 
 **REQUIRED:** Use the `playwright-cli` skill for the commands themselves. Drive the browser through `playwright-cli`, never through the Playwright MCP tools, which know nothing about the session.
 
