@@ -23,7 +23,7 @@ When asked to create or edit a skill:
 
 A skill in a new plugin stays invisible until the plugin is registered and enabled, so land that first, as its own commit, before writing the skill:
 
-1. Add `plugins/<plugin>/.claude-plugin/plugin.json` and the plugin's entry in the repository's root `.claude-plugin/marketplace.json`.
+1. Add `plugins/<plugin>/.claude-plugin/plugin.json` and the plugin's entry in the repository's root `.claude-plugin/marketplace.json`. Leave `version` out of both, so the plugin's version is its latest commit and installs pick up every merge.
 2. Enable it in **both** Claude Code settings files, `~/.dotfiles/tag-personal/claude/settings.json` and `~/.dotfiles/tag-work/claude/settings.json`, as `"<plugin>@landonschropp": true`. Missing one leaves the plugin working on only half the machines.
 
 The dotfiles are a separate repository, so that step lands there. Claude Code reads the setting at startup, so the new skill only appears in sessions opened afterwards.
