@@ -33,12 +33,12 @@ When telling the user about a workspace, name it by the label shown in the herdr
 
 ## Finishing a Workspace
 
-When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two.
+When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two. The exception is a work repository that integrates through pull requests: open the pull requests, then offer to post them for review, and offer to close the workspace only once they're posted.
 
 A main checkout closes the same way a linked worktree does; an agent closes itself out either way, even when its child worktrees are still open.
 
 - **Repositories that merge directly into the default branch:** On approval, **REQUIRED:** invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
-- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack, then the `ls-agent:close-workspace` skill. The branch outlives the worktree in the main checkout, and the pull request merges from there.
+- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack. When the user approves posting them for review, **REQUIRED:** invoke the `ls-git:ready-for-review` skill. Then invoke the `ls-agent:close-workspace` skill. The branch outlives the worktree in the main checkout, and the pull request merges from there.
 
 ## Rationalizations
 

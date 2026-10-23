@@ -10,7 +10,8 @@ The user reviews twice: the plan, then the stack's pull requests. Unlike Local E
 
 1. Unless the prompt already hands you a plan, such as one from a coordinating session or the Linear issue, **REQUIRED:** invoke the `ls-agent:plan` skill, and wait for the user to approve the plan.
 2. Build the work following [Commits](commits.md), but in a different order for each commit: create the commit, push it, then run its pre-review, and amend the commit with any fixes before pushing again with `--force-with-lease`.
-3. Push the feature branch and open the stack's pull requests.
+3. Push the feature branch and open the stack's pull requests as drafts.
+4. Once the user approves the pull requests, **REQUIRED:** invoke the `ls-git:ready-for-review` skill.
 
 ## Subagents
 
