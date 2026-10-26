@@ -1,9 +1,13 @@
 ---
 name: pull-request-feedback
-description: Use when working through review feedback on a GitHub pull request — reading review and inline comments one by one, discussing and making changes, replying or reacting, then pushing and re-requesting review. Trigger on "review the PR feedback", "go through the comments", "address review feedback".
+description: Use when working through review feedback on a GitHub pull request or a stack of them — reading review and inline comments one by one, discussing and making changes, replying or reacting, then pushing and re-requesting review. Trigger on "review the PR feedback", "go through the comments", "address review feedback".
 ---
 
 # Pull Request Feedback
+
+## Stacks
+
+When the pull request is part of a stack, walk the stack from the bottom up: check out each branch in turn and run every section below for it. Before starting on a branch's comments, sync it onto its updated parent so it picks up the fixes made lower in the stack, and run the relevant tests after resolving any conflicts, before continuing the sync. **REQUIRED:** Use the `ls-git:stacked-pull-requests` skill to find the stack and sync it.
 
 ## Context
 
