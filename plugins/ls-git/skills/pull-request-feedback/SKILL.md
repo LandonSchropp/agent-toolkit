@@ -58,8 +58,9 @@ For each comment, in order:
 ## Wrap up
 
 1. `git push`.
-2. Re-request review only from reviewers whose latest review state (from the Summary step) isn't `APPROVED`: `gh pr edit "$NUMBER" --add-reviewer <login>`.
-3. Find the Slack thread where this pull request was posted for review: search for the pull request's URL with the `slack:slack-search` skill. If found, offer to post a reply there — using the `slack:slack-messaging` skill's conventions — letting the reviewer know it's ready for re-review. If no thread turns up, say so and move on.
+2. Check CI with `gh pr checks "$NUMBER"`. Before fixing a failing check, make sure it isn't a cancelled run with a passing sibling on the same commit.
+3. Re-request review only from reviewers whose latest review state (from the Summary step) isn't `APPROVED`: `gh pr edit "$NUMBER" --add-reviewer <login>`.
+4. Find the Slack thread where this pull request was posted for review: search for the pull request's URL with the `slack:slack-search` skill. If found, offer to post a reply there — using the `slack:slack-messaging` skill's conventions — letting the reviewer know it's ready for re-review. If no thread turns up, say so and move on.
 
 ## Rationalizations
 
