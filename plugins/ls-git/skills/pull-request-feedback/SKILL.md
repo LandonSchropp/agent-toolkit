@@ -44,7 +44,7 @@ Format it like `✅ 2 approved · ❌ 1 changes requested · 💬 9 comments`: �
 
 For each comment, in order:
 
-1. Print `Comment <index> / <total>:`, then the body as a blockquote, verbatim — no summarizing or paraphrasing.
+1. Print `Comment <index> / <total>:`, then the body as a blockquote, verbatim — no summarizing or paraphrasing. Follow it with a short recommendation and the proposed change, nothing more, and leave out how it affects pull requests higher in the stack.
 2. Discuss what to do about it and make any needed changes. Changes follow the normal commit-and-review flow already in effect for this session.
 3. Ask whether to reply, react, or move on:
    - **Reply has any text in it** (even alongside an emoji): post it as a reply, not a reaction.
