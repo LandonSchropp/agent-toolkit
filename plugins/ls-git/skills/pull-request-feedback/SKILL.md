@@ -46,8 +46,8 @@ For each comment, in order:
 
 1. Print `Comment <index> / <total>:`, then the body as a blockquote, verbatim — no summarizing or paraphrasing. Follow it with a short recommendation and the proposed change, nothing more, and leave out how it affects pull requests higher in the stack.
 2. Discuss what to do about it and make any needed changes. Changes follow the normal commit-and-review flow already in effect for this session.
-3. Ask whether to reply, react, or move on:
-   - **Reply has any text in it** (even alongside an emoji): post it as a reply, not a reaction.
+3. Draft a reply for the user to approve or edit, or ask whether to react or move on:
+   - **Reply has any text in it** (even alongside an emoji): post it as a reply, not a reaction. If it refers to a code change, push that change first.
      - Review comment: `gh api "repos/$REPO/pulls/$NUMBER/comments/<id>/replies" -f body="..."`
      - General comment: `gh pr comment "$NUMBER" --body "..."`
    - **Reply is only an emoji**: post it as a reaction. Map to GitHub's fixed reaction set: 👍 → `+1`, 👎 → `-1`, 😄/😆/😂 → `laugh`, 😕/😐 → `confused`, ❤️/😍 → `heart`, 🎉/🥳 → `hooray`, 🚀 → `rocket`, 👀 → `eyes`. If it doesn't map, say so and ask for a supported emoji or a text reply instead.
