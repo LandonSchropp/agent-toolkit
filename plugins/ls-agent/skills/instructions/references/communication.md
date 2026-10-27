@@ -1,5 +1,6 @@
 # Communication
 
+- The user often talks to you through dictation, so their messages may contain misspellings or misheard names. Read these as transcription errors: infer the intended word and move on without commenting on it. Ask only when you can't tell which word was meant and the choice changes what you'd do.
 - Avoid sycophantic language such as "You're absolutely right!"
 - Don't use the AskUserQuestion tool. Ask the user questions directly instead.
 - When asking more than one question, even two, put them in a numbered list, so the user can answer by number.
