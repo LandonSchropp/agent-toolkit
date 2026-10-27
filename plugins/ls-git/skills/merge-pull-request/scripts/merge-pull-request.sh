@@ -10,7 +10,7 @@ function print_help() {
   echo "If the target branch has a merge queue rule, the pull request is added to"
   echo "the queue without specifying a strategy (the queue's configured strategy is"
   echo "used). Otherwise, detects allowed merge methods from repository settings and"
-  echo "picks one in order of preference: squash > merge commit > rebase."
+  echo "picks one in order of preference: rebase > squash > merge commit."
   echo
   echo "Deletes the head branch after merging. Does not run pre-flight checks or"
   echo "wait for CI. Run wait-for-pull-request-to-be-ready.sh first."
@@ -70,15 +70,15 @@ fi
 repository_settings=$(gh api "repos/${owner}/${repository_name}" --jq '{allow_merge_commit, allow_squash_merge, allow_rebase_merge}')
 
 # Detect the repository's allowed merge methods and pick one.
-if [[ "$(echo "$repository_settings" | jq -r '.allow_squash_merge')" == "true" ]]; then
+if [[ "$(echo "$repository_settings" | jq -r '.allow_rebase_merge')" == "true" ]]; then
+  method_flag="--rebase"
+  method_name="rebase"
+elif [[ "$(echo "$repository_settings" | jq -r '.allow_squash_merge')" == "true" ]]; then
   method_flag="--squash"
   method_name="squash"
 elif [[ "$(echo "$repository_settings" | jq -r '.allow_merge_commit')" == "true" ]]; then
   method_flag="--merge"
   method_name="merge commit"
-elif [[ "$(echo "$repository_settings" | jq -r '.allow_rebase_merge')" == "true" ]]; then
-  method_flag="--rebase"
-  method_name="rebase"
 else
   echo "Error: Repository does not allow any merge method." >&2
   exit 1
