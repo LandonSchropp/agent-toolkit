@@ -7,7 +7,7 @@ description: Use when working through review feedback on a GitHub pull request o
 
 ## Stacks
 
-When the pull request is part of a stack, walk the stack from the bottom up: check out each branch in turn and run every section below for it. Before starting on a branch's comments, sync it onto its updated parent so it picks up the fixes made lower in the stack, and run the relevant tests after resolving any conflicts, before continuing the sync. **REQUIRED:** Use the `ls-git:stacked-pull-requests` skill to find the stack and sync it.
+When the pull request is part of a stack, walk the stack from the bottom up: check out each branch in turn and run every section below for it. Before starting on a branch's comments, sync it onto its updated parent so it picks up the fixes made lower in the stack, and run the relevant tests after resolving any conflicts, before continuing the sync. Fix any conflicts or breakages the sync surfaces, from the parent or `main`, through the normal commit-and-review flow already in effect for this session, then resume the walk. **REQUIRED:** Use the `ls-git:stacked-pull-requests` skill to find the stack and sync it.
 
 ## Context
 
@@ -32,7 +32,7 @@ Drop bot comments and threads the user already resolved or answered.
 
 ## Summary
 
-Before walking anything, print the review status and the comment count that survived the filters above:
+Once the branch is synced, the summary line is the first thing the user sees for the pull request, before any other output about it. Print the review status and the comment count that survived the filters above:
 
 ```bash
 gh pr view "$NUMBER" --json latestReviews --jq '.latestReviews[] | "\(.author.login): \(.state)"'
@@ -41,6 +41,8 @@ gh pr view "$NUMBER" --json latestReviews --jq '.latestReviews[] | "\(.author.lo
 Format it like `✅ 2 approved · ❌ 1 changes requested · 💬 9 comments`: ✅ per approving reviewer, ❌ per reviewer who requested changes, 💬 for the total comment count (inline plus general, after the filters).
 
 ## Walk the comments
+
+Each comment is decided with the user when the walk reaches it. Never decide or batch comments ahead of time, and never fold them into a plan, including one from `ls-agent:plan`.
 
 For each comment, in order:
 
@@ -70,3 +72,6 @@ For each comment, in order:
 | "I'll re-request from everyone"                           | Only reviewers who haven't approved need another look.                          |
 | "I'll paraphrase the comment to save space"               | Post it verbatim in the blockquote — the user is reading it, not a summary.     |
 | "General comments can be replied to like review comments" | GitHub has no reply endpoint for general comments — post a new comment instead. |
+| "I'll decide them all up front and put them in the plan"  | Each comment is decided with the user when the walk reaches it.                 |
+| "I'll describe the pull request first"                    | The summary line is the first thing the user sees for each pull request.        |
+| "This rebase conflict is a detour from the walk"          | Fix it through the commit-and-review flow, then resume the walk.                |
