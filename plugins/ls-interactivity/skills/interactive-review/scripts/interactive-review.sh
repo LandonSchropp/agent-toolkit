@@ -113,7 +113,7 @@ function prepare_diff() {
   copy_revision "$before"
   git add --all --force
 
-  git commit --quiet --allow-empty "${amend[@]}" --message before
+  git commit --quiet --allow-empty ${amend[@]+"${amend[@]}"} --message before
 
   find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
   copy_revision "$after"
