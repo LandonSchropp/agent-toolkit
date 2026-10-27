@@ -13,7 +13,7 @@ Pass `--pull-request-url <url>` to each script. Use a 5-minute tool timeout when
 
 2. **Merge:** Run `scripts/merge-pull-request.sh`. Detects whether the target branch uses a merge queue — if so, adds the pull request to the queue without a strategy flag. Otherwise detects the repo's allowed methods (rebase > squash > merge commit) and merges with `--delete-branch`.
 
-3. **Confirm:** Run `scripts/wait-for-pull-request-to-be-merged.sh`. Polls until the pull request state is `MERGED`. Required when a merge queue is involved since the merge completes asynchronously.
+3. **Confirm:** Run `scripts/wait-for-pull-request-to-be-merged.sh`. Polls until the pull request state is `MERGED`, and fails if it leaves the merge queue without merging. Required when a merge queue is involved since the merge completes asynchronously; run it in the background so the user can keep working, and if it fails, find out why from the pull request's checks and tell the user.
 
 ## Rationalizations
 
