@@ -6,12 +6,13 @@ Personal engineering, work that needs the user's judgment as it goes (naming, UX
 
 ## Reviews
 
-The user reviews twice: the plan, then the stack's pull requests. Unlike Local Engineering, nobody reviews individual commits, so don't stop between them; all of the review happens on the pull requests.
+The plan was settled before this session started, so the prompt, along with anything it links to such as a Linear issue, is the plan. Build straight from it without planning or waiting for approval first. Stop to ask only when the prompt leaves a decision that only the user can make.
 
-1. Unless the prompt already hands you a plan, such as one from a coordinating session or the Linear issue, **REQUIRED:** invoke the `ls-agent:plan` skill, and wait for the user to approve the plan.
-2. Build the work following [Commits](commits.md), but in a different order for each commit: create the commit, push it, then run its pre-review, and amend the commit with any fixes before pushing again with `--force-with-lease`.
-3. Push the feature branch and open the stack's pull requests as drafts.
-4. Once the user approves the pull requests, **REQUIRED:** invoke the `ls-git:ready-for-review` skill.
+The user reviews once, on the stack's pull requests. Unlike Local Engineering, nobody reviews individual commits, so don't stop between them.
+
+1. Build the work following [Commits](commits.md), but in a different order for each commit: create the commit, push it, then run its pre-review, and amend the commit with any fixes before pushing again with `--force-with-lease`.
+2. Push the feature branch and open the stack's pull requests as drafts.
+3. Once the user approves the pull requests, **REQUIRED:** invoke the `ls-git:ready-for-review` skill.
 
 ## Subagents
 
@@ -24,7 +25,7 @@ One session owns one stack. A stack is a single pull request, or several that ha
 When the work needs more than one stack, this session coordinates and doesn't implement any of it:
 
 1. **REQUIRED:** Invoke the `ls-agent:parallelize` skill to sort the work into stages, treating each chain of pull requests that must land in order as a single task: one stack.
-2. Start a child session for every ready stack in the stage at once.
+2. Start a child session for every ready stack in the stage at once, giving each its part of the plan as its prompt, without planning again.
 3. Wait for the children to archive. A child archiving means its stack merged. Until then, stay quiet: don't message the user as children start, progress or report back, unless one is blocked on a decision only the user can make.
 4. Once a stage's children have all archived, start the next stage, and tell its children what the earlier stages landed.
 
@@ -36,6 +37,7 @@ When every pull request in this session's stack has merged, archive this session
 
 | Thought                                          | Reality                                                       |
 | ------------------------------------------------ | ------------------------------------------------------------- |
+| "I'll write up a plan and get it approved first" | The prompt is the approved plan. Build from it.               |
 | "These two stacks are manageable in one session" | They aren't to the user. Start a child session per stack.     |
 | "I'll stack these to keep them together"         | Independent work runs in parallel. Stack only what must wait. |
 | "It's a small task, I'll do it while I wait"     | A coordinating session never implements. Hand it to a child.  |

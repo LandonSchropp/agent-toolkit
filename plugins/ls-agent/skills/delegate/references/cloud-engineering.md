@@ -10,4 +10,6 @@ Devin clones from the remote, so it can't see anything that isn't pushed. If the
 
 ## The Prompt
 
-Devin plans, opens the pull request and archives its session on its own, so the prompt needs nothing beyond what any delegation needs. Don't include a plan of your own unless the user already approved it; a plan in the prompt skips Devin's plan review.
+Devin builds straight from the prompt without planning first, so the prompt is the plan. Before sending, **REQUIRED:** invoke the `ls-agent:plan` skill, and send the plan the user approves as the prompt, along with the Linear issue's URL if there is one. A task that would fit in a single commit skips planning and goes as given.
+
+Devin opens the pull requests and archives its session on its own, so leave those out.
