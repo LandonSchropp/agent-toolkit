@@ -17,6 +17,8 @@ A non-zero exit means `plan-day` failed, and its error is in the log. When the t
 
 **Never edit a daily note while the `plan-day` tab is open.** `plan-day` refuses to write any note that changed after it read it, so an edit made mid-session throws away everything the user planned in that note. This covers every daily note, not just today's, and every edit, even a one-character typo fix the user asked for. Tell the user each edit is queued, hold it until the tab closes, then apply it along with the comments.
 
+The one exception is a session the user hasn't started. `plan-day` saves a draft to `${XDG_STATE_HOME:-$HOME/.local/state}/plan-day/draft.json` the first time the user turns a page or clicks a tab. While that file doesn't exist, close the tab (**REQUIRED:** follow the `ls-interactivity:interactive-command` skill's rules for closing a tab), do what the user asked, then open `plan-day` again as above. Once the draft exists, queue the edit, even if the user has gone back to the first page: a reopened session resumes from the draft and still skips the edited note.
+
 ## Comments
 
 Each comment is an instruction about its task. Carry out every one, editing the notes directly; ask the user only when a comment is ambiguous or needs a decision from them.
