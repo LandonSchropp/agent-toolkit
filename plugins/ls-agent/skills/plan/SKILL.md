@@ -18,6 +18,12 @@ description: Use when instructed to create a plan (feature, bug fix, or refactor
    - Research the plan and its implementation before writing the Overview. Ask the user clarifying questions if needed to understand the task and what's required to implement it.
    - For the Commits section, invoke the `ls-git:git-atomic-commit` skill and apply its principles to decompose the implementation into ordered atomic commits, then fill in the list. Order the commits so the tree stays green at each step (pure refactors first, behavior changes on top). The plan file stores the commits as an ordered list, but when presenting the breakdown to the user in the conversation, render it as a table (columns: #, Commit, Contents).
 
-5. After the plan is complete, invoke the `ls-interactivity:interactive-edit` skill with the plan file so the user can review and edit it, then read their changes back. Where that skill isn't available, post the plan in the conversation instead, wait for the user's reply, and update the plan file with their changes.
+5. **REQUIRED:** Launch one `general-purpose` subagent with the Agent tool, with `run_in_background: false`, and give it this prompt, with `<plan file>` resolved:
+
+   > Apply the `ls-writing:streamline` skill to `<plan file>`, but report each cut instead of editing the file. Look for repetition and wordiness. Keep the template's sections.
+
+   Apply the cuts that keep every commit, check and detail the work needs.
+
+6. Once the cuts are applied, invoke the `ls-interactivity:interactive-edit` skill with the plan file so the user can review and edit it, then read their changes back. Where that skill isn't available, post the plan in the conversation instead, wait for the user's reply, and update the plan file with their changes.
 
 ultrathink
