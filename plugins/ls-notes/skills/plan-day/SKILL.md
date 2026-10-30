@@ -7,7 +7,7 @@ description: Use when the user says "plan my day" or "plan my morning", or wants
 
 **REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
 
-The planning happens in `plan-day`, a terminal app on the user's `PATH` that writes the results into the daily notes itself.
+The planning happens in `plan-day`, a terminal app on the user's `PATH` that writes the results into the daily notes itself. It also carries tasks forward from earlier daily notes. Let it, and don't carry tasks into today's note by hand unless `plan-day` has already run today.
 
 ## Open Pull Requests
 
