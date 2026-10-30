@@ -14,7 +14,7 @@ Handle each pull request on its own, including every pull request in a stack:
 3. **Post:** For each channel, find its ID with the Slack `slack_search_channels` tool, then send one message with `slack_send_message`, leaving `unfurl_app_links` unset:
 
    ```text
-   [<title>](<url>) (+<additions>/-<deletions>)
+   [<title>](<url>) `+<additions>/-<deletions>`
    ```
 
 4. **Report:** Give the user each message's Slack link.
