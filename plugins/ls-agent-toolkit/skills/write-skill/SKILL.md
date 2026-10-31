@@ -45,6 +45,10 @@ When a skill includes executable scripts, **REQUIRED:** Use the `ls-scripting:sc
 
 Installing a plugin copies its directory elsewhere, without the repository's dependency files such as a `Gemfile`. A skill script can't rely on them, so it must install its own dependencies, the way a Ruby script uses inline Bundler.
 
+## State and Configuration
+
+When a skill needs to store files outside the repository, such as state, configuration or data, **REQUIRED:** Read [State and Configuration](references/state-and-configuration.md).
+
 ## Interactive File Editing
 
 If a skill needs the user to edit a file mid-workflow and hand the result back, add to its SKILL.md: **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill.
