@@ -1,5 +1,5 @@
 ---
-description: Use when opening a GitHub issue, bug report, feature request, or discussion in any repository, including one the user has no local checkout of.
+description: Use when drafting, writing up, or opening a GitHub issue, bug report, feature request, or discussion in any repository, including one the user has no local checkout of.
 ---
 
 # GitHub Issue
