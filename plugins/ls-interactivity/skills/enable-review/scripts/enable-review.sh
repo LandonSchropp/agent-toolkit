@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
+DATABASE="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-interactivity/reviews.db"
 
 # No database means nothing was ever disabled, so review is already required.
 if [[ ! -f "$DATABASE" ]]; then

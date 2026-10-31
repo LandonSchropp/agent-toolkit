@@ -10,7 +10,7 @@ require "json"
 require "open3"
 require "shellwords"
 
-DATABASE = File.join(ENV["XDG_CACHE_HOME"] || File.join(ENV.fetch("HOME"), ".cache"), "agent-toolkit", "reviews.db")
+DATABASE = File.join(ENV["XDG_STATE_HOME"] || File.join(ENV.fetch("HOME"), ".local", "state"), "agent-toolkit", "ls-interactivity", "reviews.db")
 
 # Checks whether the review requirement is suspended for this herdr workspace. The disable-review
 # skill records a disable time, and the requirement stays suspended for an hour after it.

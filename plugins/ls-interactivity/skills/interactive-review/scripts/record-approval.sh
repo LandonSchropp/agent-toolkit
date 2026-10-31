@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # SQLite database of reviewed commits.
-DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
+DATABASE="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-interactivity/reviews.db"
 
 function print_help() {
   echo "Usage: record-approval.sh --directory <path>"

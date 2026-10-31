@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-DATABASE="${XDG_CACHE_HOME:-$HOME/.cache}/agent-toolkit/reviews.db"
+DATABASE="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-interactivity/reviews.db"
 
 # Nothing to disable until a review has been recorded.
 if [[ ! -f "$DATABASE" ]]; then
