@@ -6,7 +6,7 @@ require "optparse"
 require "fileutils"
 require "json"
 
-PROFILES = File.join(Dir.home, ".local", "share", "agent-toolkit", "playwright")
+PROFILES = File.join(ENV["XDG_DATA_HOME"] || File.join(Dir.home, ".local", "share"), "agent-toolkit", "ls-browser", "browser", "profiles")
 
 def print_help
   puts <<~HELP

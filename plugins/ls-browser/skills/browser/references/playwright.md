@@ -19,7 +19,7 @@ Assume headless unless the instructions or the user say otherwise, or unless the
 Use a profile whenever the work depends on a login, in this phase or a later one. Without one the profile is in memory and every login dies with the session.
 
 ```bash
---browser=chrome --profile="$HOME/.local/share/agent-toolkit/playwright/<profile>"
+--browser=chrome --profile="${XDG_DATA_HOME:-$HOME/.local/share}/agent-toolkit/ls-browser/browser/profiles/<profile>"
 ```
 
 When using profiles, _always_ use `--browser=chrome`. This ensures that the user can use their password manager to log into the website.
