@@ -17,8 +17,9 @@ function print_help() {
   echo "refuses rather than closing it."
   echo
   echo "A mode with no changes to review prints an error and exits 1 without opening"
-  echo "a review. When review is disabled for this workspace, prints 'Review is"
-  echo "disabled for this workspace.' instead and exits 0."
+  echo "a review. When review is disabled for this workspace, the working and staged"
+  echo "modes print 'Review is disabled for this workspace.' instead and exit 0. The"
+  echo "commit and diff modes ignore this."
   echo
   echo "Modes:"
   echo
@@ -235,9 +236,8 @@ diff)
   ;;
 esac
 
-# When review is disabled for this workspace the commit hook already allows commits, so there is
-# nothing to review.
-if is_review_disabled; then
+# Disabling review skips only the reviews that gate a commit.
+if [[ "$mode" == working || "$mode" == staged ]] && is_review_disabled; then
   echo "Review is disabled for this workspace."
   exit 0
 fi
