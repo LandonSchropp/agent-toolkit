@@ -49,6 +49,10 @@ Installing a plugin copies its directory elsewhere, without the repository's dep
 
 If a skill needs the user to edit a file mid-workflow and hand the result back, add to its SKILL.md: **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill.
 
+## Claude Duet Skills
+
+A skill is a Claude Duet skill when the user says so or its repository's documentation marks it as one. When writing or editing one, **REQUIRED:** Read [Claude Duet](references/claude-duet.md).
+
 ## Required Reading
 
 **STOP. Read these documents NOW. Not later. Not "as you go." Right now.**
