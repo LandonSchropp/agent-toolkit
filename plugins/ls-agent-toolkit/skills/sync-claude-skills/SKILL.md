@@ -1,9 +1,9 @@
 ---
-name: sync-claude-ai-skills
+name: sync-claude-skills
 description: Use when skills need uploading to the user's claude.ai account so Claude Duet routines can run them, such as after merging skill changes into main or when the user asks to sync their claude.ai skills.
 ---
 
-# Sync Claude.ai Skills
+# Sync Claude Skills
 
 Claude Duet routines can't run skills installed through plugins, so the skills they need are uploaded to claude.ai directly. The `scripts/build-skill-zips.rb` script owns the list of skills to upload.
 

@@ -33,7 +33,7 @@ These utilities are located in `plugins/ls-interactivity/skills/interactive-ui/s
 
 ## Claude.ai Skills
 
-Some skills here are also uploaded to claude.ai for Claude Duet. After merging into main and before closing the workspace, invoke the `ls-agent-toolkit:sync-claude-ai-skills` skill with the pre-merge commit SHA.
+Some skills here are also uploaded to claude.ai for Claude Duet. After merging into main and before closing the workspace, invoke the `ls-agent-toolkit:sync-claude-skills` skill with the pre-merge commit SHA.
 
 ## Documentation
 
