@@ -47,9 +47,32 @@ Write one subtask per pull request. Title it with the repository name, a colon, 
   - [x] [webapp: Fix the login redirect](https://github.com/example-org/webapp/pull/7) (🚀 Merged)
 ```
 
-If the task already has pull request subtasks, update them in place: refresh each status, add new pull requests, and remove ones that were closed, or merged before today. Never add a second line for the same pull request.
+If the task already has pull request subtasks, update them in place: refresh each status, add new pull requests, and remove ones that were closed, or merged before today and not forwarded (see [Earlier Notes](#earlier-notes)). Never add a second line for the same pull request.
 
 Draft pull requests stay off the list until they're ready, except for an existing subtask. Set it back to `[ ]` once its pull request is ready.
+
+### Earlier Notes
+
+Never leave a pull request subtask open on an earlier note. On the most recent earlier daily note that has an `Update/merge open pull requests` task, check each of its subtasks that isn't `[x]`, `[-]` or `[>]` with `gh pr view <url> --json state,isDraft,mergedAt`, and mark it:
+
+- `[x]`, with `🚀 Merged` alone: It merged on or before that note's day, in the user's time zone. Nothing else changes.
+- `[>]`: It's open and not a draft, or it merged after that day. Today's task lists it, as `[x]` with `🚀 Merged` if it merged.
+- `[<]`, with `📝 Draft` alone: It's a draft. `plan-day` moves it into today's task.
+- `[-]`: It was closed without merging.
+
+Mark the parent `[>]` when a subtask is `[>]` or `[<]`, and `[x]` otherwise.
+
+`plan-day` matches a task across notes by its text, or by a block ID at the end of the line. A forwarded line whose status changed no longer matches today's line, so `plan-day` would carry it into today as a duplicate. End each `[>]` line and its line on today's note with the same block ID: the earlier line's, if it has one, or six new random hex characters.
+
+```markdown
+- [>] Update/merge open pull requests
+  - [>] [widget-service: Sort the widget list by date](https://github.com/example-org/widget-service/pull/43) (⏱️ Awaiting Review) ^3fa91c
+```
+
+```markdown
+- [ ] Update/merge open pull requests
+  - [ ] [widget-service: Sort the widget list by date](https://github.com/example-org/widget-service/pull/43) (💬 Feedback) ^3fa91c
+```
 
 ## Planning
 
