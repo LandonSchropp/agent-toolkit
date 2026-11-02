@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-# SQLite database of reviewed commits and review overrides, shared with the commit hook.
-DATABASE="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-interactivity/reviews.db"
-
 function print_help() {
   echo "Usage: interactive-review.sh <mode> [<arguments>] [--directory <path>] [--name <name>]"
   echo
@@ -17,9 +14,7 @@ function print_help() {
   echo "refuses rather than closing it."
   echo
   echo "A mode with no changes to review prints an error and exits 1 without opening"
-  echo "a review. When review is disabled for this workspace, the working and staged"
-  echo "modes print 'Review is disabled for this workspace.' instead and exit 0. The"
-  echo "commit and diff modes ignore this."
+  echo "a review."
   echo
   echo "Modes:"
   echo
@@ -35,18 +30,6 @@ function print_help() {
   echo "  --directory <path>  Repository to review. Required by every mode but 'diff'."
   echo "  --name <name>       Label of the review tab. Defaults to 'review'."
   echo "  --help              Show this help message and exit."
-}
-
-# The disable-review skill suspends the review requirement for a herdr workspace by recording its
-# disable time. Treat the requirement as disabled while that time is within the last hour.
-function is_review_disabled() {
-  [[ -f "$DATABASE" ]] || return 1
-
-  [[ -n "$(sqlite3 "$DATABASE" \
-    "SELECT 1 FROM overrides
-     WHERE workspace = '$HERDR_WORKSPACE_ID'
-       AND disabled_at > strftime('%s', 'now') - 3600
-     LIMIT 1;" 2>/dev/null)" ]]
 }
 
 # Refuse to open Hunk on nothing, which is almost always the wrong mode. Each check mirrors what
@@ -241,12 +224,6 @@ diff)
   exit 1
   ;;
 esac
-
-# Disabling review skips only the reviews that gate a commit.
-if [[ "$mode" == working || "$mode" == staged ]] && is_review_disabled; then
-  echo "Review is disabled for this workspace."
-  exit 0
-fi
 
 # The arguments Hunk reviews each mode with.
 case "$mode" in

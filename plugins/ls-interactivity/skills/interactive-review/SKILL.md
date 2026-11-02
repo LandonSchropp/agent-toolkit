@@ -17,7 +17,7 @@ The script supports several modes:
 - `commit <sha>`: A single commit, compared with its parent.
 - `diff <before> <after>`: One path against another, neither of which needs to be in a repository. See [Reviewing Files Outside A Repository](#reviewing-files-outside-a-repository).
 
-Run `scripts/interactive-review.sh --help` for details. If it prints `Review is disabled for this workspace.` instead of a repository, skip the review.
+Run `scripts/interactive-review.sh --help` for details.
 
 `--directory` is the repository holding the changes, which is not always the one the session started in. Pass it explicitly every time rather than relying on where the command happens to run. When it isn't the session's own repository, commit with `git -C <same directory>`: the commit hook resolves the repository from that flag and can't see a `cd`, so it blocks an approved commit without one.
 
