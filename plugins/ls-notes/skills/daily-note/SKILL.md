@@ -48,17 +48,17 @@ If you notice existing items that don't follow these conventions, proactively su
 When you carry tasks into a new daily note, follow these rules exactly:
 
 - **Forwarded and In-Progress:** Copy the task into the new note as `[ ]`. Leave the original in its note, unchanged, as the record, so the task can live on several days. Carry it once, from its most recent version.
-- **Scheduled:** Move the task. Add it to the new note still marked `[<]`, with every subtask exactly as it is, completed ones included. Then delete the task and its subtasks from the earlier note.
+- **Scheduled:** Move the task's unfinished work. Add the task to the new note still marked `[<]`, with each subtask that isn't `[x]` or `[-]` exactly as it is, and delete those subtasks from the earlier note. Leave the `[x]` and `[-]` subtasks under the parent in the earlier note, as the record of the day they were done, and mark that parent `[/]`, since only part of its work was done that day. The `[<]` copy in the new note is now the task's most recent version, so the `[/]` parent isn't carried again. If no subtasks stay behind, delete the parent from the earlier note too. Split nested subtasks the same way, at every level.
 - **Incomplete, Complete and Cancelled:** Stay where they are. Such a parent comes along as `[ ]` only to hold a carried subtask.
 - **Weekends:** Work tasks aren't carried onto a Saturday or Sunday.
 
 #### Rationalizations
 
-| Thought                                     | Reality                                                           |
-| ------------------------------------------- | ----------------------------------------------------------------- |
-| "The new copy should start fresh as `[ ]`"  | Scheduled tasks stay `[<]`. Only Forwarded and In-Progress reset. |
-| "Leaving the original is a harmless record" | A Scheduled original left behind gets carried again. Delete it.   |
-| "Dropping the done subtasks is tidier"      | A Scheduled task moves whole, with every subtask as it is.        |
+| Thought                                    | Reality                                                           |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| "The new copy should start fresh as `[ ]`" | Scheduled tasks stay `[<]`. Only Forwarded and In-Progress reset. |
+| "The leftover parent can stay `[<]`"       | A `[<]` parent left behind gets carried again. Mark it `[/]`.     |
+| "A Scheduled task should move whole"       | Done subtasks belong to the day they were done. Leave them there. |
 
 ## Sections
 
