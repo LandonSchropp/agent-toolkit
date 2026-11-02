@@ -11,7 +11,7 @@ The planning happens in `plan-day`, a terminal app on the user's `PATH` that wri
 
 ## Open Pull Requests
 
-Before opening `plan-day`, fill in the subtasks of today's `Update/merge open pull requests` Work task. Skip this when today's note has no such task, or when the `plan-day` draft (see [Planning](#planning)) exists.
+Before opening `plan-day`, fill in the subtasks of today's `Update/merge open pull requests` Work task. Add the task to the Work section when today's note doesn't have it, and delete it when it ends up with no subtasks. Skip this on a weekend, or when the `plan-day` draft (see [Planning](#planning)) exists.
 
 Find the user's pull requests in their work GitHub organization (the domain of their work email, without the TLD):
 
