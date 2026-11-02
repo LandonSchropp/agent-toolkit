@@ -11,9 +11,9 @@ Opens a project's Git worktree as a herdr workspace and waits until its agent is
 scripts/open-workspace.sh --project <name> --branch <branch> --label <label>
 ```
 
-It prints the workspace ID, the handle for prompting that agent.
+It prints the workspace ID, the handle for prompting that agent. The branch does not need to exist.
 
-Name the project as `herdr-project list` does. The branch does not need to exist.
+Use this script in place of `herdr-project open`. **REQUIRED:** Invoke the `herdr-project` skill for the project names and for the main workspace that opens beside the worktree's. The script returns the worktree's agent, never the main one.
 
 ## Labeling the Workspace
 
@@ -21,13 +21,9 @@ The label is what the herdr sidebar shows, and it truncates past sixteen charact
 
 Name the task in two or three hyphenated words. Drop everything the branch carries for Git's sake rather than the reader's, starting with the Linear issue key: `abc-123-collapse-duplicate-sessions` is a fine branch and a useless label, where `collapse-dupes` reads at a glance.
 
-## Two Workspaces Open
-
-`herdr-project open --worktree` opens the project's main workspace as well as the worktree's. The script returns the worktree's agent, never the main one. Leave the main workspace alone: closing it is the user's call, not a cleanup step.
-
 ## Closing
 
-The agent working in the workspace closes it, from inside. Don't invoke `ls-agent:close-workspace` from here: it closes whatever `$HERDR_WORKSPACE_ID` points at, which is your own workspace, not the one you just opened. `herdr-project close --worktree` is no better — it destroys the checkout without checking the work is merged and pushed, and leaves the branch behind.
+The agent working in the workspace closes it, from inside, never the agent that opened it. Don't invoke `ls-agent:close-workspace` from here. It closes whatever `$HERDR_WORKSPACE_ID` points at, which is your own workspace, not the one you just opened.
 
 ## Rationalizations
 
@@ -35,6 +31,5 @@ The agent working in the workspace closes it, from inside. Don't invoke `ls-agen
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | "I'll call `herdr-project open` directly"        | Then you have no workspace id, and the agent may not be ready. Use the script.                                |
 | "The agent is up as soon as the command returns" | It reports `unknown` until its TUI settles and rejects prompts until then.                                    |
-| "Two workspaces opened, I should close one"      | Expected. The main workspace is the user's, not litter.                                                       |
 | "I'll find the workspace by its checkout path"   | herdr slugifies the branch into that path. The script matches `herdr worktree list`'s `branch` field instead. |
 | "I'll pass the branch name as the label"         | The sidebar truncates it mid-word. Give the task a short name of its own.                                     |

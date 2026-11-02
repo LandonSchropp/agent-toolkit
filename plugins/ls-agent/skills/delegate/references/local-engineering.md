@@ -4,7 +4,7 @@ Local Engineering runs in Claude Code inside herdr, on the user's Mac. Each work
 
 ## Choosing the Target
 
-`herdr-project list` shows the configured projects. Default to a fresh worktree so the work lands on its own branch. **REQUIRED:** Use the `ls-agent:open-workspace` skill; it returns the workspace id.
+Default to a fresh worktree so the work lands on its own branch. **REQUIRED:** Use the `ls-agent:open-workspace` skill; it returns the workspace id.
 
 Send to an already-running agent only when the user asks, or when the task needs that session's state. Find its workspace with `herdr agent list`, matching an agent's `cwd`: the project path for its main checkout, or `~/.herdr/worktrees/<project>/` for a worktree, whose last segment is the branch name slugified.
 
@@ -18,7 +18,7 @@ Single-quote the prompt. Prompts routinely contain backticks and `$`, which a do
 
 This returns as soon as the prompt is delivered. A delegated task usually outlasts the turn that sent it, so waiting strands this session for nothing; `--wait` is for the rare short task whose result decides what you do next. Run `--help` on it first.
 
-Nothing about this path depends on being inside Herdr. Both commands drive the running Herdr app over its socket from anywhere on the machine. `herdr` needs only that the app is running; `herdr-project` additionally needs `bun` on the `PATH`.
+Nothing about this path depends on being inside Herdr. Both scripts drive the running Herdr app over its socket from anywhere on the machine.
 
 Off the Mac, as in Devin or a cloud session of Claude Desktop, there is no route to herdr. Write the prompt and print it as a fenced code block for the user to carry over instead, without the preamble below, since the user has read it.
 
