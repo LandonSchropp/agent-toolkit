@@ -24,6 +24,6 @@ description: Use when instructed to create a plan (feature, bug fix, or refactor
 
    Apply the cuts that keep every commit, check and detail the work needs.
 
-6. Once the cuts are applied, invoke the `ls-interactivity:interactive-edit` skill with the plan file so the user can review and edit it, then read their changes back. Where that skill isn't available, post the plan in the conversation instead, wait for the user's reply, and update the plan file with their changes.
+6. Once the cuts are applied, present the plan for review. **REQUIRED:** Invoke the `ls-interactivity:interactive-review` skill in `diff` mode with `--name plan`, with the plan file plus an empty file to diff it against, so the whole plan shows as added. Revise the plan file to address the user's comments and refresh the review until the user approves. Where that skill isn't available, post the plan in the conversation instead, wait for the user's reply, and update the plan file with their changes.
 
 ultrathink
