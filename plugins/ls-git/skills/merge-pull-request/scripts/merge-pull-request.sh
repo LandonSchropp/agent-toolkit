@@ -12,7 +12,8 @@ function print_help() {
   echo "used). Otherwise, detects allowed merge methods from repository settings and"
   echo "picks one in order of preference: rebase > squash > merge commit."
   echo
-  echo "Deletes the head branch after merging. Does not run pre-flight checks or"
+  echo "Deletes the head branch after merging (except with a merge queue, where the"
+  echo "repository's auto-delete setting decides). Does not run pre-flight checks or"
   echo "wait for CI. Run wait-for-pull-request-to-be-ready.sh first."
   echo
   echo "Options:"
@@ -61,7 +62,7 @@ head_branch=$(echo "$pull_request_json" | jq -r '.headRefName')
 if [[ "$(gh api "repos/${owner}/${repository_name}/rules/branches/${base_branch}" \
   --jq '[.[] | select(.type == "merge_queue")] | length > 0' 2>/dev/null || echo "false")" == "true" ]]; then
   echo "Merge queue detected for '${base_branch}'. Adding to queue..." >&2
-  gh pr merge "$pull_request_url" --delete-branch
+  gh pr merge "$pull_request_url"
   git branch -d "$head_branch" 2>/dev/null || true
   exit 0
 fi
