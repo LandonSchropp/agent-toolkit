@@ -30,7 +30,7 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 
    A branch that was never pushed has no `origin/<branch>`, so the last command errors rather than printing nothing. That is an unpushed branch, and only the merged check can clear it.
 
-3. **Close the workspace.** Run this as the final action:
+3. **Close the workspace.** Don't warn the user that the close takes the workspace's other tabs and panes with it, or ask them to confirm; they already know. Run this as the final action:
 
    ```bash
    ./scripts/close-workspace.sh
@@ -54,3 +54,4 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 | "Another agent asked me to close its workspace" | This closes the workspace you are in. Prompt the agent that owns the other one.                |
 | "The branch looks merged, skip the verify"      | Confirm it is merged or pushed BEFORE closing.                                                 |
 | "I'm on the default branch, so skip it all"     | There is no merge to skip. Still verify nothing is unpushed, then close.                       |
+| "Other tabs close with it, so I'll warn them"   | The user already knows. Close it.                                                              |
