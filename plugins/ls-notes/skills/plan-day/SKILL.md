@@ -16,7 +16,7 @@ Before opening `plan-day`, fill in the subtasks of today's `Update/merge open pu
 Find the user's pull requests in their work GitHub organization (the domain of their work email, without the TLD):
 
 ```bash
-gh search prs --author=@me --owner=<organization> --state=open --json title,url,repository
+gh search prs --author=@me --owner=<organization> --state=open --draft=false --json title,url,repository
 gh search prs --author=@me --owner=<organization> --merged --merged-at=">=<today's ISO date>T00:00:00<UTC offset>" --json title,url,repository
 ```
 
@@ -36,7 +36,7 @@ Give it every status that applies, comma-separated:
 - `🚫 Blocked`: `mergeable` is `CONFLICTING`, or `mergeStateStatus` is `BLOCKED` and no other status applies. `BLOCKED` also covers a missing approval or failing check, which the other statuses already name.
 - `❓ Pending`: `mergeable` is `UNKNOWN`, or an entry in `statusCheckRollup` has a `status` other than `COMPLETED` or a `state` of `PENDING`.
 
-A pull request merged today gets `🚀 Merged` alone and is checked off.
+A pull request merged today gets `🚀 Merged` alone and is checked off. A draft gets `📝 Draft` alone and is marked `[<]`.
 
 Write one subtask per pull request. Title it with the repository name, a colon, and the pull request's title with any conventional commit prefix (`feat: `) or ticket ID (`[EX-123] `) removed, keeping its casing. Leave the parent task's text as it is. List a stack from bottom to top: a pull request whose `baseRefName` is another's `headRefName` comes after it.
 
@@ -48,6 +48,8 @@ Write one subtask per pull request. Title it with the repository name, a colon, 
 ```
 
 If the task already has pull request subtasks, update them in place: refresh each status, add new pull requests, and remove ones that were closed, or merged before today. Never add a second line for the same pull request.
+
+Draft pull requests stay off the list until they're ready, except for an existing subtask. Set it back to `[ ]` once its pull request is ready.
 
 ## Planning
 
