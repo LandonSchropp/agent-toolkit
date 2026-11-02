@@ -46,6 +46,7 @@ Give it every status that applies, comma-separated:
 - `☠️ CI Failing`: An entry in `statusCheckRollup` has a `state` or `conclusion` of `FAILURE` or `ERROR`.
 - `🚫 Blocked`: `mergeable` is `CONFLICTING`, or `mergeStateStatus` is `BLOCKED` and no other status applies. `BLOCKED` also covers a missing approval or failing check, which the other statuses already name.
 - `❓ Pending`: `mergeable` is `UNKNOWN`, or an entry in `statusCheckRollup` has a `status` other than `COMPLETED` or a `state` of `PENDING`.
+- `🟢 Ready to Merge`: `reviewDecision` is `APPROVED`, `mergeStateStatus` is `CLEAN`, and no other status applies.
 
 A pull request merged today gets `🚀 Merged` alone and is checked off. A draft gets `📝 Draft` alone and is marked `[<]`.
 
