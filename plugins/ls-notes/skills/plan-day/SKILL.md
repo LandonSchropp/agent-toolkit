@@ -22,15 +22,26 @@ gh search prs --author=@me --owner=<organization> --merged --merged-at=">=<today
 
 Use midnight in the user's time zone, since GitHub otherwise compares the date in UTC.
 
-Check each open one:
+Check each open one, taking the owner, repository and number for the review threads from its URL:
 
 ```bash
 gh pr view <url> --json author,reviewDecision,statusCheckRollup,reviewRequests,mergeable,mergeStateStatus,latestReviews,headRefName,baseRefName
+gh api graphql -F owner=<owner> -F repo=<repository> -F number=<number> -f query='
+  query($owner: String!, $repo: String!, $number: Int!) {
+    repository(owner: $owner, name: $repo) {
+      pullRequest(number: $number) {
+        reviewThreads(first: 100) { nodes { isResolved comments(first: 1) { nodes { author { login } } } } }
+      }
+    }
+  }'
 ```
 
 Give it every status that applies, comma-separated:
 
-- `💬 Feedback`: `reviewDecision` is `CHANGES_REQUESTED`, or it isn't `APPROVED` and an entry in `latestReviews` by someone other than the `author` is `COMMENTED`. Replying to a review thread records a `COMMENTED` review from the author, which doesn't count.
+- `💬 Feedback`: Any of these is true:
+  - `reviewDecision` is `CHANGES_REQUESTED`.
+  - A reviewer or bot started a review thread that isn't resolved, even if the pull request is approved.
+  - The pull request isn't approved, and a reviewer or bot left a `COMMENTED` review in `latestReviews`.
 - `⏱️ Awaiting Review`: `reviewRequests` isn't empty.
 - `☠️ CI Failing`: An entry in `statusCheckRollup` has a `state` or `conclusion` of `FAILURE` or `ERROR`.
 - `🚫 Blocked`: `mergeable` is `CONFLICTING`, or `mergeStateStatus` is `BLOCKED` and no other status applies. `BLOCKED` also covers a missing approval or failing check, which the other statuses already name.
