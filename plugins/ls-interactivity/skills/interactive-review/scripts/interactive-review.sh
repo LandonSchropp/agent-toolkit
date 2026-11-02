@@ -6,9 +6,9 @@ set -euo pipefail
 DATABASE="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-interactivity/reviews.db"
 
 function print_help() {
-  echo "Usage: interactive-review.sh <mode> [<arguments>] [--directory <path>]"
+  echo "Usage: interactive-review.sh <mode> [<arguments>] [--directory <path>] [--name <name>]"
   echo
-  echo "Opens Hunk in a background herdr tab named 'review' and prints the repository"
+  echo "Opens Hunk in a background herdr tab named <name> and prints the repository"
   echo "to listen to with 'hunk verdict listen --repo'. Returns right after starting"
   echo "Hunk; it doesn't wait for a decision. Must run inside herdr."
   echo
@@ -33,6 +33,7 @@ function print_help() {
   echo "Options:"
   echo
   echo "  --directory <path>  Repository to review. Required by every mode but 'diff'."
+  echo "  --name <name>       Label of the review tab. Defaults to 'review'."
   echo "  --help              Show this help message and exit."
 }
 
@@ -86,15 +87,15 @@ function copy_revision() {
   cp -R "$scratch/." .
 }
 
-# Stage two paths as the before and after of this workspace's ephemeral repository, and move into
-# it. While a review is open the repository is updated in place, so the review reloads rather than
-# starting over.
+# Stage two paths as the before and after of the ephemeral repository for this workspace and tab
+# name, and move into it. While a review is open the repository is updated in place, so the review
+# reloads rather than starting over.
 function prepare_diff() {
   local before after repository amend=(--amend)
 
   before="$(realpath "$1")"
   after="$(realpath "$2")"
-  repository="$(realpath "${TMPDIR:-/tmp}")/agent-toolkit/review-$HERDR_WORKSPACE_ID"
+  repository="$(realpath "${TMPDIR:-/tmp}")/agent-toolkit/review-$HERDR_WORKSPACE_ID-$name"
 
   [[ -n "$(review_tab)" ]] || rm -rf "$repository"
   mkdir -p "$repository"
@@ -121,10 +122,10 @@ function prepare_diff() {
   git add --all --force
 }
 
-# The review tab open in this workspace, if any.
+# The review tab named $name open in this workspace, if any.
 function review_tab() {
   herdr tab list --workspace "$HERDR_WORKSPACE_ID" |
-    jq --raw-output '.result.tabs[] | select(.label == "review") | .tab_id'
+    jq --raw-output --arg name "$name" '.result.tabs[] | select(.label == $name) | .tab_id'
 }
 
 # The directory a review tab was opened in.
@@ -134,6 +135,7 @@ function review_directory() {
 }
 
 directory=""
+name="review"
 positionals=()
 
 while [[ $# -gt 0 ]]; do
@@ -144,6 +146,10 @@ while [[ $# -gt 0 ]]; do
     ;;
   --directory)
     directory="$2"
+    shift 2
+    ;;
+  --name)
+    name="$2"
     shift 2
     ;;
   -*)
@@ -282,7 +288,7 @@ else
   printf -v command '%q ' hunk "${hunk_arguments[@]}"
 
   pane="$(
-    herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd "$PWD" --label review --no-focus |
+    herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd "$PWD" --label "$name" --no-focus |
       jq --raw-output '.result.root_pane.pane_id'
   )"
 

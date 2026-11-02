@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function print_help() {
-  echo "Usage: listen.sh --directory <path>"
+  echo "Usage: listen.sh --directory <path> [--name <name>]"
   echo
   echo "Prints each decision the user makes in the Hunk review of <path>, one line at a time, the way"
   echo "'hunk verdict listen' does. On an approval, a comment or a denial made while the user is on the"
@@ -12,11 +12,14 @@ function print_help() {
   echo "Options:"
   echo
   echo "  --directory <path>     The repository interactive-review.sh printed."
+  echo "  --name <name>          The review tab's label, as passed to interactive-review.sh. Defaults to"
+  echo "                         'review'."
   echo "  --help                 Show this help message and exit."
 }
 
 # Parse arguments
 directory=""
+name="review"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -26,6 +29,10 @@ while [[ $# -gt 0 ]]; do
     ;;
   --directory)
     directory="$2"
+    shift 2
+    ;;
+  --name)
+    name="$2"
     shift 2
     ;;
   *)
@@ -52,7 +59,7 @@ function return_to_agent_tab() {
 
   review_focused="$(
     herdr tab list --workspace "$HERDR_WORKSPACE_ID" |
-      jq --raw-output '.result.tabs[] | select(.label == "review") | .focused'
+      jq --raw-output --arg name "$name" '.result.tabs[] | select(.label == $name) | .focused'
   )"
 
   [[ "$review_focused" == "true" ]] || return 0
