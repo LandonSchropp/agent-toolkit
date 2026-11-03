@@ -25,6 +25,10 @@ The queue grows as the user adds to the note. Alongside `dispatch`'s watcher, ru
 
 Propose each new task as it joins the queue. Ignore the tasks you added yourself, and any that already have a workspace or are queued, since editing a task reports it again.
 
+## Pull Requests to Merge
+
+When the user hands you pull requests to get merged, **REQUIRED:** read [Pull Requests to Merge](references/pull-requests-to-merge.md).
+
 ## Keeping the Note Current
 
 - **The user hands you work directly:** The queue lives in the note, so anything that isn't trivial goes in as a task before you queue it.
