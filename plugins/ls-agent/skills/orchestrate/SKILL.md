@@ -15,13 +15,6 @@ The daily note is the source of truth for what gets worked on today. This sessio
 
 Follow the `ls-agent:dispatch`'s instructions with the changes below.
 
-## Active Tasks
-
-Beyond `dispatch`'s count, also leave out:
-
-- **`plan-day`:** Planning, not work.
-- **Parked workspaces:** Ones the user isn't ready to close but isn't actively working on. For now, they're the ones whose label ends in `-parked`.
-
 ## The Queue
 
 Today's unchecked tasks are the queue. Skip `dispatch`'s parallelization step: the user picks the order, so propose tasks from the note and let them choose.
@@ -30,13 +23,13 @@ Leave out tasks no agent can do, such as errands. Those stay with the user. Your
 
 The queue grows as the user adds to the note. Alongside `dispatch`'s watcher, run `scripts/watch-daily-note.sh` with the `Monitor` tool, at its longest timeout, and re-arm it each time it expires. It prints a line for each unchecked task that appears in today's note, including the whole new note when the day rolls over. A task added in the last couple of minutes before it expired goes unreported, so after re-arming, read the note for unchecked tasks you haven't queued yet.
 
-A new task joins the queue: propose it if fewer than three tasks are active, and otherwise let it wait its turn. Ignore the tasks you added yourself, and any that are already active or queued, since editing a task reports it again.
+Propose each new task as it joins the queue. Ignore the tasks you added yourself, and any that already have a workspace or are queued, since editing a task reports it again.
 
 ## Keeping the Note Current
 
 - **The user hands you work directly:** The queue lives in the note, so anything that isn't trivial goes in as a task before you queue it.
 - **A task's workspace closes:** Check its task off, unless it's already checked.
-- **A workspace opens for work that isn't in the note:** The user chose to spend part of the day on it. If it's a real piece of the day's work, offer to add it as a task, and add nothing until they say yes. If its label doesn't make clear what it's doing, read its agent with `herdr agent read`.
+- **A workspace opens for work that isn't in the note:** The user chose to spend part of the day on it. If it's a real piece of the day's work, offer to add it as a task, and add nothing until they say yes. If its label doesn't make clear what it's doing, read its agent with `herdr agent read`. Skip the `plan-day` workspace, which is planning, not work.
 
 Don't offer to add anything small enough that tracking it isn't worth it, like a quick fix or a one-off question.
 
