@@ -5,11 +5,11 @@ description: Use when merging a single GitHub pull request. Handles pre-flight c
 
 # Merge Pull Request
 
-Pass `--pull-request-url <url>` to each script. Use a 5-minute tool timeout when running the polling scripts. If a script times out, check for any issues, then re-run it — repeat up to 5 times before giving up.
+This skill runs inside herdr and merges a pull request opened from this workspace's branch. Pass `--pull-request-url <url>` to each script.
 
 ## Process
 
-1. **Wait until ready:** Run `scripts/wait-for-pull-request-to-be-ready.sh`. Waits for CI to complete and for GitHub to report the pull request as mergeable (not draft, no conflicts, reviews approved, up to date with its base branch). Exits immediately on any permanent blocker — stop and surface the error to the user.
+1. **Wait until ready:** Run `herdr-pull-request-status watch --workspace "$HERDR_WORKSPACE_ID"` with the `Monitor` tool, at its longest timeout, and re-arm it each time it expires. Wait for the pull request's line to show `ready to merge`. `waiting for CI` and `in merge queue` resolve on their own. Any other status is a blocker, such as `CI failed`, `changes requested` or `waiting for review`, so stop and surface it to the user. Never call `herdr-pull-request-status add` here, since it attaches the pull request to this workspace's sidebar.
 
 2. **Merge:** Run `scripts/merge-pull-request.sh`. Detects whether the target branch uses a merge queue — if so, adds the pull request to the queue without a strategy flag. Otherwise detects the repo's allowed methods (rebase > squash > merge commit) and merges with `--delete-branch`.
 
@@ -17,7 +17,7 @@ Pass `--pull-request-url <url>` to each script. Use a 5-minute tool timeout when
 
 ## Rationalizations
 
-| Thought                                                          | Reality                                                                       |
-| ---------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| "CI is almost done, I'll skip wait-for-pull-request-to-be-ready" | Use the script. It handles the wait.                                          |
-| "The pull request is blocked on approvals, I'll use `--admin`"   | Admin bypass is a user decision, not the skill's. Surface the block and stop. |
+| Thought                                                        | Reality                                                                       |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| "CI is almost done, I'll skip the wait"                        | Wait for `ready to merge`. `watch` handles the wait.                          |
+| "The pull request is blocked on approvals, I'll use `--admin`" | Admin bypass is a user decision, not the skill's. Surface the block and stop. |

@@ -14,7 +14,7 @@ function print_help() {
   echo
   echo "Deletes the head branch after merging (except with a merge queue, where the"
   echo "repository's auto-delete setting decides). Does not run pre-flight checks or"
-  echo "wait for CI. Run wait-for-pull-request-to-be-ready.sh first."
+  echo "wait for CI. Wait until the pull request is ready to merge first."
   echo
   echo "Options:"
   echo
