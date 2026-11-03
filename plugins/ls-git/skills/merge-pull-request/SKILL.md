@@ -9,7 +9,7 @@ Pass `--pull-request-url <url>` to each script. Use a 5-minute tool timeout when
 
 ## Process
 
-1. **Wait until ready:** Run `scripts/wait-for-pull-request-to-be-ready.sh`. Waits for CI to complete and verifies all static conditions (not draft, no conflicts, reviews approved). Exits immediately on any permanent blocker — stop and surface the error to the user.
+1. **Wait until ready:** Run `scripts/wait-for-pull-request-to-be-ready.sh`. Waits for CI to complete and for GitHub to report the pull request as mergeable (not draft, no conflicts, reviews approved, up to date with its base branch). Exits immediately on any permanent blocker — stop and surface the error to the user.
 
 2. **Merge:** Run `scripts/merge-pull-request.sh`. Detects whether the target branch uses a merge queue — if so, adds the pull request to the queue without a strategy flag. Otherwise detects the repo's allowed methods (rebase > squash > merge commit) and merges with `--delete-branch`.
 

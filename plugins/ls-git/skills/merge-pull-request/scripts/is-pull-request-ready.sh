@@ -11,8 +11,10 @@ function print_help() {
   echo "  0  Ready to merge."
   echo "  1  Argument error."
   echo "  2  Permanent blocker — requires user action (draft, conflicts,"
-  echo "     changes requested, missing review, CI failed)."
-  echo "  3  Transient — CI checks are still pending. Retry later."
+  echo "     changes requested, missing review, CI failed, behind base branch,"
+  echo "     blocked by a branch protection rule)."
+  echo "  3  Transient — CI checks are still pending, or GitHub is still computing"
+  echo "     the merge state. Retry later."
   echo
   echo "Options:"
   echo
@@ -49,7 +51,7 @@ if [[ -z "$pull_request_url" ]]; then
 fi
 
 pull_request_json=$(gh pr view "$pull_request_url" \
-  --json state,isDraft,mergeable,reviewDecision,statusCheckRollup)
+  --json state,isDraft,mergeable,mergeStateStatus,reviewDecision)
 
 # The pull request must be open. This catches MERGED and CLOSED states.
 if [[ "$(echo "$pull_request_json" | jq -r '.state')" != "OPEN" ]]; then
@@ -81,47 +83,40 @@ REVIEW_REQUIRED)
   ;;
 esac
 
-# All CI checks must have passed. Any failure is a permanent blocker.
-failed=$(echo "$pull_request_json" | jq -r '
-  .statusCheckRollup | [
-    .[] | select(
-      (.__typename == "CheckRun" and (
-        .conclusion == "FAILURE" or
-        .conclusion == "CANCELLED" or
-        .conclusion == "TIMED_OUT" or
-        .conclusion == "ACTION_REQUIRED"
-      )) or
-      (.__typename == "StatusContext" and (
-        .state == "FAILURE" or
-        .state == "ERROR"
-      ))
-    ) | (.name // .context)
-  ] | join(", ")
-')
+merge_state=$(echo "$pull_request_json" | jq -r '.mergeStateStatus')
 
-if [[ -n "$failed" ]]; then
-  echo "Error: CI check(s) failed: ${failed}" >&2
-  exit 2
-fi
-
-# Pending CI checks are transient. Signal the caller to retry rather than failing permanently.
-pending=$(echo "$pull_request_json" | jq '
-  .statusCheckRollup | [
-    .[] | select(
-      (.__typename == "CheckRun" and (
-        .status == "QUEUED" or
-        .status == "IN_PROGRESS" or
-        .status == "PENDING" or
-        .status == "WAITING"
-      )) or
-      (.__typename == "StatusContext" and .state == "PENDING")
-    )
-  ] | length
-')
-
-if [[ "$pending" -gt 0 ]]; then
-  echo "CI checks pending: ${pending} check(s) still running." >&2
+case "$merge_state" in
+CLEAN | HAS_HOOKS) ;;
+UNKNOWN)
+  echo "GitHub is still computing the merge state." >&2
   exit 3
-fi
+  ;;
+BEHIND)
+  echo "Error: Pull request is behind its base branch. Update it before merging." >&2
+  exit 2
+  ;;
+BLOCKED | UNSTABLE)
+  case "$(gh pr checks "$pull_request_url" --json bucket \
+    --jq 'map(.bucket) | if any(. == "fail" or . == "cancel") then "fail" elif any(. == "pending") then "pending" else "" end')" in
+  fail)
+    echo "Error: CI checks failed. Run \`gh pr checks ${pull_request_url}\` to see which." >&2
+    exit 2
+    ;;
+  pending)
+    echo "CI checks pending." >&2
+    exit 3
+    ;;
+  esac
+
+  if [[ "$merge_state" == "BLOCKED" ]]; then
+    echo "Error: Pull request is blocked by a branch protection rule." >&2
+    exit 2
+  fi
+  ;;
+*)
+  echo "Error: Pull request can't be merged (merge state: ${merge_state})." >&2
+  exit 2
+  ;;
+esac
 
 echo "Pull request is ready to merge." >&2

@@ -11,7 +11,8 @@ function print_help() {
   echo
   echo "Calls is-pull-request-ready.sh every ${poll_interval}s."
   echo "Exits immediately on permanent blockers (draft, conflicts, changes requested,"
-  echo "CI failure). Retries while CI checks are pending."
+  echo "CI failure, behind base branch, blocked by a branch protection rule). Retries"
+  echo "while CI checks are pending or GitHub is still computing the merge state."
   echo "Exits 0 when ready, 1 on argument error, 2 on permanent blocker."
   echo
   echo "Options:"
