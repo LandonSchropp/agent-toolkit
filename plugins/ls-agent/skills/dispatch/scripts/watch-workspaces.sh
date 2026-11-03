@@ -7,7 +7,7 @@ set -euo pipefail
 # without changing, so a burst of changes arrives as one batch. Runs until it is killed.
 
 function list_workspaces() {
-  herdr workspace list | jq --raw-output '.result.workspaces[] | "\(.workspace_id) \(.label)"' | sort --key=1,1
+  herdr-group list --json | jq --raw-output '.[] | "\(.workspace_id) \(.label)"' | sort --key=1,1
 }
 
 function print_missing_workspaces() {
