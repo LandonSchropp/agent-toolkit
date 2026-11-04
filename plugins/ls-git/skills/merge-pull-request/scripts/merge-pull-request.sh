@@ -12,10 +12,6 @@ function print_help() {
   echo "used). Otherwise, detects allowed merge methods from repository settings and"
   echo "picks one in order of preference: rebase > squash > merge commit."
   echo
-  echo "Deletes the head branch after merging (except with a merge queue, where the"
-  echo "repository's auto-delete setting decides). Does not run pre-flight checks or"
-  echo "wait for CI. Wait until the pull request is ready to merge first."
-  echo
   echo "Options:"
   echo
   echo "  --pull-request-url <url>   URL or number of the pull request."
@@ -86,5 +82,5 @@ else
 fi
 
 echo "Merging with ${method_name} strategy..." >&2
-gh pr merge "$pull_request_url" "$method_flag" --delete-branch
+gh pr merge "$pull_request_url" "$method_flag"
 git branch -d "$head_branch" 2>/dev/null || true
