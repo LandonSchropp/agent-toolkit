@@ -10,7 +10,7 @@ Source carries the minimum that conveys the contract. Past that, every line is a
 Two forms, two jobs:
 
 - [Comments](references/comments.md) label. A comment names what the code is, in one line, where the code can't name itself.
-- [Documentation](references/documentation.md) states the contract. What a caller passes, what comes back, what can go wrong.
+- [Documentation](references/documentation.md) states the contract. What a caller passes, what comes back, what can go wrong. A script's usage and help text is documentation too.
 
 Read the reference for whichever form the diff touches. Read both when it touches both.
 
