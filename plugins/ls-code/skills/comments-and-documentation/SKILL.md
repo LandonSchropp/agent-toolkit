@@ -14,6 +14,8 @@ Two forms, two jobs:
 
 Read the reference for whichever form the diff touches. Read both when it touches both.
 
+**REQUIRED:** Both forms must follow the communication principles of the `ls-agent:instructions` skill, especially its rule to describe what's there, not what isn't. Every sentence that breaks it gets cut or rewritten.
+
 ## The Procedure
 
 List every comment and every documentation block the diff touches, with its line count, including the ones the diff already carried and not only the ones you wrote. Toolchain directives are the one exemption, and `references/comments.md` says which. Give each remaining entry exactly one disposition:
