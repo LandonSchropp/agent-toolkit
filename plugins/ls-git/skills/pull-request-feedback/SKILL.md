@@ -28,7 +28,7 @@ gh api "repos/$REPO/pulls/$NUMBER/comments" --paginate --jq '[.[] | select(.in_r
 gh api "repos/$REPO/issues/$NUMBER/comments" --paginate --jq '[.[] | {kind: "general", id, body, bot: (.user.type == "Bot"), url: .html_url, created_at}]'
 ```
 
-Drop bot comments and threads the user already resolved or answered.
+Drop threads the user already resolved or answered.
 
 ## Summary
 
@@ -57,6 +57,40 @@ For each comment, in order:
      - General comment: `gh api "repos/$REPO/issues/comments/<id>/reactions" -f content="..."`
    - **Move on**: no action, continue to the next comment.
 
+4. When you replied or reacted to a bot's review comment, resolve its thread. Never resolve a person's thread. The reply is enough.
+
+   ```bash
+   THREAD=$(gh api graphql \
+     -F owner="${REPO%/*}" \
+     -F name="${REPO#*/}" \
+     -F number="$NUMBER" \
+     -f query='
+       query($owner: String!, $name: String!, $number: Int!) {
+         repository(owner: $owner, name: $name) {
+           pullRequest(number: $number) {
+             reviewThreads(first: 100) {
+               nodes {
+                 id
+                 comments(first: 1) { nodes { databaseId } }
+               }
+             }
+           }
+         }
+       }' \
+     --jq '.data.repository.pullRequest.reviewThreads.nodes[]
+       | select(.comments.nodes[0].databaseId == <id>)
+       | .id')
+
+   gh api graphql \
+     -f id="$THREAD" \
+     -f query='
+       mutation($id: ID!) {
+         resolveReviewThread(input: {threadId: $id}) {
+           thread { isResolved }
+         }
+       }'
+   ```
+
 ## Wrap up
 
 1. `git push`.
@@ -75,3 +109,4 @@ For each comment, in order:
 | "I'll decide them all up front and put them in the plan"  | Each comment is decided with the user when the walk reaches it.                 |
 | "I'll describe the pull request first"                    | The summary line is the first thing the user sees for each pull request.        |
 | "This rebase conflict is a detour from the walk"          | Fix it through the commit-and-review flow, then resume the walk.                |
+| "I replied to the bot, so the thread is done"             | Resolve its thread too, or it stays open as unanswered feedback.                |
