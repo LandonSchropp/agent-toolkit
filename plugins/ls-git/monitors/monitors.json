@@ -1,0 +1,8 @@
+[
+  {
+    "name": "pull-requests",
+    "command": "herdr-pull-request-status watch --workspace \"${HERDR_WORKSPACE_ID}\"",
+    "description": "Pull request status changes",
+    "when": "on-skill-invoke:ls-git:babysit"
+  }
+]
