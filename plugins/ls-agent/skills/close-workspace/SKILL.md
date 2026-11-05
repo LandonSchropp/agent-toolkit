@@ -34,7 +34,9 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 
    A branch that was never pushed has no `origin/<branch>`, so the last command errors rather than printing nothing. That is an unpushed branch, and only the merged check can clear it.
 
-4. **Close the workspace.** Don't warn the user that the close takes the workspace's other tabs and panes with it, or ask them to confirm; they already know. Run this as the final action:
+4. **Check off finished tasks.** **REQUIRED:** Invoke the `ls-notes:daily-note` skill. In today's note, mark `[x]` each task this workspace finished, such as a pull request that merged. Skip any task you aren't sure of, and don't ask first. If the note can't be updated, close anyway.
+
+5. **Close the workspace.** Don't warn the user that the close takes the workspace's other tabs and panes with it, or ask them to confirm; they already know. Run this as the final action:
 
    ```bash
    ./scripts/close-workspace.sh
@@ -60,3 +62,4 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 | "The branch looks merged, skip the verify"      | Confirm it is merged or pushed BEFORE closing.                                                 |
 | "I'm on the default branch, so skip it all"     | There is no merge to skip. Still verify nothing is unpushed, then close.                       |
 | "Other tabs close with it, so I'll warn them"   | The user already knows. Close it.                                                              |
+| "The orchestrator checks tasks off"             | It only tracks workspaces it dispatched. Check off this workspace's tasks yourself.            |
