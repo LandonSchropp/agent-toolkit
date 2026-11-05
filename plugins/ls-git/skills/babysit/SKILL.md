@@ -1,11 +1,13 @@
 ---
 name: babysit
-description: Use when a session has finished opening its pull requests, whether one or a whole stack, and they need to be carried through feedback, CI and review to merge, or when the orchestrator tells a session to babysit its pull requests.
+description: Use when a session has opened its pull requests or posted them for review, whether one or a whole stack, and they need to be carried through feedback, CI and review to merge, or when the orchestrator tells a session to babysit its pull requests.
 ---
 
 # Babysit
 
 Carry this workspace's pull requests to merge. Babysit only the pull requests this session opened or was handed. Leave draft pull requests alone.
+
+The workspace stays open the whole time. Never close it while any of its pull requests is still open.
 
 ## Start
 

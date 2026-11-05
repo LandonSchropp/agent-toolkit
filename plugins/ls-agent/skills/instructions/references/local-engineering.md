@@ -33,31 +33,33 @@ When telling the user about a workspace, name it by the label shown in the herdr
 
 ## Finishing a Workspace
 
-When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two. The exception is a work repository that integrates through pull requests: open the pull requests, then offer to post them for review, and offer to close the workspace only once they're posted.
+When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two. The exception is a work repository that integrates through pull requests. Open the pull requests and offer to post them for review. Once they're posted, babysit them.
+
+**Never close a workspace while it's babysitting pull requests.** Posting a pull request for review doesn't finish the work. Merging it does.
 
 A main checkout closes the same way a linked worktree does; an agent closes itself out either way, even when its child worktrees are still open.
 
 - **Repositories that merge directly into the default branch:** On approval, **REQUIRED:** invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
-- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack. When the user approves posting them for review, **REQUIRED:** invoke the `ls-git:ready-for-review` skill. Then invoke the `ls-agent:close-workspace` skill. The branch outlives the worktree in the main checkout, and the pull request merges from there.
+- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack. When the user approves posting them for review, **REQUIRED:** invoke the `ls-git:ready-for-review` skill. As soon as they're posted, **REQUIRED:** invoke the `ls-git:babysit` skill. It moves the workspace to In Review, carries the pull requests to merge and offers to close the workspace once they have.
 
 ## Rationalizations
 
-| Thought                                                | Reality                                                                    |
-| ------------------------------------------------------ | -------------------------------------------------------------------------- |
-| "`rm` is fine for a scratch file"                      | `trash` is recoverable. Use it every time.                                 |
-| "I'll ask if they're ready to commit"                  | The decision already answered that. Act on it, don't ask.                  |
-| "I'll ask if they want to re-review"                   | A denial already answered that. Address it, don't ask.                     |
-| "It was approved, so there's nothing to check"         | Approval and comments are independent. Check both.                         |
-| "Denied with no feedback — I'll retry anyway"          | No comments means they weren't ready. Stop and wait.                       |
-| "They only commented, so the rest is approved"         | A comment is not an approval. Reply, then wait for the next decision.      |
-| "This change is trivial, skip the review"              | Every commit is reviewed. Present it.                                      |
-| "I'll commit now and let them review after"            | Review comes before the commit. Present first.                             |
-| "No feedback last time, so skip it now"                | A new change is a new review. Present it.                                  |
-| "The worktree has unrelated edits too"                 | Stage only this commit's files and review in staged mode.                  |
-| "The workspace ID is precise enough"                   | The user only sees labels. Name the workspace by its label.                |
-| "Chaining commands saves a round trip"                 | Each command needs its own approval. Run them one at a time.               |
-| "I'll ask to merge now and to close later"             | One question covers both. Ask once, then do both.                          |
-| "The task is done, so the worktree can wait"           | An unmerged worktree is unfinished work. Offer to close it.                |
-| "This is the main checkout, not a worktree"            | It closes too, even with worktrees still open.                             |
-| "I'll merge into main, it's simpler"                   | Only where the repository merges directly. Elsewhere, open a pull request. |
-| "The pull request hasn't merged, so keep the worktree" | The branch survives in the main checkout. Close the worktree anyway.       |
+| Thought                                           | Reality                                                                    |
+| ------------------------------------------------- | -------------------------------------------------------------------------- |
+| "`rm` is fine for a scratch file"                 | `trash` is recoverable. Use it every time.                                 |
+| "I'll ask if they're ready to commit"             | The decision already answered that. Act on it, don't ask.                  |
+| "I'll ask if they want to re-review"              | A denial already answered that. Address it, don't ask.                     |
+| "It was approved, so there's nothing to check"    | Approval and comments are independent. Check both.                         |
+| "Denied with no feedback — I'll retry anyway"     | No comments means they weren't ready. Stop and wait.                       |
+| "They only commented, so the rest is approved"    | A comment is not an approval. Reply, then wait for the next decision.      |
+| "This change is trivial, skip the review"         | Every commit is reviewed. Present it.                                      |
+| "I'll commit now and let them review after"       | Review comes before the commit. Present first.                             |
+| "No feedback last time, so skip it now"           | A new change is a new review. Present it.                                  |
+| "The worktree has unrelated edits too"            | Stage only this commit's files and review in staged mode.                  |
+| "The workspace ID is precise enough"              | The user only sees labels. Name the workspace by its label.                |
+| "Chaining commands saves a round trip"            | Each command needs its own approval. Run them one at a time.               |
+| "I'll ask to merge now and to close later"        | One question covers both. Ask once, then do both.                          |
+| "The task is done, so the worktree can wait"      | An unmerged worktree is unfinished work. Offer to close it.                |
+| "This is the main checkout, not a worktree"       | It closes too, even with worktrees still open.                             |
+| "I'll merge into main, it's simpler"              | Only where the repository merges directly. Elsewhere, open a pull request. |
+| "The pull request is posted, so the work is done" | It's done when it merges. Babysit it until then.                           |

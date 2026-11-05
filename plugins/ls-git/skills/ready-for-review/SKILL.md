@@ -19,6 +19,8 @@ Handle each pull request on its own, including every pull request in a stack:
 
 4. **Report:** Give the user each message's Slack link.
 
+Once every pull request is posted, **REQUIRED:** invoke the `ls-git:babysit` skill on them. Never close the workspace after posting. It closes only after its pull requests merge.
+
 ## Rationalizations
 
 | Thought                                            | Reality                                                                               |
@@ -27,3 +29,4 @@ Handle each pull request on its own, including every pull request in a stack:
 | "The bot comment has copy-paste text ready to go"  | Its format isn't the one the user wants. Use the line above.                          |
 | "A link preview makes the message clearer"         | The user doesn't want the preview. Leave `unfurl_app_links` unset.                    |
 | "No comment yet, so I'll guess the team's channel" | A guess posts to the wrong team. Ask the user.                                        |
+| "They're posted, so the workspace can close"       | Posting starts the review. Babysit the pull requests until they merge.                |
