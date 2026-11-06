@@ -6,8 +6,8 @@ function print_help() {
   echo "Usage: interactive-review.sh <mode> [<arguments>] [--directory <path>] [--name <name>]"
   echo
   echo "Opens Hunk in a background herdr tab named <name> and prints the repository"
-  echo "to listen to with 'hunk verdict listen --repo'. Returns right after starting"
-  echo "Hunk; it doesn't wait for a decision. Must run inside herdr."
+  echo "holding the review, which in diff mode is a temporary one. Returns right after"
+  echo "starting Hunk; it doesn't wait for a decision. Must run inside herdr."
   echo
   echo "If a review of the same repository is already open, reloads it in place,"
   echo "keeping the user's comments. If a review of another repository is open,"
@@ -271,7 +271,15 @@ else
 
   # The trailing `exit` closes the tab when Hunk quits.
   herdr pane run "$pane" "$command; exit" >/dev/null
+
+  # Wait for the review to register, so the hunk-verdict hook finds it when this turn ends.
+  for _ in {1..20}; do
+    hunk session list --json |
+      jq --exit-status --arg directory "$(pwd -P)" 'any(.sessions[]; .cwd == $directory)' >/dev/null &&
+      break
+    sleep 0.5
+  done
 fi
 
-# Print the repository to listen to, which in diff mode is the temporary one.
+# Print the repository holding the review, which in diff mode is the temporary one.
 pwd

@@ -8,7 +8,7 @@ user-invocable: false
 
 ## Opening the Review
 
-Run `scripts/interactive-review.sh <mode> [<arguments>] [--directory <path>] [--name <name>]`. It opens Hunk in a background herdr tab named `<name>`, `review` by default, prints the repository to listen to, and returns right away. Running it again while that review is open reloads it in place, keeping the user's comments.
+Run `scripts/interactive-review.sh <mode> [<arguments>] [--directory <path>] [--name <name>]`. It opens Hunk in a background herdr tab named `<name>`, `review` by default, prints the repository holding the review, and returns right away. Running it again while that review is open reloads it in place, keeping the user's comments.
 
 The script supports several modes:
 
@@ -23,7 +23,7 @@ Run `scripts/interactive-review.sh --help` for details.
 
 ## Listening for the Decision
 
-**REQUIRED:** Use the `hunk-verdict` skill to listen for the user's decision and to act on it and the user's comments, but listen with `scripts/listen.sh --directory <printed repository> [--name <name>]`, passing the same `--name` as the review, in place of `hunk verdict listen`. It prints the same lines, and on an approval, a comment or a denial it switches the user back to your tab. In `staged` mode, the review shows only what's staged, so stage your fixes to make them show, and stage any edits the user makes during the review. Stage only the changes that belong to the commit, since a file can be partly staged on purpose.
+While the review is open, the plugin's `hunk-verdict` hook wakes you with each decision the user makes, as `Hunk review decision: review-approved`, `review-commented` or `review-denied`, and usually `review-closed` when the review closes. On an approval, a comment or a denial, it also switches the user back to your tab. The hook is the only listener. **REQUIRED:** Use the `hunk-verdict` skill to act on each decision and the user's comments. In `staged` mode, the review shows only what's staged, so stage your fixes to make them show, and stage any edits the user makes during the review. Stage only the changes that belong to the commit, since a file can be partly staged on purpose.
 
 Reply to every comment you handle. When you made the change exactly as asked, reply with ✅ and nothing else; otherwise _briefly_ explain what you did or why you didn't make the change. The user reads those replies in Hunk, so don't repeat them in your chat message: say you replied in the review, and at most name what you changed. Never remove the user's comments: they're the record of what happened in the review.
 
@@ -31,7 +31,7 @@ When the user approves, and before committing:
 
 1. Read the user's comments. Closing the tab ends the Hunk session, and its comments go with it.
 2. Run `scripts/record-approval.sh --directory <printed repository>`, so the commit hook allows the commit.
-3. Close the review tab. Closing Hunk also ends the listener.
+3. Close the review tab.
 
 In `commit` mode the commit already exists, so skip `record-approval.sh`. The decision and comments still count.
 

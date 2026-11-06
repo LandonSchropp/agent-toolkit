@@ -1,5 +1,5 @@
 {
-  "description": "Blocks git commit until the pending changes have been reviewed.",
+  "description": "Blocks git commit until the pending changes have been reviewed, and wakes the agent with each decision made in an open Hunk review.",
   "hooks": {
     "PreToolUse": [
       {
@@ -8,6 +8,18 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/require-review.rb"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/hunk-verdict.sh",
+            "asyncRewake": true,
+            "timeout": 604800
           }
         ]
       }
