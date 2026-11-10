@@ -307,7 +307,7 @@
   // One row per stage, at most four tasks each: [id, title, lane, ids it waits on, milestone, status, source].
   // Status is the Linear status as [name, type], where type is backlog, unstarted, started, completed or canceled.
   // A task with no Linear issue gets a short key such as "Q1" for its id, the status ["Open", "backlog"] or
-  // ["Answered", "completed"], and a source of [document name, URL of the block that holds it].
+  // ["Answered", "completed"], and a source of [short document name, URL of the block that holds it].
   const STEPS = [
     [
       [
@@ -317,7 +317,7 @@
         [],
         "Milestone",
         ["Open", "backlog"],
-        ["Engineering Assessment", "https://www.notion.so/<page>#<block>"],
+        ["Eng Assessment", "https://www.notion.so/<page>#<block>"],
       ],
       ["ABC-2", "Add the endpoint", "Web", [], "Milestone", ["In Progress", "started"]],
     ],

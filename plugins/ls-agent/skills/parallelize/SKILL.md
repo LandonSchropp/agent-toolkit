@@ -9,7 +9,7 @@ Turn a set of tasks into an ordered set of stages: what can run at the same time
 
 ## Workflow
 
-1. Gather the tasks. Where they are Linear issues, fetch them with the Linear MCP server so each one carries its own description rather than a title. Add the open work that has no issue yet, such as unanswered questions in the project's engineering assessment, and note the link to the block that holds each one.
+1. Gather the tasks. Where they are Linear issues, fetch them with the Linear MCP server so each one carries its own description rather than a title. Add any issue outside the set that blocks one of them. Add the open work that has no issue yet, such as unanswered questions in the project's engineering assessment, and note the link to the block that holds each one.
 2. Copy `assets/parallelization.md` to `/tmp/[title].md`, slugifying the title.
 3. Fill in the tasks, then sort them into stages. A task belongs in the earliest stage whose predecessors have all finished. Keep stages to three tasks, moving the ones that unblock the least to a later stage. A fourth is fine only when holding it back would delay the whole plan. Never put five in one stage. Schedule questions to answer and requests to other teams as early as they can go, adding a stage ahead of the rest for them when the first stage is full.
 4. Look for overlaps: two tasks that would edit the same files, or that both have to add the same thing before they can start. Split, merge, or sequence them so no two agents in the same stage collide.
