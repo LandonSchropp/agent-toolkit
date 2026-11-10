@@ -47,7 +47,7 @@ trap 'exit 143' TERM INT HUP
 trap '[[ -z "$listener" ]] || kill "$listener" 2>/dev/null; rm -f "$lock" "$fifo"' EXIT
 
 mkfifo "$fifo"
-hunk verdict listen --session "$review" >"$fifo" &
+hunk verdict listen --session "$review" >"$fifo" 2>/dev/null &
 listener=$!
 read -r decision <"$fifo" || exit 0
 
