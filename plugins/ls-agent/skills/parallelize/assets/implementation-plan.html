@@ -116,8 +116,7 @@
   .map {
     position: relative;
     display: grid;
-    grid-template-columns: 70px repeat(3, minmax(180px, 1fr));
-    min-width: 620px;
+    min-width: 636px;
     padding: 6px 0 12px;
   }
   .step {
@@ -128,6 +127,7 @@
     color: var(--muted);
     padding: 22px 0 0 14px;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
   .slot {
     padding: 11px 10px;
@@ -186,8 +186,9 @@
   .card .status.backlog i {
     border-style: dashed;
   }
-  .card .status.started i {
-    border-color: var(--started);
+  .card .status.started i,
+  .step.started .step-icon {
+    border: 1.5px solid var(--started);
     background: conic-gradient(var(--started) 0 50%, transparent 0);
   }
   .card .status.completed i {
@@ -201,19 +202,34 @@
     text-decoration: line-through;
     text-decoration-color: var(--muted);
   }
+  .step-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .step-icon {
+    flex: none;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--muted);
+    box-sizing: border-box;
+  }
   .step.complete {
     color: var(--completed);
   }
-  .step.complete::after {
-    content: "";
-    display: block;
-    width: 16px;
-    height: 16px;
-    margin-top: 6px;
-    border-radius: 50%;
+  .step.complete .step-icon {
+    border: none;
     background: var(--completed)
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.3 2.3 4.7-4.9' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
       center / 100% no-repeat;
+  }
+  .step-progress {
+    margin: 4px 0 0 19px;
+    font-family: var(--body);
+    font-size: 0.7rem;
+    letter-spacing: 0;
+    text-transform: none;
   }
   .as-of {
     margin-left: auto;
@@ -364,14 +380,21 @@
   const detail = document.getElementById("detail");
   const cards = {};
   const columns = Math.max(3, ...STEPS.map((step) => step.length));
-  map.style.gridTemplateColumns = `70px repeat(${columns}, minmax(180px, 1fr))`;
+  map.style.gridTemplateColumns = `96px repeat(${columns}, minmax(180px, 1fr))`;
   STEPS.forEach((step, index) => {
     if (index) map.append(element("div", "row-line"));
-    const label = element("div", "step", `Step ${index + 1}`);
-    if (step.every((task) => isDone(task[5]))) {
-      label.classList.add("complete");
-      label.title = "Every task in this step is done";
+    const done = step.filter((task) => isDone(task[5])).length;
+    const started = step.some((task) => task[5]?.[1] === "started");
+    const label = element("div", "step");
+    const name = element("div", "step-name");
+    label.append(name);
+    if (step.some((task) => task[5])) {
+      if (done === step.length) label.classList.add("complete");
+      else if (done || started) label.classList.add("started");
+      name.append(element("i", "step-icon"));
+      label.append(element("div", "step-progress", `${done}/${step.length} done`));
     }
+    name.append(`Step ${index + 1}`);
     map.append(label);
     for (let column = 0; column < columns; column++) {
       const slot = element("div", "slot");
