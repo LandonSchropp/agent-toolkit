@@ -219,6 +219,7 @@
     margin-left: auto;
   }
   .card .title {
+    overflow-wrap: anywhere;
     font-size: 0.85rem;
     font-weight: 500;
     line-height: 1.3;
@@ -302,31 +303,32 @@
 <script>
   // Data: replace everything between here and the end of WHY.
   // Where the work happens, in legend order. Each one takes the next color slot (four available).
-  const LANES = ["External", "Web"];
-  // One row per stage, at most four tasks each: [id, title, lane, ids it waits on, milestone, status].
+  const LANES = ["Coordination", "Web"];
+  // One row per stage, at most four tasks each: [id, title, lane, ids it waits on, milestone, status, source].
   // Status is the Linear status as [name, type], where type is backlog, unstarted, started, completed or canceled.
+  // A task with no Linear issue gets a short key such as "Q1" for its id, the status ["Open", "backlog"] or
+  // ["Answered", "completed"], and a source of [document name, URL of the block that holds it].
   const STEPS = [
     [
-      ["ABC-1", "Ask another team a question", "External", [], "Milestone", ["Done", "completed"]],
+      [
+        "Q1",
+        "Ask another team a question",
+        "Coordination",
+        [],
+        "Milestone",
+        ["Open", "backlog"],
+        ["Engineering Assessment", "https://www.notion.so/<page>#<block>"],
+      ],
       ["ABC-2", "Add the endpoint", "Web", [], "Milestone", ["In Progress", "started"]],
     ],
-    [
-      [
-        "ABC-3",
-        "Call the endpoint",
-        "Web",
-        ["ABC-1", "ABC-2"],
-        "Milestone",
-        ["Backlog", "backlog"],
-      ],
-    ],
+    [["ABC-3", "Call the endpoint", "Web", ["Q1", "ABC-2"], "Milestone", ["Backlog", "backlog"]]],
   ];
   // The date the statuses were fetched. Leave it empty when no task has a status.
   const STATUS_AS_OF = "Jan 1, 2026";
   // Each card links to this URL with the task's id appended. Leave it empty when the tasks aren't issues.
   const ISSUE_URL = "https://linear.app/<workspace>/issue/";
   // Optional reasons shown in the dependency line, keyed "task>dependency".
-  const WHY = { "ABC-3>ABC-1": "needs the answer" };
+  const WHY = { "ABC-3>Q1": "needs the answer" };
 
   const tasks = STEPS.flat();
   const byId = Object.fromEntries(tasks.map((task) => [task[0], task]));
@@ -341,6 +343,8 @@
     const slot = LANES.indexOf(lane) + 1;
     return `--lane: var(--lane-${slot}); --lane-bg: var(--lane-${slot}-bg)`;
   };
+  const isIssue = (id) => !byId[id]?.[6];
+  const nameOf = (id) => (isIssue(id) ? id : byId[id][1]);
   const isDone = (status) => ["completed", "canceled"].includes(status?.[1]);
   const element = (tag, className, text = "") =>
     Object.assign(document.createElement(tag), { className, textContent: text });
@@ -373,10 +377,11 @@
       const slot = element("div", "slot");
       const task = step[column];
       if (task) {
-        const [id, title, lane, , milestone, status] = task;
+        const [id, title, lane, , milestone, status, source] = task;
         const card = element("a", "card");
-        if (ISSUE_URL) {
-          card.href = ISSUE_URL + id;
+        const url = source ? source[1] : ISSUE_URL && ISSUE_URL + id;
+        if (url) {
+          card.href = url;
           card.target = "_blank";
           card.rel = "noopener";
         } else {
@@ -384,7 +389,7 @@
         }
         card.style.cssText = laneStyle(lane);
         const top = element("span", "top");
-        top.append(element("span", "id", id));
+        top.append(element("span", "id", source ? source[0] : id));
         if (status) {
           const badge = element("span", `status ${status[1]}`);
           badge.append(element("i", ""), status[0]);
@@ -446,9 +451,7 @@
     }
   }
 
-  const HINT = ISSUE_URL
-    ? "Hover over a task to see its dependencies. Click it to open the issue."
-    : "Hover over a task to see its dependencies.";
+  const HINT = "Hover over a task to see its dependencies. Click it to open it.";
   function show(id) {
     current = id;
     map.classList.toggle("focus", Boolean(current));
@@ -469,14 +472,18 @@
       ? dependencies
           .map((dependency) => {
             const reason = WHY[`${current}>${dependency}`];
-            return reason ? `${dependency} (${reason})` : dependency;
+            return reason ? `${nameOf(dependency)} (${reason})` : nameOf(dependency);
           })
           .join(", ")
       : "nothing";
-    const unblocks = (dependents[current] || []).join(", ") || "nothing";
+    const unblocks = (dependents[current] || []).map(nameOf).join(", ") || "nothing";
     detail.textContent = "";
     detail.append(
-      element("b", "", `Step ${stepOf[current]} · ${current}: ${title}`),
+      element(
+        "b",
+        "",
+        `Step ${stepOf[current]} · ${isIssue(current) ? `${current}: ` : ""}${title}`,
+      ),
       ` · waits on ${waits} · unblocks ${unblocks}`,
     );
   }
