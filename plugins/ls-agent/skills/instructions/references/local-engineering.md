@@ -33,7 +33,11 @@ When telling the user about a workspace, name it by the label shown in the herdr
 
 ## Finishing a Workspace
 
-When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two. The exception is a work repository that integrates through pull requests. Open the pull requests, babysit them right away and offer to post them for review.
+When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed.
+
+In a repository that merges directly into the default branch, offer to merge into main and close the workspace in the same question, so the user answers once instead of twice.
+
+In a repository that integrates through pull requests, offer to open the pull requests. Once they're open, babysit them right away and offer to post them for review. Offer to close the workspace only after every pull request has merged.
 
 **Never close a workspace while it's babysitting pull requests.** Posting a pull request for review doesn't finish the work. Merging it does.
 
