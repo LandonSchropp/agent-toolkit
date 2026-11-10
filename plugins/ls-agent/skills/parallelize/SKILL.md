@@ -15,6 +15,8 @@ Turn a set of tasks into an ordered set of stages: what can run at the same time
 4. Look for overlaps: two tasks that would edit the same files, or that both have to add the same thing before they can start. Split, merge, or sequence them so no two agents in the same stage collide.
 5. Present the stages to the user as a table (columns: Stage, Tasks, Waiting On).
 6. Invoke the `ls-interactivity:interactive-edit` skill with the file so the user can adjust it, then read their changes back. Where that skill isn't available, post the file's contents in the conversation instead, wait for the user's reply, and update the file with their changes.
+7. Build the implementation map from the final file as a Claude artifact. The Artifact tool publishes a local file, so copy `assets/implementation-map.html` to a temporary file, replace the data block at the top of its script following its comments, and publish that copy. Color each task by where the work happens, with work other teams do, like questions or requests, as External. The template has four colors, so use at most four locations. Where the Artifact tool isn't available, open the copy in a browser tab with the `herdr-gpui-browser` skill instead.
+8. When the user asks to refresh the statuses, fetch them again and republish to the same link.
 
 ## Rationalizations
 
@@ -26,3 +28,4 @@ Turn a set of tasks into an ordered set of stages: what can run at the same time
 | "Two tasks overlap, I'll let them race"      | Two agents editing one file is a conflict you chose. Sequence them.         |
 | "The table is approved, the file can differ" | The file is what gets executed. Fix it, not just the table.                 |
 | "Four tasks are ready, run them together"    | Three is the target. Hold the fourth back unless that delays the plan.      |
+| "The map would look better redesigned"       | The template's layout is what the user settled on. Only replace its data.   |

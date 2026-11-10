@@ -1,0 +1,487 @@
+<title>[Title] Implementation Map</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+/>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --fg: #1b2230;
+    --muted: #5d6779;
+    --line: #d9dee7;
+    --lane-1: #8a5a00;
+    --lane-1-bg: #fff4dd;
+    --lane-2: #1d5fbf;
+    --lane-2-bg: #e7f0fd;
+    --lane-3: #6b3fb8;
+    --lane-3-bg: #f1eafd;
+    --lane-4: #1f7a4d;
+    --lane-4-bg: #e3f5ec;
+    --hot: #e0542e;
+    --started: #d9a400;
+    --completed: #4b8f5f;
+    --display: "Space Grotesk", system-ui, sans-serif;
+    --body: "Inter", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12161d;
+      --surface: #1a2029;
+      --fg: #e6eaf1;
+      --muted: #9aa4b5;
+      --line: #2c3442;
+      --lane-1: #f0b54a;
+      --lane-1-bg: #2e2617;
+      --lane-2: #7fb0ff;
+      --lane-2-bg: #172437;
+      --lane-3: #b99bff;
+      --lane-3-bg: #241c38;
+      --lane-4: #6fd3a0;
+      --lane-4-bg: #16291f;
+      --hot: #ff7a52;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12161d;
+    --surface: #1a2029;
+    --fg: #e6eaf1;
+    --muted: #9aa4b5;
+    --line: #2c3442;
+    --lane-1: #f0b54a;
+    --lane-1-bg: #2e2617;
+    --lane-2: #7fb0ff;
+    --lane-2-bg: #172437;
+    --lane-3: #b99bff;
+    --lane-3-bg: #241c38;
+    --lane-4: #6fd3a0;
+    --lane-4-bg: #16291f;
+    --hot: #ff7a52;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    line-height: 1.5;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 40px;
+  }
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  header {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.7rem;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 2px solid var(--lane);
+    background: var(--lane-bg);
+  }
+  .scroller {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+  .map {
+    position: relative;
+    display: grid;
+    grid-template-columns: 70px repeat(3, minmax(180px, 1fr));
+    min-width: 620px;
+    padding: 6px 0 12px;
+  }
+  .step {
+    font-family: var(--display);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 22px 0 0 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .slot {
+    padding: 11px 10px;
+    min-width: 0;
+  }
+  .row-line {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line);
+  }
+  .card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    box-sizing: border-box;
+    border: 1.5px solid var(--lane);
+    background: var(--lane-bg);
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: grid;
+    gap: 2px;
+    transition:
+      opacity 0.15s,
+      box-shadow 0.15s;
+  }
+  .card .id {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--lane);
+  }
+  .card .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .card .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.68rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .card .status i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--muted);
+    box-sizing: border-box;
+  }
+  .card .status.backlog i {
+    border-style: dashed;
+  }
+  .card .status.started i {
+    border-color: var(--started);
+    background: conic-gradient(var(--started) 0 50%, transparent 0);
+  }
+  .card .status.completed i {
+    border-color: var(--completed);
+    background: var(--completed);
+  }
+  .card .status.canceled i {
+    background: var(--muted);
+  }
+  .card.done .title {
+    text-decoration: line-through;
+    text-decoration-color: var(--muted);
+  }
+  .step.complete {
+    color: var(--completed);
+  }
+  .step.complete::after {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin-top: 6px;
+    border-radius: 50%;
+    background: var(--completed)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.3 2.3 4.7-4.9' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      center / 100% no-repeat;
+  }
+  .as-of {
+    margin-left: auto;
+  }
+  .card .title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .card .milestone {
+    justify-self: start;
+    margin-top: 5px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 1px 8px 1px 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card .milestone::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border: 1.5px solid currentColor;
+    border-radius: 1px;
+    transform: rotate(45deg);
+    margin-right: 1px;
+  }
+  .card:focus-visible {
+    outline: 2px solid var(--hot);
+    outline-offset: 2px;
+  }
+  .map.focus .card {
+    opacity: 0.28;
+  }
+  .map.focus .card.on {
+    opacity: 1;
+  }
+  .map.focus .card.selected {
+    box-shadow: 0 0 0 3px var(--hot);
+  }
+  svg.edges {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    overflow: visible;
+  }
+  svg.edges > path {
+    fill: none;
+    stroke: var(--hot);
+    stroke-width: 2.2;
+  }
+  svg.edges marker path {
+    fill: var(--hot);
+  }
+  .detail {
+    margin: 14px 0 0;
+    min-height: 3em;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .detail b {
+    color: var(--fg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card {
+      transition: none;
+    }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>[Title] Implementation Map</h1>
+    <div class="legend" id="legend"><span class="as-of" id="as-of"></span></div>
+  </header>
+  <div class="scroller"><div class="map" id="map"></div></div>
+  <p class="detail" id="detail"></p>
+</div>
+
+<script>
+  // Data: replace everything between here and the end of WHY.
+  // Where the work happens, in legend order. Each one takes the next color slot (four available).
+  const LANES = ["External", "Web"];
+  // One row per stage, at most four tasks each: [id, title, lane, ids it waits on, milestone, status].
+  // Status is the Linear status as [name, type], where type is backlog, unstarted, started, completed or canceled.
+  const STEPS = [
+    [
+      ["ABC-1", "Ask another team a question", "External", [], "Milestone", ["Done", "completed"]],
+      ["ABC-2", "Add the endpoint", "Web", [], "Milestone", ["In Progress", "started"]],
+    ],
+    [
+      [
+        "ABC-3",
+        "Call the endpoint",
+        "Web",
+        ["ABC-1", "ABC-2"],
+        "Milestone",
+        ["Backlog", "backlog"],
+      ],
+    ],
+  ];
+  // The date the statuses were fetched. Leave it empty when no task has a status.
+  const STATUS_AS_OF = "Jan 1, 2026";
+  // Each card links to this URL with the task's id appended. Leave it empty when the tasks aren't issues.
+  const ISSUE_URL = "https://linear.app/<workspace>/issue/";
+  // Optional reasons shown in the dependency line, keyed "task>dependency".
+  const WHY = { "ABC-3>ABC-1": "needs the answer" };
+
+  const tasks = STEPS.flat();
+  const byId = Object.fromEntries(tasks.map((task) => [task[0], task]));
+  const stepOf = {};
+  STEPS.forEach((step, index) => step.forEach((task) => (stepOf[task[0]] = index + 1)));
+  const dependents = {};
+  tasks.forEach(([id, , , dependencies]) =>
+    dependencies.forEach((dependency) => (dependents[dependency] ||= []).push(id)),
+  );
+
+  const laneStyle = (lane) => {
+    const slot = LANES.indexOf(lane) + 1;
+    return `--lane: var(--lane-${slot}); --lane-bg: var(--lane-${slot}-bg)`;
+  };
+  const isDone = (status) => ["completed", "canceled"].includes(status?.[1]);
+  const element = (tag, className, text = "") =>
+    Object.assign(document.createElement(tag), { className, textContent: text });
+
+  const legend = document.getElementById("legend");
+  const asOf = document.getElementById("as-of");
+  if (STATUS_AS_OF) asOf.textContent = `Statuses as of ${STATUS_AS_OF}`;
+  LANES.forEach((lane) => {
+    const item = element("span", "");
+    const swatch = element("i", "swatch");
+    swatch.style.cssText = laneStyle(lane);
+    item.append(swatch, lane);
+    asOf.before(item);
+  });
+
+  const map = document.getElementById("map");
+  const detail = document.getElementById("detail");
+  const cards = {};
+  const columns = Math.max(3, ...STEPS.map((step) => step.length));
+  map.style.gridTemplateColumns = `70px repeat(${columns}, minmax(180px, 1fr))`;
+  STEPS.forEach((step, index) => {
+    if (index) map.append(element("div", "row-line"));
+    const label = element("div", "step", `Step ${index + 1}`);
+    if (step.every((task) => isDone(task[5]))) {
+      label.classList.add("complete");
+      label.title = "Every task in this step is done";
+    }
+    map.append(label);
+    for (let column = 0; column < columns; column++) {
+      const slot = element("div", "slot");
+      const task = step[column];
+      if (task) {
+        const [id, title, lane, , milestone, status] = task;
+        const card = element("a", "card");
+        if (ISSUE_URL) {
+          card.href = ISSUE_URL + id;
+          card.target = "_blank";
+          card.rel = "noopener";
+        } else {
+          card.tabIndex = 0;
+        }
+        card.style.cssText = laneStyle(lane);
+        const top = element("span", "top");
+        top.append(element("span", "id", id));
+        if (status) {
+          const badge = element("span", `status ${status[1]}`);
+          badge.append(element("i", ""), status[0]);
+          top.append(badge);
+        }
+        if (isDone(status)) card.classList.add("done");
+        card.append(top, element("span", "title", title));
+        if (milestone) {
+          const pill = element("span", "milestone", milestone);
+          pill.title = `Milestone: ${milestone}`;
+          card.append(pill);
+        }
+        card.addEventListener("mouseenter", () => show(id));
+        card.addEventListener("focus", () => show(id));
+        card.addEventListener("mouseleave", () => show(null));
+        card.addEventListener("blur", () => show(null));
+        slot.append(card);
+        cards[id] = card;
+      }
+      map.append(slot);
+    }
+  });
+
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.classList.add("edges");
+  map.append(svg);
+  let current = null;
+
+  function draw() {
+    svg.innerHTML =
+      '<defs><marker id="head" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>';
+    if (!current) return;
+    const bounds = map.getBoundingClientRect();
+    svg.setAttribute("width", bounds.width);
+    svg.setAttribute("height", bounds.height);
+    const edges = [
+      ...byId[current][3].map((dependency) => [dependency, current]),
+      ...(dependents[current] || []).map((dependent) => [current, dependent]),
+    ].filter(([from, to]) => cards[from] && cards[to]);
+    for (const [from, to] of edges) {
+      const source = cards[from].getBoundingClientRect();
+      const target = cards[to].getBoundingClientRect();
+      // Tips touch the card border, clearing the selected card's 3px outline.
+      const x1 = source.left + source.width / 2 - bounds.left;
+      const y1 = source.bottom - bounds.top + 2 + (from === current ? 3 : 0);
+      const x2 = target.left + target.width / 2 - bounds.left;
+      const y2 = target.top - bounds.top - 2.5 - (to === current ? 3 : 0);
+      // Straight last 10px for the arrowhead.
+      const bendEnd = y2 - 10;
+      const pull = Math.max(40, (bendEnd - y1) * 0.6);
+      const path = document.createElementNS(NS, "path");
+      path.setAttribute(
+        "d",
+        `M${x1},${y1} C${x1},${y1 + pull} ${x2},${bendEnd - pull} ${x2},${bendEnd} V${y2}`,
+      );
+      path.setAttribute("marker-end", "url(#head)");
+      svg.append(path);
+    }
+  }
+
+  const HINT = ISSUE_URL
+    ? "Hover over a task to see its dependencies. Click it to open the issue."
+    : "Hover over a task to see its dependencies.";
+  function show(id) {
+    current = id;
+    map.classList.toggle("focus", Boolean(current));
+    const related = current
+      ? new Set([current, ...byId[current][3], ...(dependents[current] || [])])
+      : new Set();
+    Object.entries(cards).forEach(([key, card]) => {
+      card.classList.toggle("on", related.has(key));
+      card.classList.toggle("selected", key === current);
+    });
+    draw();
+    if (!current) {
+      detail.textContent = HINT;
+      return;
+    }
+    const [, title, , dependencies] = byId[current];
+    const waits = dependencies.length
+      ? dependencies
+          .map((dependency) => {
+            const reason = WHY[`${current}>${dependency}`];
+            return reason ? `${dependency} (${reason})` : dependency;
+          })
+          .join(", ")
+      : "nothing";
+    const unblocks = (dependents[current] || []).join(", ") || "nothing";
+    detail.textContent = "";
+    detail.append(
+      element("b", "", `Step ${stepOf[current]} · ${current}: ${title}`),
+      ` · waits on ${waits} · unblocks ${unblocks}`,
+    );
+  }
+
+  show(null);
+  addEventListener("resize", draw);
+  document.fonts.ready.then(draw);
+</script>
