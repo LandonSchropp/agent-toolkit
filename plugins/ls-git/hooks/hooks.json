@@ -1,5 +1,5 @@
 {
-  "description": "Runs git town commands without an interactive terminal.",
+  "description": "Runs git town commands without an interactive terminal, and starts babysitting each pull request as soon as it's opened.",
   "hooks": {
     "PreToolUse": [
       {
@@ -8,6 +8,17 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/git-town.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/babysit-new-pull-request.sh"
           }
         ]
       }

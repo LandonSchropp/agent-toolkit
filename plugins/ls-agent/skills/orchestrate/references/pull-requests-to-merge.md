@@ -16,4 +16,4 @@ For each pull request:
 | "A session that mentions the URL is close enough" | Many sessions mention it. Only the one that created it owns it.           |
 | "A plain workspace is faster to open"             | It lacks the project's tabs. Reopen through `ls-agent:open-workspace`.    |
 | "A fresh session will figure it out"              | The session that wrote it has the context. Resume it whenever one exists. |
-| "The draft is in the stack, so babysit it too"    | Drafts aren't ready. Leave them alone.                                    |
+| "The draft is in the stack, so babysit it too"    | The session that opened the draft already babysits it. Leave it alone.    |

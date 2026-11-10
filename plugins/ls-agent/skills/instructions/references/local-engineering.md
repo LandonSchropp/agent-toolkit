@@ -33,14 +33,14 @@ When telling the user about a workspace, name it by the label shown in the herdr
 
 ## Finishing a Workspace
 
-When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two. The exception is a work repository that integrates through pull requests. Open the pull requests and offer to post them for review. Once they're posted, babysit them.
+When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed. Offer to merge into main or open pull requests for the work (depending on the situation below) and close the workspace. Always offer both at the same time, so the user answers one question instead of two. The exception is a work repository that integrates through pull requests. Open the pull requests, babysit them right away and offer to post them for review.
 
 **Never close a workspace while it's babysitting pull requests.** Posting a pull request for review doesn't finish the work. Merging it does.
 
 A main checkout closes the same way a linked worktree does; an agent closes itself out either way, even when its child worktrees are still open.
 
 - **Repositories that merge directly into the default branch:** On approval, **REQUIRED:** invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
-- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack. When the user approves posting them for review, **REQUIRED:** invoke the `ls-git:ready-for-review` skill. As soon as they're posted, **REQUIRED:** invoke the `ls-git:babysit` skill. It moves the workspace to In Review, carries the pull requests to merge and offers to close the workspace once they have.
+- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack. As soon as they're opened, **REQUIRED:** invoke the `ls-git:babysit` skill. It carries the pull requests to merge and offers to close the workspace once they have. When the user approves posting them for review, **REQUIRED:** invoke the `ls-git:ready-for-review` skill.
 
 ## Rationalizations
 
