@@ -86,6 +86,10 @@ Mark the parent `[>]` when a subtask is `[>]` or `[<]`, and `[x]` otherwise.
   - [ ] [widget-service: Sort the widget list by date](https://github.com/example-org/widget-service/pull/43) (💬 Feedback) ^3fa91c
 ```
 
+## Standup
+
+After filling in the pull requests and before opening `plan-day`, draft the user's standup reply. **REQUIRED:** Invoke the `ls-writing:standup` skill. Skip this on a Friday or a weekend, since there's no standup then, or when the `plan-day` draft exists.
+
 ## Planning
 
 **REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill with `plan-day > /tmp/plan-day-<date>.md 2> /tmp/plan-day-<date>.log` as the command, where `<date>` is today's ISO date, and `plan-day` as the tab name. With its output redirected, `plan-day` draws on the terminal and prints only a summary to the file.
