@@ -29,6 +29,7 @@ When adding or reviewing tasks in the daily note, follow these link conventions:
 
 - **Inline links:** Embed links directly in the item text by linking the relevant noun or phrase. Never use a standalone `([link](url))` tag — the link should flow naturally with the sentence. For example: `- [ ] Update my [Providing Context doc](https://...) based on the comments` not `- [ ] Update my Providing Context doc ([link](https://...)) based on comments`.
 - **Slack threads:** If a task has an associated Slack thread, append `([thread](url))` at the end of the item. For example: `- [ ] Draft the vibe code policy ([thread](https://example.slack.com/archives/...))`.
+- **Linear issues:** If a task has an associated Linear issue, append the issue ID, linked to the issue, at the end of the item. For example: `- [ ] Fix the checkout bug ([ABC-123](https://linear.app/...))`.
 
 If you notice existing items that don't follow these conventions, proactively suggest corrections.
 
