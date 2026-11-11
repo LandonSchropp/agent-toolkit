@@ -5,7 +5,7 @@ description: Use when the user wants to draft a Slack message they'll post thems
 
 # Slack Message
 
-Show the draft in your reply as plain prose, with links written as their visible text followed by the URL. Copy it to the clipboard only after the user approves it.
+Show the draft in your reply as plain prose. Write each link as an inline Markdown link, `[visible text](url)`, so the draft reads the way the message will look in Slack. Copy it to the clipboard only after the user approves it.
 
 Slack's message box is a rich-text editor, not a Markdown parser. Pasted Markdown and Slack's `<url|text>` link syntax stay literal text, and so does the output of the built-in `/copy` command. The message has to reach the clipboard as rich text:
 
