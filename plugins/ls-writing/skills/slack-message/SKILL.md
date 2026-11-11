@@ -11,7 +11,7 @@ Slack's message box is a rich-text editor, not a Markdown parser. Pasted Markdow
 
 1. Write the message as HTML to a file in the scratchpad directory. Use `<a href>` for links, `<strong>` and `<em>` for emphasis, `<code>` for code and `<ul>` or `<ol>` for lists.
 2. Slack collapses pasted paragraphs into single line breaks. Put `<p><br></p>` between every pair of paragraphs and before and after every list.
-3. Run `scripts/copy-rich-text.sh` with that file.
+3. Run `scripts/copy-rich-text.sh <file>`, passing that file's path.
 4. Tell the user the message is on their clipboard and ready to paste.
 
 ## Rationalizations
