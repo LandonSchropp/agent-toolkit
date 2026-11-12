@@ -177,8 +177,8 @@
     white-space: nowrap;
   }
   .card .status i {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     border: 1.5px solid var(--muted);
     box-sizing: border-box;
@@ -191,16 +191,27 @@
     border: 1.5px solid var(--started);
     background: conic-gradient(var(--started) 0 50%, transparent 0);
   }
-  .card .status.completed i {
-    border-color: var(--completed);
-    background: var(--completed);
+  .card .status.completed i,
+  .step.complete .step-icon {
+    border: none;
+    background: var(--completed)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.3 2.3 4.7-4.9' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      center / 100% no-repeat;
   }
   .card .status.canceled i {
-    background: var(--muted);
+    border: none;
+    background: var(--muted)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5.5 5.5l5 5M10.5 5.5l-5 5' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E")
+      center / 100% no-repeat;
   }
+  .card.done {
+    background: var(--bg);
+    border-color: var(--line);
+    opacity: 0.55;
+  }
+  .card.done .id,
   .card.done .title {
-    text-decoration: line-through;
-    text-decoration-color: var(--muted);
+    color: var(--muted);
   }
   .step-name {
     display: flex;
@@ -217,12 +228,6 @@
   }
   .step.complete {
     color: var(--completed);
-  }
-  .step.complete .step-icon {
-    border: none;
-    background: var(--completed)
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.3 2.3 4.7-4.9' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-      center / 100% no-repeat;
   }
   .step-progress {
     margin: 4px 0 0 19px;
@@ -323,7 +328,7 @@
   // One row per stage, at most four tasks each: [id, title, lane, ids it waits on, milestone, status, source].
   // Status is the Linear status as [name, type], where type is backlog, unstarted, started, completed or canceled.
   // A task with no Linear issue gets a short key such as "Q1" for its id, the status ["Open", "backlog"] or
-  // ["Answered", "completed"], and a source of [short document name, URL of the block that holds it].
+  // ["Done", "completed"], and a source of [short document name, URL of the block that holds it].
   const STEPS = [
     [
       [
