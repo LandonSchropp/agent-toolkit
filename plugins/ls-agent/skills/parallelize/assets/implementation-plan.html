@@ -245,9 +245,22 @@
     font-weight: 500;
     line-height: 1.3;
   }
-  .card .milestone {
-    justify-self: start;
+  .card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
     margin-top: 5px;
+  }
+  .card .lane {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--lane);
+    background: var(--surface);
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 1px 8px;
+  }
+  .card .milestone {
     font-size: 0.68rem;
     font-weight: 500;
     color: var(--muted);
@@ -424,12 +437,14 @@
           top.append(badge);
         }
         if (isDone(status)) card.classList.add("done");
-        card.append(top, element("span", "title", title));
+        const tags = element("span", "tags");
+        tags.append(element("span", "lane", lane));
         if (milestone) {
           const pill = element("span", "milestone", milestone);
           pill.title = `Milestone: ${milestone}`;
-          card.append(pill);
+          tags.append(pill);
         }
+        card.append(top, element("span", "title", title), tags);
         card.addEventListener("mouseenter", () => show(id));
         card.addEventListener("focus", () => show(id));
         card.addEventListener("mouseleave", () => show(null));
