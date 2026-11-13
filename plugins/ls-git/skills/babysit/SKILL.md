@@ -18,6 +18,12 @@ The workspace stays open the whole time. Never close it while any of its pull re
    herdr-pull-request-status add --workspace "$HERDR_WORKSPACE_ID" --url <url>
    ```
 
+Pull requests stay registered until the workspace closes, including merged and closed ones. Remove one only when the user explicitly asks you to:
+
+```bash
+herdr-pull-request-status remove --workspace "$HERDR_WORKSPACE_ID" --url <url>
+```
+
 ## Watch
 
 This skill starts the plugin's `pull-requests` monitor, which runs for the rest of the session. It sends a JSON line for each pull request as soon as it starts, and another whenever one changes. Don't start a monitor of your own or poll GitHub yourself.
@@ -51,3 +57,4 @@ Merge in dependency order. A pull request that depends on another one waits unti
 | "It's only a draft, so nobody's looking yet"          | Bots review drafts as soon as they open. Watch it now.             |
 | "I'll check `gh pr view` while I wait"                | The monitor already reports every change. Let it tell you.         |
 | "It's ready, I'll merge the next one too"             | Merge in order. A dependent pull request waits for its dependency. |
+| "It merged, so I'll clear it from the sidebar"        | It stays until the workspace closes. Remove one only on request.   |
