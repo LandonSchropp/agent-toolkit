@@ -46,7 +46,12 @@ Each comment is decided with the user when the walk reaches it. Never decide or 
 
 For each comment, in order:
 
-1. Print `Comment <index> / <total>:`, then the body as a blockquote, verbatim — no summarizing or paraphrasing. Follow it with a short recommendation and the proposed change, nothing more, and leave out how it affects pull requests higher in the stack.
+1. Print `Comment <index> / <total>:`, then the comment:
+   - **Person's comment:** Print the body as a blockquote, verbatim.
+   - **Bot's comment:** Reformat the body as clean, readable Markdown. If it opens with a title, print the title as a bold heading, then the rest as plain paragraphs and lists. Strip HTML tags such as `<details>` and `<summary>` but keep their contents, so a collapsed section becomes a bold label from its `<summary>` followed by its contents. Keep every point the bot made, in its own words.
+
+   Follow it with a short recommendation and the proposed change, nothing more, and leave out how it affects pull requests higher in the stack.
+
 2. Discuss what to do about it and make any needed changes. Changes follow the normal commit-and-review flow already in effect for this session.
 3. Draft a reply for the user to approve or edit, or ask whether to react or move on:
    - **Reply has any text in it** (even alongside an emoji): post it as a reply, not a reaction. If it refers to a code change, push that change first.
@@ -104,7 +109,9 @@ For each comment, in order:
 | --------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | "The reply has an emoji in it, react instead"             | Only pure-emoji replies become reactions. Any text goes in the reply body.      |
 | "I'll re-request from everyone"                           | Only reviewers who haven't approved need another look.                          |
-| "I'll paraphrase the comment to save space"               | Post it verbatim in the blockquote — the user is reading it, not a summary.     |
+| "I'll paraphrase the comment to save space"               | Quote a person's comment verbatim. The user is reading it, not a summary.       |
+| "The bot's comment should be quoted verbatim too"         | Raw HTML and dense text are unreadable. Reformat it so it reads cleanly.        |
+| "Reformatting the bot's comment means I can trim it"      | Change only the layout. Keep every point the bot made, in its own words.        |
 | "General comments can be replied to like review comments" | GitHub has no reply endpoint for general comments — post a new comment instead. |
 | "I'll decide them all up front and put them in the plan"  | Each comment is decided with the user when the walk reaches it.                 |
 | "I'll describe the pull request first"                    | The summary line is the first thing the user sees for each pull request.        |
