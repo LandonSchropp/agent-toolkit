@@ -9,6 +9,10 @@ Time-boxed work leaves debris behind. A self-destruct records what to delete, wh
 
 **REQUIRED:** Invoke the `ls-code:project-conventions` skill for `AGENTS.local.md` and `CLAUDE.local.md`.
 
+## Work In The Main Worktree
+
+Every path in this skill lives in the main worktree, which is the first entry in `git worktree list`. That covers the self-destructing files, `AGENTS.local.md` and `.git/info/exclude`. A linked worktree keeps its own copy of each untracked file, and that copy is deleted when the worktree closes, taking the entry with it. When you're in a linked worktree, write to the main worktree's paths instead, even when this worktree already has an `AGENTS.local.md`. A linked worktree's `.git` is a file, so its exclude lines also belong in the main worktree's `.git/info/exclude`.
+
 ## Mark The File
 
 Markdown gets a callout, at the top of the file after any frontmatter:
@@ -32,7 +36,7 @@ Always an absolute date. "In three weeks" is unreadable by the time it matters.
 
 ## Record It in AGENTS.local.md
 
-The marker only fires if someone opens the file, so the instruction also goes where every session reads it. Add an entry under a `## Self-Destructs` section in the repository's `AGENTS.local.md`:
+The marker only fires if someone opens the file, so the instruction also goes where every session reads it. Add an entry under a `## Self-Destructs` section in the main worktree's `AGENTS.local.md`:
 
 ```markdown
 ## Self-Destructs
