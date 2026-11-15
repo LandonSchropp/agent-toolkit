@@ -3,8 +3,8 @@
 set -euo pipefail
 
 # Waits, while Hunk reviews are open in this herdr workspace, for the user's next decision in any of
-# them, then exits 2 with it, which wakes the agent. Exits 0 when no review is open. Replaces the
-# session's previous listener. On an approval, a comment or a denial made while the user is on that
+# them, then exits 2 with it, which wakes the agent. Exits 0 when every open review already has a
+# listener in this session. On an approval, a comment or a denial made while the user is on that
 # review's tab, it focuses the agent's tab.
 
 session="$(jq --raw-output '.session_id')"
@@ -27,24 +27,20 @@ function find_reviews() {
             | $sessions[] | select(.pid == $pid) | "\(.sessionId) \($tab)"'
     done
 }
-
 reviews="$(find_reviews 2>/dev/null)" || exit 0
 [[ -n "$reviews" ]] || exit 0
 
-# One listener per session: take over the lock and stop the previous listener.
-directory="${TMPDIR:-/tmp}/agent-toolkit/hunk-verdict"
-lock="$directory/$session.pid"
-fifo="$directory/$session.$$.fifo"
-mkdir -p "$directory"
+# Each review has one listener per session. A hook claims a review by creating its directory, which
+# fails when another hook already holds it, and releases its claims when it exits.
+claims="${TMPDIR:-/tmp}/agent-toolkit/hunk-verdict/$session"
+fifo="$claims.$$.fifo"
+mkdir -p "$claims"
 
-previous="$(cat "$lock" 2>/dev/null || true)"
-echo "$$" >"$lock"
-[[ -z "$previous" ]] || kill "$previous" 2>/dev/null || true
-
+claimed=()
 listeners=()
 trap 'exit 143' TERM INT HUP
 trap '[[ ${#listeners[@]} -eq 0 ]] || kill "${listeners[@]}" 2>/dev/null || true
-  [[ "$(cat "$lock" 2>/dev/null)" != "$$" ]] || rm -f "$lock"
+  [[ ${#claimed[@]} -eq 0 ]] || rmdir "${claimed[@]}"
   rm -f "$fifo"' EXIT
 
 # Every listener writes "<tab> <decision>" lines into one FIFO, then "<tab> done" when it exits.
@@ -52,6 +48,9 @@ mkfifo "$fifo"
 exec 3<>"$fifo"
 
 while read -r review tab; do
+  mkdir "$claims/$review" 2>/dev/null || continue
+  claimed+=("$claims/$review")
+
   hunk verdict listen --session "$review" 2>/dev/null > >(
     {
       while read -r line; do echo "$tab $line"; done
@@ -60,6 +59,8 @@ while read -r review tab; do
   ) &
   listeners+=($!)
 done <<<"$reviews"
+
+[[ ${#listeners[@]} -gt 0 ]] || exit 0
 
 remaining="${#listeners[@]}"
 while read -r tab decision <&3 && [[ "$decision" == "done" ]]; do

@@ -12,6 +12,18 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/hunk-verdict.sh",
+            "asyncRewake": true,
+            "timeout": 604800
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
