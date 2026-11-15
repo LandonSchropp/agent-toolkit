@@ -272,10 +272,11 @@ else
   # The trailing `exit` closes the tab when Hunk quits.
   herdr pane run "$pane" "$command; exit" >/dev/null
 
-  # Wait for the review to register, so the hunk-verdict hook finds it when this turn ends.
+  # Wait for this tab's Hunk to register.
   for _ in {1..20}; do
-    hunk session list --json |
-      jq --exit-status --arg directory "$(pwd -P)" 'any(.sessions[]; .cwd == $directory)' >/dev/null &&
+    pids="$(herdr pane process-info --pane "$pane" | jq --compact-output '[.result.process_info.foreground_processes[].pid]')" &&
+      hunk session list --json |
+      jq --exit-status --argjson pids "$pids" 'any(.sessions[]; .pid as $pid | $pids | index($pid))' >/dev/null &&
       break
     sleep 0.5
   done
