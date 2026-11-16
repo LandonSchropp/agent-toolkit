@@ -53,13 +53,15 @@ A pull request merged today gets `🚀 Merged` alone and is checked off. A draft
 Write one subtask per pull request. Title it with the repository name, a colon, and the pull request's title with any conventional commit prefix (`feat: `) or ticket ID (`[EX-123] `) removed, keeping its casing. Leave the parent task's text as it is. List a stack from bottom to top: a pull request whose `baseRefName` is another's `headRefName` comes after it.
 
 ```markdown
-- [ ] Update/merge open pull requests
+- [/] Update/merge open pull requests
   - [ ] [widget-service: Add pagination to the widget list](https://github.com/example-org/widget-service/pull/42) (💬 Feedback, ☠️ CI Failing)
   - [ ] [widget-service: Sort the widget list by date](https://github.com/example-org/widget-service/pull/43) (⏱️ Awaiting Review)
   - [x] [webapp: Fix the login redirect](https://github.com/example-org/webapp/pull/7) (🚀 Merged)
 ```
 
 If the task already has pull request subtasks, update them in place: refresh each status, add new pull requests, and remove ones that were closed, or merged before today and not forwarded (see [Earlier Notes](#earlier-notes)). Never add a second line for the same pull request.
+
+Each time you fill in or refresh the subtasks, mark the parent `[x]` when every subtask is `[x]` or `[-]`, `[/]` when only some are, and `[ ]` when none are.
 
 Draft pull requests stay off the list until they're ready, except for an existing subtask. Set it back to `[ ]` once its pull request is ready.
 
