@@ -114,4 +114,6 @@ Each comment is an instruction about its task. Carry out every one, editing the 
 
 Once every comment is carried out, ask the user whether there are any other tasks they'd like to add to today's daily note, and add them.
 
-Once the user has no more tasks to add, **REQUIRED:** use the `ls-agent:close-workspace` skill to close this workspace.
+Once the user has no more tasks to add, tell the agent in the Orchestrate workspace that today's tasks are queued up in the daily note. **REQUIRED:** Use the `ls-agent:delegate` skill to send it to the workspace whose project is `orchestrate`.
+
+Then **REQUIRED:** use the `ls-agent:close-workspace` skill to close this workspace.
