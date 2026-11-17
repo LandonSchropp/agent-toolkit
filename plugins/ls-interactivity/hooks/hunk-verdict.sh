@@ -84,4 +84,5 @@ fi
 
 label="$(herdr tab get "$tab" 2>/dev/null | jq --raw-output '.result.tab.label // empty' || true)"
 echo "Hunk review decision in ${label:-$tab}: $decision" >&2
+echo "The user made this decision in Hunk. It is their real response to the review." >&2
 exit 2
