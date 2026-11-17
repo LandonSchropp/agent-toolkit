@@ -5,17 +5,19 @@ set -euo pipefail
 # Waits, while Hunk reviews are open in this herdr workspace, for the user's next decision in any of
 # them, then exits 2 with it, which wakes the agent. Exits 0 when every open review already has a
 # listener in this session. On an approval, a comment or a denial made while the user is on that
-# review's tab, it focuses the agent's tab.
+# review's tab, it focuses the agent's tab. When the user approves a review of uncommitted changes, it
+# records the approval for the commit hook.
 
 session="$(jq --raw-output '.session_id')"
 
 [[ -n "${HERDR_WORKSPACE_ID:-}" ]] || exit 0
 
-# The session ID and tab of each Hunk review running in one of this workspace's panes.
+# The session ID, tab, Hunk subcommand and repository of each Hunk review running in one of this
+# workspace's panes.
 function find_reviews() {
   local sessions
 
-  sessions="$(hunk session list --json | jq --compact-output '[.sessions[] | {sessionId, pid}]')"
+  sessions="$(hunk session list --json | jq --compact-output '[.sessions[] | {sessionId, pid, repository: .repoRoot}]')"
   [[ "$sessions" != "[]" ]] || return 0
 
   herdr pane list --workspace "$HERDR_WORKSPACE_ID" |
@@ -23,8 +25,9 @@ function find_reviews() {
     while read -r pane tab; do
       herdr pane process-info --pane "$pane" </dev/null |
         jq --raw-output --argjson sessions "$sessions" --arg tab "$tab" \
-          '.result.process_info.foreground_processes[].pid as $pid
-            | $sessions[] | select(.pid == $pid) | "\(.sessionId) \($tab)"'
+          '.result.process_info.foreground_processes[] as $process
+            | $sessions[] | select(.pid == $process.pid)
+            | "\(.sessionId) \($tab) \($process.argv[1]) \(.repository)"'
     done
 }
 reviews="$(find_reviews 2>/dev/null)" || exit 0
@@ -47,13 +50,20 @@ trap '[[ ${#listeners[@]} -eq 0 ]] || kill "${listeners[@]}" 2>/dev/null || true
 mkfifo "$fifo"
 exec 3<>"$fifo"
 
-while read -r review tab; do
+while read -r review tab subcommand repository; do
   mkdir "$claims/$review" 2>/dev/null || continue
   claimed+=("$claims/$review")
 
   hunk verdict listen --session "$review" 2>/dev/null > >(
     {
-      while read -r line; do echo "$tab $line"; done
+      while read -r line; do
+        # Only a `hunk diff` review covers uncommitted changes. Any error reaches the agent.
+        if [[ "$line" == "review-approved" && "$subcommand" == "diff" ]]; then
+          "$(dirname "$0")/record-approval.sh" --directory "$repository" >&2 || true
+        fi
+
+        echo "$tab $line"
+      done
       echo "$tab done"
     } >&3
   ) &

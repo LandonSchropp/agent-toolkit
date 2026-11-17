@@ -30,10 +30,7 @@ Reply to every comment you handle. When you made the change exactly as asked, re
 When the user approves, and before committing:
 
 1. Read the user's comments. Closing the tab ends the Hunk session, and its comments go with it.
-2. Run `scripts/record-approval.sh --directory <printed repository>`, so the commit hook allows the commit.
-3. Close the review tab.
-
-In `commit` mode the commit already exists, so skip `record-approval.sh`. The decision and comments still count.
+2. Close the review tab.
 
 ## Reviewing Files Outside A Repository
 

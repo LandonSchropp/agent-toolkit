@@ -111,6 +111,20 @@ function review_tab() {
     jq --raw-output --arg name "$name" '.result.tabs[] | select(.label == $name) | .tab_id'
 }
 
+# The Hunk subcommand a review tab was launched with, `diff` or `show`. A reload doesn't change it.
+function review_subcommand() {
+  local pane
+
+  pane="$(
+    herdr pane list --workspace "$HERDR_WORKSPACE_ID" |
+      jq --raw-output --arg tab "$1" 'first(.result.panes[] | select(.tab_id == $tab) | .pane_id)'
+  )"
+
+  herdr pane process-info --pane "$pane" |
+    jq --raw-output --argjson pids "$(hunk session list --json | jq --compact-output '[.sessions[].pid]')" \
+      'first(.result.process_info.foreground_processes[] | select(.pid as $pid | $pids | index($pid)) | .argv[1])'
+}
+
 # The directory a review tab was opened in.
 function review_directory() {
   herdr pane list --workspace "$HERDR_WORKSPACE_ID" |
@@ -254,6 +268,13 @@ if [[ -n "$tab" ]]; then
 
   if [[ "$open_directory" != "$(pwd -P)" ]]; then
     echo "Error: A review of $open_directory is already open in this workspace. Close it first." >&2
+    exit 1
+  fi
+
+  # The hunk-verdict hook records an approval only for a review launched as `hunk diff`, so a reload
+  # must keep the subcommand the review was launched with.
+  if [[ "$(review_subcommand "$tab")" != "${hunk_arguments[0]}" ]]; then
+    echo "Error: The open review can't switch between commit mode and the other modes. Close it first." >&2
     exit 1
   fi
 
