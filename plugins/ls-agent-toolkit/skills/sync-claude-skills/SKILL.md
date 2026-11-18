@@ -1,11 +1,11 @@
 ---
 name: sync-claude-skills
-description: Use when skills need uploading to the user's claude.ai account so Claude Duet routines can run them, such as after merging skill changes into main or when the user asks to sync their claude.ai skills.
+description: Use when skills need uploading to the user's claude.ai account so Claude Duet scheduled tasks can run them, such as after merging skill changes into main or when the user asks to sync their claude.ai skills.
 ---
 
 # Sync Claude Skills
 
-Claude Duet routines can't run skills installed through plugins, so the skills they need are uploaded to claude.ai directly. The `scripts/build-skill-zips.rb` script owns the list of skills to upload.
+Claude Duet's scheduled tasks can't load skills from plugins installed on claude.ai, so the skills they need are uploaded to claude.ai directly. The `scripts/build-skill-zips.rb` script owns the list of skills to upload.
 
 1. Run `scripts/build-skill-zips.rb` with `--output` set to a directory in the session's scratchpad. Pass `--since <commit>` when you were given one, to build only the skills that changed. If it prints nothing, stop.
 2. Add every zip it printed at https://claude.ai/customize/skills/new/upload, then start the upload. (Adding the files doesn't upload them.) **REQUIRED:** Use the `ls-browser:browser` skill.
