@@ -10,23 +10,21 @@ Send to an already-running agent only when the user asks, or when the task needs
 
 ## Sending
 
+Send the prompt with the `SendMessage` tool. It arrives labeled with this session's name, so the receiver knows another agent sent it. Get the receiving session's name from the workspace ID, then confirm `ListAgents` shows it:
+
 ```bash
-scripts/prompt.sh --workspace <id> --prompt <text>
+scripts/session-name.sh --workspace <id>
 ```
 
-Single-quote the prompt. Prompts routinely contain backticks and `$`, which a double-quoted argument expands before the agent sees it.
+The send returns as soon as the message is delivered. A delegated task usually outlasts the turn that sent it, so waiting strands this session for nothing. `notify_when_idle` is for the rare short task whose result decides what you do next.
 
-This returns as soon as the prompt is delivered. A delegated task usually outlasts the turn that sent it, so waiting strands this session for nothing; `--wait` is for the rare short task whose result decides what you do next. Run `--help` on it first.
+A session in a different permission mode holds cross-session messages until the user approves them, and they can expire. When the send result or a later `[Cross-session delivery notice]` says the message was held, tell the user to approve it in that workspace.
 
-Nothing about this path depends on being inside Herdr. Both scripts drive the running Herdr app over its socket from anywhere on the machine.
-
-Off the Mac, as in Devin or a cloud session of Claude Desktop, there is no route to herdr. Write the prompt and print it as a fenced code block for the user to carry over instead, without the preamble below, since the user has read it.
+When `session-name.sh` fails, `ListAgents` doesn't show its name, or the session refuses the message, print the prompt as a fenced code block for the user to carry over instead. Do the same off the Mac, as in Devin or a cloud session of Claude Desktop, where there is no route to herdr. `session-name.sh` reaches the running Herdr app over its socket from anywhere on the machine, so being outside Herdr on the Mac is fine.
 
 ## The Prompt
 
-Open by naming where the prompt came from, or it reads as the user speaking and stalls waiting on an answer:
-
-> This comes from an agent working in `<project>`, sent through `ls-agent:delegate`. The user did not read this prompt, so proceed on your best judgment.
+Tell the agent that the user did not read the prompt and that it should proceed on its best judgment, or it stalls waiting on an answer. Leave that out of a prompt the user carries over, since they will have read it.
 
 Then, beyond what any delegation needs, tell the agent:
 
