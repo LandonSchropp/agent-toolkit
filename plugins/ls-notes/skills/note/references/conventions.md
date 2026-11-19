@@ -2,7 +2,7 @@
 
 ## File Naming
 
-- File names ARE titles. Use descriptive, human-readable names.
+- File names are titles. Use descriptive, human-readable names.
 - Time-sensitive content uses a `YYYY-MM-DD` prefix.
 - Maintain consistency within each directory.
 

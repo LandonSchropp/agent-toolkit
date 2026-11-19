@@ -52,7 +52,7 @@ Write the draft to a scratch file, plus an empty file to diff it against. Use th
 
 When the user approves, create the issue, first making any small fixes their comments ask for. When they deny, revise the draft using their comments and review it again.
 
-CRITICAL: Never submit an issue without the user explicitly approving the draft!
+Submit the issue only after the user explicitly approves the draft.
 
 ## Create It
 

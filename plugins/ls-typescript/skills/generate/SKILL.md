@@ -6,11 +6,11 @@ disable-model-invocation: true
 
 ## Process
 
-1. **Fetch the readme** from `https://github.com/LandonSchropp/generate` to confirm the current generator list and canonical order. Do NOT rely on memory — the list changes.
+1. **Fetch the readme** from `https://github.com/LandonSchropp/generate` to confirm the current generator list and canonical order. The list changes, so don't work from memory.
 
 2. **Present the generators** to the user and ask which ones to run. Preserve the readme's documented order.
 
-3. **Run `--help` on every selected generator BEFORE asking the user anything**:
+3. **Run `--help` on every selected generator before asking the user anything**:
 
    ```
    pnpx @landonschropp/generate <generator> --help
@@ -34,7 +34,7 @@ disable-model-invocation: true
 | Thought                                         | Reality                                                                                  |
 | ----------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | "Positional args are shorter"                   | Positional order is undocumented and fragile. Always use `--flag=value`.                 |
-| "I'll ask as I go, one generator at a time"     | That defeats dedup. Gather flags from ALL selected generators' `--help` first, then ask. |
+| "I'll ask as I go, one generator at a time"     | That defeats dedup. Gather flags from all selected generators' `--help` first, then ask. |
 | "The CLI will prompt for anything I miss"       | No. Run non-interactively. If a flag is missing, ask the user first, then invoke.        |
 | "I already know the generator list from memory" | Fetch the readme. Generators and their flags change — the readme is the source of truth. |
 | "Running `--help` on 5 generators is wasteful"  | It takes seconds and prevents repeated questions. Always do it up front.                 |

@@ -20,7 +20,7 @@ Repeat this process each time you add a new feature or behavior.
 
 ## The Iron Law
 
-**THE IRON LAW: DON'T WRITE CODE WITHOUT A FAILING TEST FIRST.** If you didn't watch a test fail, you don't know if it tests the right thing. This applies to new code and edits to existing code.
+**Write a failing test before writing the code.** If you didn't watch a test fail, you don't know if it tests the right thing. This applies to new code and edits to existing code.
 
 This applies to new features, bug fixes, refactors and behavior changes. The only exceptions are throwaway prototypes, generated code or configuration files.
 

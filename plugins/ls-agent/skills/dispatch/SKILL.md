@@ -22,7 +22,7 @@ Workspaces the user opened themselves are work they chose to prioritize. Leave t
 2. Start the watcher (see [Watching Workspaces](#watching-workspaces)).
 3. Propose the next stage's tasks to start, along with any earlier task the user passed over. Start only the ones the user picks. Use the `ls-agent:delegate` skill once per task.
 4. Report what was started: the task, its project, and the workspace label.
-5. **STOP.** Wait for the watcher.
+5. Stop and wait for the watcher.
 
 ## Watching Workspaces
 

@@ -15,13 +15,13 @@ description: Use when setting up a new personal project, or when deciding which 
 | `mise.toml`       | Yes       | Tool versions, tasks, and environment that version files can't express. Conditional.       |
 | `mise.local.toml` | No        | Secrets and machine-specific environment variables.                                        |
 
-ALWAYS create `README.md`, `CLAUDE.md`, and `AGENTS.md` in every project. Create the local files only when there's local content to put in them.
+Create `README.md`, `CLAUDE.md`, and `AGENTS.md` in every project. Create the local files only when there's local content to put in them.
 
 ## Ownership
 
 Never duplicate content between `README.md` and `AGENTS.md`. If something is useful to a human, it goes in the README even when agents also need it. `AGENTS.md` holds only what a human reader would have no use for.
 
-Because of that split, `AGENTS.md` MUST open by requiring the agent to read `README.md`:
+Because of that split, open `AGENTS.md` by telling the agent to read `README.md`:
 
 ```markdown
 Read `README.md` before doing anything else. It documents the project's purpose, setup, and commands.
@@ -33,7 +33,7 @@ Prefer the conventional version file — `.node-version`, `.ruby-version`, and e
 
 ## Rules
 
-- Import case MUST match the filename exactly: `@AGENTS.md`, never `@agents.md`. Lowercase resolves on macOS and silently loads nothing on Linux and CI.
+- Match the import's case to the filename exactly: `@AGENTS.md`, never `@agents.md`. Lowercase resolves on macOS and silently loads nothing on Linux and CI.
 - Never import `AGENTS.local.md` from `AGENTS.md`. `CLAUDE.local.md` already imports it, and it often won't exist.
 - Never alter the casing of these filenames. It's `README.md`, never `readme.md` or `Readme.md`.
 - Never put content in `CLAUDE.md` or `CLAUDE.local.md`. If either holds anything but its import line, move that content to the matching `AGENTS` file.

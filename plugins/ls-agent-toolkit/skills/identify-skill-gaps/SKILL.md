@@ -17,7 +17,7 @@ Example: "What date range would you like me to analyze? (e.g., December 1-15, 20
 
 Claude Code stores conversation logs in `~/.claude/projects/` as JSONL files.
 
-**NEVER assume logs aren't accessible.** They ARE stored locally.
+The logs are on this machine, so read them directly.
 
 Run the extraction script with the date range:
 

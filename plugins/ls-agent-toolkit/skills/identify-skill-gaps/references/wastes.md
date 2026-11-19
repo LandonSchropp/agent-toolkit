@@ -159,7 +159,7 @@ Or:
 
 **Skill opportunity**: Establish clear defaults about appropriate scope, when to add abstractions, and when simplicity is preferred.
 
-**Detection strategy**: Look for negative instructions (what NOT to do), simplification requests, and pushback on agent suggestions. Patterns here reveal where agents systematically over-deliver.
+**Detection strategy**: Look for negative instructions (what not to do), simplification requests, and pushback on agent suggestions. Patterns here reveal where agents systematically over-deliver.
 
 ## What This Framework Doesn't Capture
 

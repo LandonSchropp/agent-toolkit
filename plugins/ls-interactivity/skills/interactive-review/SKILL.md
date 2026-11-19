@@ -52,7 +52,7 @@ Before invoking the script, run `git status`, and pick the mode from what it rep
 
 Once the user has approved and you've read their comments, close the review tab by its tab ID, the way the `ls-interactivity:interactive-command` skill closes a leftover tab. The tab has no script of its own to stop.
 
-NEVER ask the user to close the tab for you. Always close it yourself.
+Close the tab yourself rather than asking the user to.
 
 ## Rationalizations
 

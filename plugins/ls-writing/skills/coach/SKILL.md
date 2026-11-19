@@ -29,7 +29,7 @@ Example questions:
 
 ### Revision Phase
 
-**CRITICAL: Work on ONE paragraph or list item at a time.**
+**Work on one paragraph or list item at a time.**
 
 For each paragraph or list item you address:
 

@@ -26,7 +26,7 @@ Avoid overly detailed titles and phrases like "This commit..." or "Changes to...
 
 ## Body
 
-**MOST COMMITS SHOULD HAVE NO BODY. DO NOT ADD A BODY UNLESS ABSOLUTELY NECESSARY.** A title-only commit is almost always better.
+**Most commits have no body. Add one only when the title can't carry context the reader needs.** A title-only commit is almost always better.
 
 **Before adding a body, ask yourself:** Does this body add information that isn't obvious from the title? If the body just expands on what the title already says, delete it.
 
@@ -71,9 +71,9 @@ EOF
 
 | Thought                            | Reality                           |
 | ---------------------------------- | --------------------------------- |
-| "I'll provide multiple versions"   | Draft ONE commit message          |
+| "I'll provide multiple versions"   | Draft one commit message          |
 | "I should explain the format"      | Start with the title directly     |
-| "I'll introduce the message"       | NO introductory text whatsoever   |
+| "I'll introduce the message"       | No introductory text at all       |
 | "This simple change needs context" | Simple changes rarely need bodies |
 
 Read [Examples](references/examples.md) before writing the commit message.
