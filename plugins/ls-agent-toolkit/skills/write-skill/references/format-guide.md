@@ -2,11 +2,11 @@
 
 ## Directories
 
-Use subdirectories like `references`, `scripts`, and `assets` if you have the corresponding file types. Supporting markdown documentation MUST go in `references/`. Executable scripts MUST go in `scripts/`. Static resources MUST go in `assets/`.
+Put supporting Markdown documentation in `references/`, executable scripts in `scripts/`, and static resources in `assets/`. Create each directory only when the skill has files of that type.
 
 ## File References
 
-All file paths MUST be relative to the `SKILL.md` file, not absolute paths from the project root.
+Write file paths relative to the `SKILL.md` file, because the installed plugin lives outside the repository and a path from the project root won't resolve there.
 
 ```markdown
 <!-- GOOD: Relative to SKILL.md -->
@@ -26,11 +26,11 @@ Run the `example.ts` script.
 
 ## Name
 
-Every skill sets a `name` property matching its directory name. In a plugin skill, `name` supplies the last segment of the command, so declaring it states what the skill answers to in the file itself rather than leaving it implied by the path. Rename the directory and the property together; a `name` left behind keeps the old command alive.
+Every skill sets a `name` property matching its directory name. In a plugin skill, `name` supplies the last segment of the command, so declaring it states what the skill answers to in the file itself rather than leaving it implied by the path. Rename the directory and the property together. A `name` left behind keeps the old command alive.
 
 ## Description
 
-Describe ONLY _when_ to use the skill, NOT what it does.
+Describe when to use the skill, not what it does. An agent that reads a workflow summary in the description follows the summary instead of reading the skill. Name the decision point where the skill prevents a mistake, so the agent loads it before making the mistake rather than after.
 
 **Guidelines:**
 
@@ -66,9 +66,9 @@ description: Use when using React Router and handling authentication redirects
 
 ## Body
 
-The body contains only instructions. The agent reads the body only after the skill is loaded, so by then the triggering decision is over. A "Use this when" or "Not for" paragraph in the body does nothing; triggering belongs in the [description](#description).
+The body contains only instructions. The agent reads the body only after the skill is loaded, so by then the triggering decision is over. A "Use this when" or "Not for" paragraph in the body does nothing. Triggering belongs in the [description](#description).
 
-When an instruction points at another skill, say what that skill does, not what this skill doesn't do. "The `<skill>` skill logs meals" tells the agent where to go; "This skill isn't for logging meals" only tells it where not to look.
+When an instruction points at another skill, say what that skill does, not what this skill doesn't do. "The `<skill>` skill logs meals" tells the agent where to go. "This skill isn't for logging meals" only tells it where not to look.
 
 ```markdown
 <!-- BAD: Triggering conditions in the body -->
@@ -102,7 +102,7 @@ Write "the user", never a personal name. A skill that names someone reads as bei
 Good examples are:
 
 - Complete and runnable
-- Commented only where the pattern isn't evident from the code. **REQUIRED:** Use the `ls-code:comments-and-documentation` skill
+- Commented only where the pattern isn't evident from the code, following the `ls-code:comments-and-documentation` skill
 - From a real scenario
 - Shows the pattern clearly
 - Ready to adapt (not generic)
@@ -115,7 +115,7 @@ Avoid:
 
 ## Token Efficiency
 
-Frequently-loaded skills appear in EVERY conversation. Every token counts, so keep them concise.
+A loaded skill stays in context for the rest of the session, and frequently loaded skills load in most sessions, so every line is a recurring cost. After a compaction, Claude Code re-attaches only the first 5,000 tokens of each invoked skill, so put what matters most first.
 
 | Skill Type        | Target Word Count |
 | ----------------- | ----------------- |
@@ -151,7 +151,7 @@ wc -w skills/<skill-name>/SKILL.md
 
 Every rule, definition, and workflow has exactly one canonical home: the skill or reference file that owns it. Before writing anything into a skill, or editing one, find out whether it already lives somewhere else. Search the other skills and their references, and check the skills this one already requires.
 
-If it does, point to it with a requirement marker (see [Referencing Other Skills](#referencing-other-skills)) and write nothing more about it. A copy drifts: when the canonical home changes, the copy keeps teaching the old rule, and the agent can't tell which one is right. This includes partial copies, like a summary of what the other file covers or a restated list of allowed values.
+If it does, point to it (see [Referencing Other Skills](#referencing-other-skills)) and write nothing more about it. A copy drifts: when the canonical home changes, the copy keeps teaching the old rule, and the agent can't tell which one is right. This includes partial copies, like a summary of what the other file covers or a restated list of allowed values.
 
 Point to another skill by requiring the skill itself, never one of its reference files. A skill only links to references in its own directory. The other skill decides which of its references to load, so it can reorganize them later without breaking anything that points to it.
 
@@ -170,13 +170,13 @@ Before testing, commit your changes:
 
 <!-- BAD: Summarizes what the referenced file covers -->
 
-**REQUIRED:** Read [<Reference Name>](references/<reference>.md) for <topic A>, <topic B>, and <topic C>.
+Read [<Reference Name>](references/<reference>.md) for <topic A>, <topic B>, and <topic C>.
 
 <!-- GOOD: Points to the canonical home -->
 
-Before testing, commit your changes. **REQUIRED:** Use the `ls-git:git-commit` skill.
+Before testing, commit your changes with the `ls-git:git-commit` skill.
 
-**REQUIRED:** Read [<Reference Name>](references/<reference>.md).
+When <condition>, read [<Reference Name>](references/<reference>.md).
 ```
 
 ### Rationalizations
@@ -189,24 +189,20 @@ Before testing, commit your changes. **REQUIRED:** Use the `ls-git:git-commit` s
 
 ## Referencing Other Skills
 
-When referencing other skills, wrap the skill name in backticks and use explicit requirement markers.
+Wrap the skill name in backticks, and say plainly when to use it.
 
 Name a skill exactly as the skills listing shows it, which for a skill in a plugin is `plugin:skill`. A bare name the Skill tool can't resolve reads to the agent as a skill that doesn't exist, and it moves on without the guidance.
 
 ```markdown
-<!-- GOOD: Qualified name, explicit requirement marker -->
+<!-- GOOD: Qualified name, with when to use it -->
 
-**REQUIRED:** Use the `ls-typescript:testing-bun` skill
-
-<!-- GOOD: Clear requirement language -->
-
-**REQUIRED:** You MUST use the `ls-git:git-commit` skill
+Write the tests with the `ls-typescript:testing-bun` skill.
 
 <!-- BAD: Bare name the Skill tool can't resolve -->
 
-**REQUIRED:** Use the `testing-bun` skill
+Write the tests with the `testing-bun` skill.
 
-<!-- BAD: Unclear if required -->
+<!-- BAD: A path instead of a skill, with no sign of when to use it -->
 
 See skills/testing/test-driven-development
 ```
