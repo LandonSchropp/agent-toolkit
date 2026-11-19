@@ -28,18 +28,6 @@ When a skill might apply to what you're doing, invoke it before acting.
 
 | Thought                              | Reality                                                                      |
 | ------------------------------------ | ---------------------------------------------------------------------------- |
-| "This is just a simple question"     | Questions are tasks. Check for skills.                                       |
-| "I need more context first"          | Skill check comes before clarifying questions.                               |
-| "Let me explore the codebase first"  | Skills tell you how to explore. Check first.                                 |
-| "I can check git/files quickly"      | Files lack conversation context. Check for skills.                           |
-| "Let me gather information first"    | Skills tell you how to gather information.                                   |
-| "This doesn't need a formal skill"   | If a skill exists, use it.                                                   |
-| "I remember this skill"              | Skills evolve. Read the current version.                                     |
 | "I'm running the task, so I'm there" | The user may not be. Check the environment before assuming you can wait.     |
-| "This doesn't count as a task"       | Action = task. Check for skills.                                             |
-| "The skill is overkill"              | Simple things become complex. Use it.                                        |
-| "I'll just do this one thing first"  | Check before doing anything.                                                 |
-| "This feels productive"              | Undisciplined action wastes time. Skills prevent this.                       |
-| "I know what that means"             | Knowing the concept ≠ using the skill. Invoke it.                            |
 | "They basically approved the commit" | Read your environment's reference; it defines the only approval that counts. |
 | "They said the changes look good"    | Read your environment's reference; looking good is not commit approval.      |

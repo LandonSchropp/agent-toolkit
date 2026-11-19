@@ -18,9 +18,7 @@ Fix everything it turns up. When it flags more than one logical change, narrow t
 | Thought                                      | Reality                                                     |
 | -------------------------------------------- | ----------------------------------------------------------- |
 | "The diff is small, I'll check it myself"    | You already read it once and missed it. Dispatch the agent. |
-| "I know what's in it, I just wrote it"       | That's the problem the subagent exists to fix.              |
 | "I'll run it in the background and present"  | Findings after the user reviews are worthless. Block on it. |
 | "I'll let the subagent fix what it finds"    | It reports; you fix. Its edits never got reviewed.          |
 | "The checks are loaded, I can just run them" | Loading the rubric is not the point. Fresh eyes are.        |
-| "Dispatching costs a round trip"             | Cheaper than the round trip through the user.               |
 | "Splitting means committing, so I'll ask"    | Narrowing to one commit's files is not committing.          |

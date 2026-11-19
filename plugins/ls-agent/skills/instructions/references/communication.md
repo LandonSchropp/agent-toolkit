@@ -33,4 +33,3 @@
 | "A clarifying sentence makes the term precise"  | Precise words do that on their own. Name the thing directly.                 |
 | "The existing text already uses that label"     | If it needs defining, replace it anyway.                                     |
 | "Everyone writes 'dir' and 'args'"              | Write the full word unless you'd say the short form out loud.                |
-| "A longer answer is a more complete one"        | Too long means skimmed, and skimmed means missed. Concision helps.           |

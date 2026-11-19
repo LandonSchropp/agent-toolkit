@@ -46,9 +46,5 @@ If there's nothing to split, apply atomic-commit principles to any new commits m
 | "I'll just commit everything as one"                 | The user invoked this skill to split. Propose a plan first.                     |
 | "I can use `git add -p`"                             | Requires a TTY. You can't. Use restore-and-replay.                              |
 | "I'll add a follow-up commit to patch the prior one" | If it belongs to a prior commit on the branch, edit it. Don't pollute history.  |
-| "I'll skip the plan step and start committing"       | Without a plan, you'll commit the wrong groupings. Show the user first.         |
-| "Restore-and-replay is too tedious"                  | It's the only working option. Use it.                                           |
 | "I'll describe the splits and let the user do it"    | After plan approval, execute the splits yourself.                               |
 | "It's one logical change, so size doesn't matter"    | Size still decides whether it can be reviewed. Split it into standalone pieces. |
-| "Splitting takes more time"                          | Smaller commits are faster to review, catch more bugs, and cherry-pick better.  |
-| "The change is too interconnected to split"          | Interdependencies between commits signal design debt. Splitting exposes it.     |
