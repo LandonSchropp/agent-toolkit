@@ -11,7 +11,7 @@
 
 ## Staying In Scope
 
-Don't edit files outside the scope of the commit you're building. If you unavoidably touch unrelated files and they don't overlap with the current commit's files, review and commit each separately — one review, one commit, at a time. Never bundle unreviewed changes into a reviewed commit.
+Don't edit files outside the scope of the commit you're building. If you unavoidably touch unrelated files and they don't overlap with the current commit's files, review and commit each separately: one review, one commit, at a time. Never bundle unreviewed changes into a reviewed commit.
 
 ## Rationalizations
 

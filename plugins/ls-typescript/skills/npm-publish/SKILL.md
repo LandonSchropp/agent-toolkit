@@ -35,6 +35,6 @@ Both steps only touch `package.json` and the registry, so `npm version` / `npm p
 ## Troubleshooting publish failures
 
 - **`404` on a scoped package** is not "deleted" or "wrong name." The registry returns `404 ... PUT .../@scope%2fname` when you lack write access — it masks an auth failure. Re-check `npm whoami`.
-- **`EOTP`** (2FA enabled): add `--otp=<code>` to the publish command. Codes expire in ~30 seconds — ask the user for it and run publish IMMEDIATELY in the same turn, don't gather it then do other work. A repeat `EOTP` means it expired; ask for a fresh one.
+- **`EOTP`** (2FA enabled): add `--otp=<code>` to the publish command. Codes expire in about 30 seconds, so ask the user for one and run the publish in the same turn, before any other work. A repeat `EOTP` means the code expired, so ask for a fresh one.
 - **`EPUBLISHCONFLICT`**: that version already exists and can't be overwritten. This usually means the local branch is behind — the version was already bumped and published on the default branch. Don't just bump again on stale history; offer to rebase onto the latest default branch first, then bump from there.
 - **Bumped and tagged but publish failed**: keep the commit and tag, fix the cause, and re-run only the publish — do not bump again.

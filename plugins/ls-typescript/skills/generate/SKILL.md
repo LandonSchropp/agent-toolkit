@@ -16,7 +16,7 @@ disable-model-invocation: true
    pnpx @landonschropp/generate <generator> --help
    ```
 
-   Collect every flag across every selected generator. Identify conceptual overlaps — the same question may appear under different flag names (e.g. jest's `--react`, husky's `--react`, and eslint's `--plugins` checkbox all ask about React). Ask the user ONCE for each conceptual question.
+   Collect every flag across every selected generator. Identify conceptual overlaps — the same question may appear under different flag names (e.g. jest's `--react`, husky's `--react`, and eslint's `--plugins` checkbox all ask about React). Ask the user each conceptual question once.
 
    `--help` lists flag names and messages but not enumerated choices for list or checkbox prompts. When the allowed values for a flag are unclear, read the generator's source on GitHub (e.g. `https://raw.githubusercontent.com/LandonSchropp/generate/main/src/<generator>/index.js`) — the `choices` array lists every valid value.
 

@@ -1,6 +1,6 @@
 # Local Engineering
 
-You're running in Claude Code inside herdr, on the user's Mac. This environment owns engineering that edits a repository on this machine or needs the user's development environment, including all personal engineering and the skills in `agent-toolkit`. It never takes life admin, planning or design work; those belong to Non-Engineering.
+You're running in Claude Code inside herdr, on the user's Mac. This environment owns engineering that edits a repository on this machine or needs the user's development environment, including all personal engineering and the skills in `agent-toolkit`. It never takes life admin, planning or design work, which belong to Non-Engineering.
 
 Use the `trash` command in place of `rm` when removing files.
 
@@ -8,14 +8,14 @@ Use the `trash` command in place of `rm` when removing files.
 
 Every commit is reviewed before it is created. Present each commit's changes for review and create the commit only after the user signs off. Drive the review yourself.
 
-The decision the `ls-interactivity:interactive-review` skill delivers (approve, comment or deny) is the only signal that matters — never ask the user whether they're ready to commit or want another look. A commit hook also blocks `git commit` until an approved review is on record, as a backstop, but don't rely on hitting it to find out the answer; act on the decision directly.
+The decision the `ls-interactivity:interactive-review` skill delivers (approve, comment or deny) is the only signal that matters. Never ask the user whether they're ready to commit or want another look. A commit hook also blocks `git commit` until an approved review is on record, as a backstop. Act on the decision directly rather than relying on the hook to tell you.
 
-The decision and the user's comments are independent signals — read both. They combine into these cases:
+The decision and the user's comments are independent signals, so read both. They combine into these cases:
 
-- **Approved / comments:** Minor fixes. Address them, then commit — already signed off, no re-review needed.
+- **Approved / comments:** Minor fixes. Address them, then commit. The user already signed off, so there's no re-review.
 - **Approved / no comments:** Ready to commit as-is.
 - **Commented:** Questions or notes, not a decision yet. Answer the questions in your replies, make any changes the comments ask for, then wait for the next decision. Never record an approval or commit on a comment.
-- **Denied / comments:** Real concerns. Address them, then wait for the next decision; the open review shows your changes.
+- **Denied / comments:** Real concerns. Address them, then wait for the next decision. The open review shows your changes.
 - **Denied / no comments:** The user wasn't ready to review this. Stop and wait for them rather than retrying.
 
 The review step in [Commits](commits.md) is this one:
@@ -29,11 +29,11 @@ Run Bash commands one at a time. Don't chain commands together with `&&` or `;`.
 
 ## Referring to Workspaces
 
-When telling the user about a workspace, name it by the label shown in the herdr UI, never by its internal ID. The user never sees the IDs, so an ID tells them nothing. Keep IDs for herdr commands only; `herdr workspace list` maps them to labels.
+When telling the user about a workspace, name it by the label shown in the herdr UI, never by its internal ID. The user never sees the IDs, so an ID tells them nothing. Keep IDs for herdr commands. `herdr workspace list` maps them to labels.
 
 ## Finishing a Workspace
 
-When the whole assignment is finished (not each task within it) the work isn't done until it is integrated and the workspace is closed.
+When the whole assignment is finished, the work isn't done until it's integrated and the workspace is closed. This applies to the assignment, not to each task within it.
 
 In a repository that merges directly into the default branch, offer to merge into main and close the workspace in the same question, so the user answers once instead of twice.
 
@@ -41,7 +41,7 @@ In a repository that integrates through pull requests, offer to open the pull re
 
 **Never close a workspace while it's babysitting pull requests.** Posting a pull request for review doesn't finish the work. Merging it does.
 
-A main checkout closes the same way a linked worktree does; an agent closes itself out either way, even when its child worktrees are still open.
+A main checkout closes the same way a linked worktree does. An agent closes itself out either way, even when its child worktrees are still open.
 
 - **Repositories that merge directly into the default branch:** On approval, invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
 - **Repositories that integrate through pull requests:** Invoke the `ls-git:stacked-pull-requests` skill for a stack. As soon as they're opened, invoke the `ls-git:babysit` skill. It carries the pull requests to merge and offers to close the workspace once they have. When the user approves posting them for review, invoke the `ls-git:ready-for-review` skill.

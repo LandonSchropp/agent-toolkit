@@ -1,16 +1,14 @@
 # Test-Driven Development
 
-## Overview
-
 Follow the TDD methodology when writing code.
 
 ## Red-Green-Refactor
 
-- **Red:** Write a test showing what should happen. Then run it and verify that it fails. This is MANDATORY—never skip this step. Confirm that the test fails (not errors), the failure message is expected and it fails because the feature is missing.
+- **Red:** Write a test showing what should happen. Then run it and verify that it fails. Confirm that the test fails (not errors), the failure message is expected and it fails because the feature is missing.
 
-  If the test passes, then you're testing existing behavior—fix the test. If the test fails with an unexpected error, then fix the error and re-run until it fails correctly.
+  If the test passes, then you're testing existing behavior, so fix the test. If the test fails with an unexpected error, then fix the error and re-run until it fails correctly.
 
-- **Green:** Write the simplest code you can to make the test pass. Don't add features, refactor other code, or "improve" beyond the test. Then re-run the tests (MANDATORY) to verify they pass, other tests still pass, and the output does not contain errors or warnings.
+- **Green:** Write the simplest code you can to make the test pass. Don't add features, refactor other code, or "improve" beyond the test. Then re-run the tests to verify they pass, other tests still pass, and the output does not contain errors or warnings.
 
   If the test fails, fix the code, not the test. If other tests fail, fix the code until they pass.
 
