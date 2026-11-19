@@ -23,5 +23,9 @@ is_spec_file() {
 }
 
 if is_bash_file "$file_path" && ! is_spec_file "$file_path" && which shfmt >/dev/null; then
-  shfmt -w -i 2 "$(readlink -f "$file_path")"
+  # Exit 2 sends a parse error back to the agent to fix.
+  if ! output=$(shfmt -w -i 2 "$(readlink -f "$file_path")" 2>&1); then
+    echo "$output" >&2
+    exit 2
+  fi
 fi

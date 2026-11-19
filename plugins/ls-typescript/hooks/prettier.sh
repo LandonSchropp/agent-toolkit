@@ -36,16 +36,24 @@ find_ancestor() {
 
 file_directory=$(dirname "$resolved")
 
-if directory=$(find_ancestor "$file_directory" node_modules/.bin/prettier); then
-  "$directory/node_modules/.bin/prettier" --write "$resolved"
-elif directory=$(find_ancestor "$file_directory" bun.lock) ||
-  directory=$(find_ancestor "$file_directory" bun.lockb); then
-  cd "$directory" && bun x prettier --write "$resolved"
-elif directory=$(find_ancestor "$file_directory" package-lock.json); then
-  cd "$directory" && npx prettier --write "$resolved"
-elif directory=$(find_ancestor "$file_directory" pnpm-lock.yaml); then
-  cd "$directory" && pnpm exec prettier --write "$resolved"
-else
-  directory=$(git -C "$file_directory" rev-parse --show-toplevel 2>/dev/null || echo "$file_directory")
-  cd "$directory" && pnpm dlx prettier --write "$resolved"
+format() {
+  if directory=$(find_ancestor "$file_directory" node_modules/.bin/prettier); then
+    "$directory/node_modules/.bin/prettier" --write "$resolved"
+  elif directory=$(find_ancestor "$file_directory" bun.lock) ||
+    directory=$(find_ancestor "$file_directory" bun.lockb); then
+    cd "$directory" && bun x prettier --write "$resolved"
+  elif directory=$(find_ancestor "$file_directory" package-lock.json); then
+    cd "$directory" && npx prettier --write "$resolved"
+  elif directory=$(find_ancestor "$file_directory" pnpm-lock.yaml); then
+    cd "$directory" && pnpm exec prettier --write "$resolved"
+  else
+    directory=$(git -C "$file_directory" rev-parse --show-toplevel 2>/dev/null || echo "$file_directory")
+    cd "$directory" && pnpm dlx prettier --write "$resolved"
+  fi
+}
+
+# Exit 2 sends an error, such as a syntax error, back to the agent to fix.
+if ! output=$(format 2>&1); then
+  echo "$output" >&2
+  exit 2
 fi

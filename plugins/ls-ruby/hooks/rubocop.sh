@@ -17,7 +17,16 @@ repository_root=$(git -C "$file_directory" rev-parse --show-toplevel 2>/dev/null
 cd "$repository_root"
 
 if [[ -f .standard.yml ]]; then
-  bundle exec standardrb --fix "$file_path" || true
+  command=(bundle exec standardrb --fix "$file_path")
 else
-  bundle exec rubocop --autocorrect "$file_path" || true
+  command=(bundle exec rubocop --autocorrect "$file_path")
+fi
+
+# RuboCop exits 1 when offenses remain after autocorrecting. Exit 2 sends them back to the agent to fix.
+status=0
+output=$("${command[@]}" 2>&1) || status=$?
+
+if [[ $status -eq 1 ]]; then
+  echo "$output" >&2
+  exit 2
 fi
