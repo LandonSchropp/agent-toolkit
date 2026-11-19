@@ -28,8 +28,8 @@ Both steps only touch `package.json` and the registry, so `npm version` / `npm p
 ## Bump, push, and publish
 
 1. **Bump.** Pick the level — major (breaking), minor (new backward-compatible feature), or patch (fix/internal only); ask if unsure. Run the bump command for your manager. It edits `package.json`, commits, and creates a `v<version>` tag.
-2. **Push** the commit and tag: `git push --follow-tags`. REQUIRED: `--follow-tags`, or the tag stays on your machine.
-3. **Publish** with your manager's command plus `--access public`. REQUIRED for scoped packages (`@scope/name`): without it npm publishes privately and rejects a free account.
+2. **Push** the commit and tag: `git push --follow-tags`. Without `--follow-tags`, the tag stays on your machine.
+3. **Publish** with your manager's command plus `--access public`, which scoped packages (`@scope/name`) need: without it npm publishes privately and rejects a free account.
 4. **Verify:** `npm view <package-name> version`.
 
 ## Troubleshooting publish failures

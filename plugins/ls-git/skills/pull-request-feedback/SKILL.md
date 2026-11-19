@@ -7,7 +7,7 @@ description: Use when working through review feedback on a GitHub pull request o
 
 ## Stacks
 
-When the pull request is part of a stack, walk the stack from the bottom up: check out each branch in turn and run every section below for it. Before starting on a branch's comments, sync it onto its updated parent so it picks up the fixes made lower in the stack, and run the relevant tests after resolving any conflicts, before continuing the sync. Fix any conflicts or breakages the sync surfaces, from the parent or `main`, through the normal commit-and-review flow already in effect for this session, then resume the walk. **REQUIRED:** Use the `ls-git:stacked-pull-requests` skill to find the stack and sync it.
+When the pull request is part of a stack, walk the stack from the bottom up: check out each branch in turn and run every section below for it. Before starting on a branch's comments, sync it onto its updated parent so it picks up the fixes made lower in the stack, and run the relevant tests after resolving any conflicts, before continuing the sync. Fix any conflicts or breakages the sync surfaces, from the parent or `main`, through the normal commit-and-review flow already in effect for this session, then resume the walk. Use the `ls-git:stacked-pull-requests` skill to find the stack and sync it.
 
 ## Context
 

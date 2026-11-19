@@ -21,7 +21,7 @@ Take the author and title from the book's metadata, dropping any subtitle from t
 ## Process
 
 1. Convert the book to plain text in the scratchpad directory, for example with Calibre's `ebook-convert` (`brew install --cask calibre` if it's missing). Delete the text file once the summary is written.
-2. **REQUIRED:** Read the whole book before writing. Chapter summaries and the introduction are not the book; the frameworks, numbers and caveats live in the body chapters.
+2. Read the whole book before writing. Chapter summaries and the introduction are not the book; the frameworks, numbers and caveats live in the body chapters.
 3. Read the existing `(Summary).md` files in the folder. They are approved summaries of other books; match their shape, depth and tone.
 4. Write the summary.
 

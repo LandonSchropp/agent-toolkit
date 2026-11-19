@@ -21,7 +21,7 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 
 1. **Identify the workspace.** Run `herdr workspace get "$HERDR_WORKSPACE_ID"` and read `result.workspace.worktree`. When it is absent, or `is_linked_worktree` is `false`, this is a plain workspace on the main checkout. Its checkout is the current directory, and it skips step 3. When it is present with `is_linked_worktree` set to `true`, this is a herdr-managed worktree. Take the checkout from `worktree.checkout_path`.
 
-2. **Confirm no pull request is open.** Read the branch with `git -C <checkout_path> rev-parse --abbrev-ref HEAD`. Herdr injects no variable for it. Then run `gh pr list --head <branch> --state open --json url`, unless the repository has no GitHub remote. If it lists a pull request, **STOP**. Don't close the workspace. **REQUIRED:** Invoke the `ls-git:babysit` skill on it instead.
+2. **Confirm no pull request is open.** Read the branch with `git -C <checkout_path> rev-parse --abbrev-ref HEAD`. Herdr injects no variable for it. Then run `gh pr list --head <branch> --state open --json url`, unless the repository has no GitHub remote. If it lists a pull request, **STOP**. Don't close the workspace. Invoke the `ls-git:babysit` skill on it instead.
 
 3. **Confirm nothing is left behind.** Check the working tree and the branch, and **STOP** unless the tree is clean and the branch is merged into the default branch or pushed to `origin/<branch>`. Once the worktree is removed, whatever lived only here is gone.
 
@@ -34,7 +34,7 @@ Herdr injects `$HERDR_WORKSPACE_ID` into every managed pane. If it is empty you 
 
    A branch that was never pushed has no `origin/<branch>`, so the last command errors rather than printing nothing. That is an unpushed branch, and only the merged check can clear it.
 
-4. **Check off finished tasks.** **REQUIRED:** Invoke the `ls-notes:daily-note` skill. In today's note, mark `[x]` each task this workspace finished, such as a pull request that merged. Skip any task you aren't sure of, and don't ask first. If the note can't be updated, close anyway.
+4. **Check off finished tasks.** Invoke the `ls-notes:daily-note` skill. In today's note, mark `[x]` each task this workspace finished, such as a pull request that merged. Skip any task you aren't sure of, and don't ask first. If the note can't be updated, close anyway.
 
 5. **Close the workspace.** Don't warn the user that the close takes the workspace's other tabs and panes with it, or ask them to confirm; they already know. Run this as the final action:
 

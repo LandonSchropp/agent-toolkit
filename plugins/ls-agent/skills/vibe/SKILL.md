@@ -7,7 +7,7 @@ description: Use when working in a vibe-coded repository, where the user never r
 
 The user never reads the code here. They run the product and react to it, so nobody else will catch a bug in the code, and the only thing worth reporting is what they can see.
 
-For a new project, **REQUIRED:** use the `ls-code:project-conventions` skill to create the root files first. At the start of every session, make sure the README, `AGENTS.md` and coverage setup below are in place.
+For a new project, use the `ls-code:project-conventions` skill to create the root files first. At the start of every session, make sure the README, `AGENTS.md` and coverage setup below are in place.
 
 ## README
 
@@ -25,7 +25,7 @@ The README opens, above everything else, with this callout:
 Directly after the line requiring agents to read `README.md`, `AGENTS.md` has this instruction:
 
 ```markdown
-**REQUIRED:** Invoke the `ls-agent:vibe` skill and follow its instructions. At the start of every session, ask the user to run `/ls-interactivity:disable-review`.
+Invoke the `ls-agent:vibe` skill and follow its instructions. At the start of every session, ask the user to run `/ls-interactivity:disable-review`.
 ```
 
 ## Coverage

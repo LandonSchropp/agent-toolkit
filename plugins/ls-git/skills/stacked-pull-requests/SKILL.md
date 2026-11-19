@@ -5,7 +5,7 @@ description: Use when working with a stack of GitHub pull requests — creating 
 
 # Stacked Pull Requests
 
-Uses Git Town to manage parent/child branch relationships. **REQUIRED:** Run `git town help` for the full command list, or `git town <command> --help` for documentation on a specific command.
+Uses Git Town to manage parent/child branch relationships. Run `git town help` for the full command list, or `git town <command> --help` for documentation on a specific command.
 
 ## Creating a Stack
 
@@ -26,7 +26,7 @@ When upstream changes or a parent branch is updated, run `git town sync --stack`
 
 ## Merging
 
-Merge oldest ancestor first. **REQUIRED:** Confirm the full merge order with the user before merging anything.
+Merge oldest ancestor first. Confirm the full merge order with the user before merging anything.
 
 1. **Discover the tree:** Run `scripts/list-pull-request-tree.rb --branch <name>`. Pass any branch in the tree — the script walks up to the oldest ancestor and down through all descendants. A native stack is one linear chain, so merge a tree that forks one chain at a time.
 
@@ -34,7 +34,7 @@ Merge oldest ancestor first. **REQUIRED:** Confirm the full merge order with the
 
 3. **Merge the stack:** Run `gh stack merge <top-pr-number> --yes` with `--rebase`, `--squash` or `--merge`, whichever the repository allows first in that order (`gh repo view --json rebaseMergeAllowed,squashMergeAllowed,mergeCommitAllowed`). Without a flag, it uses your last-used method. It merges every PR up to and including that one in a single all-or-nothing operation, or adds them all to the merge queue when the base branch has one. GitHub checks reviews, CI and branch protection when the merge runs; if a PR is blocked, surface the error and stop. Never bypass a block.
 
-4. **Confirm the merge:** If the base branch has a merge queue, wait for the top PR to merge. **REQUIRED:** Follow the confirm step of the `ls-git:merge-pull-request` skill, passing the top PR's URL.
+4. **Confirm the merge:** If the base branch has a merge queue, wait for the top PR to merge. Follow the confirm step of the `ls-git:merge-pull-request` skill, passing the top PR's URL.
 
 5. **Clean up:** Run `git town sync` to delete the merged local branches.
 
@@ -44,7 +44,7 @@ For each PR in order:
 
 1. **Retarget the next PR** (if one exists): Run `scripts/retarget-pull-request-to-default-branch.sh --pull-request-url <next-url>`. When merging via the CLI, GitHub does not auto-retarget dependent PRs — it closes them instead (cli/cli#1168). Retargeting manually before each merge prevents this.
 
-2. **Merge the current PR:** **REQUIRED:** Use the `ls-git:merge-pull-request` skill.
+2. **Merge the current PR:** Use the `ls-git:merge-pull-request` skill.
 
 3. **Sync the remaining stack:** Run `git town sync --stack` from any remaining branch. Git Town will detect the merged branch is gone and rebase the next branch onto main.
 

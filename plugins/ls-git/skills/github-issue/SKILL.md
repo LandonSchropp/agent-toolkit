@@ -34,7 +34,7 @@ Shape the draft as a bare title on the first line, a blank line, then the body, 
 
 Keep the title to five words or fewer, not counting any prefix the template sets. It names the problem or request and leaves the explanation to the body, so write "Crash on empty config", not "The app crashes on startup when the config file exists but is empty".
 
-**REQUIRED:** Use the `ls-writing:format` skill on the prose inside the fields. The template owns the headings; never restyle them.
+Use the `ls-writing:format` skill on the prose inside the fields. The template owns the headings; never restyle them.
 
 Never hard-wrap. In every field, write each paragraph and each list item as one unbroken line, however long, with blank lines only between blocks. GitHub renders every newline in an issue as a line break, so a wrap shows up as a ragged break mid-sentence. Fenced code blocks and quoted log output keep their own line breaks.
 
@@ -48,7 +48,7 @@ A person reads this. Include what a maintainer needs to act, and stop:
 
 ## Get Approval
 
-Write the draft to a scratch file, plus an empty file to diff it against. **REQUIRED:** Use the `ls-interactivity:interactive-review` skill in `diff <empty file> <draft>` mode.
+Write the draft to a scratch file, plus an empty file to diff it against. Use the `ls-interactivity:interactive-review` skill in `diff <empty file> <draft>` mode.
 
 When the user approves, create the issue, first making any small fixes their comments ask for. When they deny, revise the draft using their comments and review it again.
 

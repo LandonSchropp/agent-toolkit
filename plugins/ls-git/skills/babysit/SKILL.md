@@ -11,7 +11,7 @@ The workspace stays open the whole time. Never close it while any of its pull re
 
 ## Start
 
-1. Once the pull requests are posted for review, **REQUIRED:** use the `herdr-group` skill to move the workspace to In Review.
+1. Once the pull requests are posted for review, use the `herdr-group` skill to move the workspace to In Review.
 2. Register every pull request, even one you think is already registered. (Adding pull requests is idempotent.)
 
    ```bash
@@ -30,11 +30,11 @@ This skill starts the plugin's `pull-requests` monitor, which runs for the rest 
 
 Handle each line by its `feedback` and `status`:
 
-- **Feedback:** Whenever `feedback` isn't empty, whatever the status, **REQUIRED:** use the `ls-git:pull-request-feedback` skill to work through it. Optional and nit comments are real feedback, since the user may want to address them.
+- **Feedback:** Whenever `feedback` isn't empty, whatever the status, use the `ls-git:pull-request-feedback` skill to work through it. Optional and nit comments are real feedback, since the user may want to address them.
 - **CI failed:** Open each of the `failingChecks` URLs, find the cause and fix it. If the failure is flaky, rerun it with `gh run rerun --failed`.
-- **Merge conflicts:** Update the branch onto its parent. For a stack, **REQUIRED:** use the `ls-git:stacked-pull-requests` skill to sync it.
+- **Merge conflicts:** Update the branch onto its parent. For a stack, use the `ls-git:stacked-pull-requests` skill to sync it.
 - **Ready to merge:** See [Merging](#merging).
-- **Merged or closed:** Once every pull request is, offer to close the workspace. On approval, **REQUIRED:** use the `ls-agent:close-workspace` skill to close it.
+- **Merged or closed:** Once every pull request is, offer to close the workspace. On approval, use the `ls-agent:close-workspace` skill to close it.
 - **Anything else:** Waiting for CI, review or the merge queue resolves on its own.
 
 Before asking the user whether to post a draft for review, handle the feedback and failing checks in the monitor's lines so far.
@@ -45,7 +45,7 @@ Ask the user once per stack, the first time one of its pull requests is ready to
 
 Merge in dependency order. A pull request that depends on another one waits until that one merges, even when the other one is in a different repository. The monitor reports it as merged. When it has to deploy first, ask the user to confirm the deploy.
 
-**REQUIRED:** Use the `ls-git:stacked-pull-requests` skill to merge a stack, and the `ls-git:merge-pull-request` skill to merge a single pull request.
+Use the `ls-git:stacked-pull-requests` skill to merge a stack, and the `ls-git:merge-pull-request` skill to merge a single pull request.
 
 ## Rationalizations
 

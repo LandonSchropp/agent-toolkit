@@ -13,7 +13,7 @@ scripts/open-workspace.sh --project <name> --branch <branch> --label <label>
 
 It prints the workspace ID, the handle for prompting that agent. The branch does not need to exist.
 
-Use this script in place of `herdr-project open`. **REQUIRED:** Invoke the `herdr-project` skill for the project names and for the main workspace that opens beside the worktree's. The script returns the worktree's agent, never the main one.
+Use this script in place of `herdr-project open`. Invoke the `herdr-project` skill for the project names and for the main workspace that opens beside the worktree's. The script returns the worktree's agent, never the main one.
 
 ## Labeling the Workspace
 

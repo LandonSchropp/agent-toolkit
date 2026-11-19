@@ -11,9 +11,9 @@ If you're running in Claude Duet, use its built-in browser and follow Duet's own
 
 ## Everywhere Else
 
-Drive the browser through Claude in Chrome. **REQUIRED:** Use the `claude-in-chrome` skill. It works in the user's own Chrome, in a window they can see, with the extension's safety checks and the user's existing logins.
+Drive the browser through Claude in Chrome. Use the `claude-in-chrome` skill. It works in the user's own Chrome, in a window they can see, with the extension's safety checks and the user's existing logins.
 
-Use Playwright only when a skill or the user explicitly tells you to. **REQUIRED:** Read [Playwright](references/playwright.md) before using it.
+Use Playwright only when a skill or the user explicitly tells you to. Read [Playwright](references/playwright.md) before using it.
 
 If Claude in Chrome isn't connected or a site blocks it, stop and tell the user. Never fall back to Playwright on your own.
 

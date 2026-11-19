@@ -18,9 +18,9 @@ Workspaces the user opened themselves are work they chose to prioritize. Leave t
 
 ## Workflow
 
-1. Get the parallelization, which lives at `/tmp/[slugified-title].md`. **REQUIRED:** Use the `ls-agent:parallelize` skill if there isn't one yet. Work through it one stage at a time.
+1. Get the parallelization, which lives at `/tmp/[slugified-title].md`. Use the `ls-agent:parallelize` skill if there isn't one yet. Work through it one stage at a time.
 2. Start the watcher (see [Watching Workspaces](#watching-workspaces)).
-3. Propose the next stage's tasks to start, along with any earlier task the user passed over. Start only the ones the user picks. **REQUIRED:** Use the `ls-agent:delegate` skill once per task.
+3. Propose the next stage's tasks to start, along with any earlier task the user passed over. Start only the ones the user picks. Use the `ls-agent:delegate` skill once per task.
 4. Report what was started: the task, its project, and the workspace label.
 5. **STOP.** Wait for the watcher.
 

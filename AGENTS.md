@@ -1,4 +1,4 @@
-**REQUIRED:** Read `README.md` before doing anything else. It documents the project's purpose, setup, and commands.
+Read `README.md` before doing anything else. It documents the project's purpose, setup, and commands.
 
 ## Project Overview
 

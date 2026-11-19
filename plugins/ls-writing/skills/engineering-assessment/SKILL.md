@@ -9,7 +9,7 @@ The assessment is written with the user one section at a time, and the user revi
 
 ## Setting Up
 
-1. **REQUIRED:** Invoke the `ls-notes:note` skill, and follow its conventions for the new note.
+1. Invoke the `ls-notes:note` skill, and follow its conventions for the new note.
 2. Copy `~/Notes/Areas/Oyster/Engineering Assessment Template.md` to a new note named `<Project Name> Engineering Assessment.md`. Ask the user which folder it belongs in if the conversation doesn't make it clear.
 3. Copy the new note into the session's scratchpad directory before the first edit. This copy is the baseline the review compares against.
 
@@ -18,7 +18,7 @@ The assessment is written with the user one section at a time, and the user revi
 Work through the template's sections in order. For each one:
 
 1. Replace the section's italic prompt and placeholders, such as empty bullets and the risk table's example cells, with drafted content that answers it.
-2. Open the review. **REQUIRED:** Invoke the `ls-interactivity:interactive-review` skill in `diff <baseline> <note>` mode, with `--name engineering-assessment` so every run reloads the same tab.
+2. Open the review. Invoke the `ls-interactivity:interactive-review` skill in `diff <baseline> <note>` mode, with `--name engineering-assessment` so every run reloads the same tab.
 3. Revise from the user's comments and rerun the same command to reload the review. Keep going until the user approves the section or says to move on.
 4. Re-read the note, since the user may have edited it during the review. Copy it over the baseline, so the next review shows only the next section.
 

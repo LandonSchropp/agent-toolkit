@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 The daily note is the source of truth for what gets worked on today. This session hands its tasks out to other agents and keeps the note in step with the work.
 
-**REQUIRED:** You _must_ invoke the following skills:
+Invoke the following skills:
 
 - `ls-notes:daily-note`
 - `ls-agent:dispatch`
@@ -27,7 +27,7 @@ Propose each new task as it joins the queue. Ignore the tasks you added yourself
 
 ## Pull Requests to Merge
 
-When the user hands you pull requests to get merged, **REQUIRED:** read [Pull Requests to Merge](references/pull-requests-to-merge.md).
+When the user hands you pull requests to get merged, read [Pull Requests to Merge](references/pull-requests-to-merge.md).
 
 ## Keeping the Note Current
 

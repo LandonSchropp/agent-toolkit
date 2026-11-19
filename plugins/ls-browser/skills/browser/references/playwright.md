@@ -1,6 +1,6 @@
 # Playwright
 
-**REQUIRED:** Use the `playwright-cli` skill for the commands themselves. Drive the browser through `playwright-cli`, never through the Playwright MCP tools, which know nothing about the session.
+Use the `playwright-cli` skill for the commands themselves. Drive the browser through `playwright-cli`, never through the Playwright MCP tools, which know nothing about the session.
 
 Always name the session, and pass the name on every later command:
 

@@ -16,7 +16,7 @@ If the user's arguments already describe the side quest, that description is the
 
 ## Handing It Off
 
-**REQUIRED:** Use the `ls-agent:delegate` skill to hand the side quest off. The prompt covers only the side quest, not the main task.
+Use the `ls-agent:delegate` skill to hand the side quest off. The prompt covers only the side quest, not the main task.
 
 ## Returning to the Main Thread
 

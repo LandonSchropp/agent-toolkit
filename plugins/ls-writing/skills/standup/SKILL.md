@@ -7,12 +7,12 @@ description: Use when the user wants to write their standup update.
 
 Draft the user's reply to their team's standup thread from their daily notes.
 
-1. **REQUIRED:** Invoke the `ls-notes:daily-note` skill. Read today's note and the previous weekday's note. On a Monday, the previous weekday is Friday.
+1. Invoke the `ls-notes:daily-note` skill. Read today's note and the previous weekday's note. On a Monday, the previous weekday is Friday.
 2. Build Yesterday from the previous weekday's Work tasks marked `[x]` or `[/]`, and Today from today's Work tasks. Today's note may not have its carried-forward tasks yet, so also include the previous weekday's Work tasks marked `[>]`, `[/]` or `[<]` that today's note doesn't list. Personal tasks never go in the standup.
 3. Rewrite each task as a short phrase, in the past tense under Yesterday and the "-ing" form under Today. Summarize a task's subtasks into its one line.
 4. When a task has a Linear issue, end its line with the issue ID in parentheses, linked to the issue, as in `([ABC-123](https://linear.app/...))`.
 5. Ask the user for the blockers and live-time items, since the daily notes don't record them.
-6. **REQUIRED:** Invoke the `ls-writing:slack-message` skill to show the draft and copy it.
+6. Invoke the `ls-writing:slack-message` skill to show the draft and copy it.
 
 The reply answers the thread's three questions:
 

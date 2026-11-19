@@ -2,11 +2,11 @@
 
 ## The Process
 
-1. **REQUIRED:** Invoke the `ls-git:git-atomic-commit` skill before making changes, and follow its guidance. Group the work into atomic commits.
+1. Invoke the `ls-git:git-atomic-commit` skill before making changes, and follow its guidance. Group the work into atomic commits.
 2. Work one commit at a time. Keep your changes scoped to the single commit you're building.
-3. Review your own changes first. **REQUIRED:** Invoke the `ls-code:pre-review` skill, and fix what it finds before the user sees the diff.
+3. Review your own changes first. Invoke the `ls-code:pre-review` skill, and fix what it finds before the user sees the diff.
 4. Complete any review your environment's reference adds before committing.
-5. Create the commit. **REQUIRED:** Use the `ls-git:git-commit` skill.
+5. Create the commit. Use the `ls-git:git-commit` skill.
 6. Repeat for the next commit.
 
 ## Staying In Scope

@@ -19,7 +19,7 @@ Handle each pull request on its own, including every pull request in a stack:
 
 4. **Report:** Give the user each message's Slack link.
 
-Once every pull request is posted, **REQUIRED:** invoke the `ls-git:babysit` skill on them. Never close the workspace after posting. It closes only after its pull requests merge.
+Once every pull request is posted, invoke the `ls-git:babysit` skill on them. Never close the workspace after posting. It closes only after its pull requests merge.
 
 ## Rationalizations
 

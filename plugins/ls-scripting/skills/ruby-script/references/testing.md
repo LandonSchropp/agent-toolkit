@@ -17,4 +17,4 @@ end
 require "rspec/autorun"
 ```
 
-**REQUIRED:** Use the `ls-ruby:rspec` skill to write the specs.
+Use the `ls-ruby:rspec` skill to write the specs.

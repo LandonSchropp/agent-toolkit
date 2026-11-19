@@ -20,7 +20,7 @@ The decision and the user's comments are independent signals — read both. They
 
 The review step in [Commits](commits.md) is this one:
 
-1. Present the changes for review. **REQUIRED:** Invoke the `ls-interactivity:interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
+1. Present the changes for review. Invoke the `ls-interactivity:interactive-review` skill, normally in `working` mode; follow its own guidance on when to use `staged` mode instead.
 2. Read the decision and the user's comments, and follow the matching case above.
 
 ## Running Commands
@@ -43,8 +43,8 @@ In a repository that integrates through pull requests, offer to open the pull re
 
 A main checkout closes the same way a linked worktree does; an agent closes itself out either way, even when its child worktrees are still open.
 
-- **Repositories that merge directly into the default branch:** On approval, **REQUIRED:** invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
-- **Repositories that integrate through pull requests:** **REQUIRED:** invoke the `ls-git:stacked-pull-requests` skill for a stack. As soon as they're opened, **REQUIRED:** invoke the `ls-git:babysit` skill. It carries the pull requests to merge and offers to close the workspace once they have. When the user approves posting them for review, **REQUIRED:** invoke the `ls-git:ready-for-review` skill.
+- **Repositories that merge directly into the default branch:** On approval, invoke the `ls-git:git-merge-into-main` skill and follow it, then the `ls-agent:close-workspace` skill.
+- **Repositories that integrate through pull requests:** Invoke the `ls-git:stacked-pull-requests` skill for a stack. As soon as they're opened, invoke the `ls-git:babysit` skill. It carries the pull requests to merge and offers to close the workspace once they have. When the user approves posting them for review, invoke the `ls-git:ready-for-review` skill.
 
 ## Rationalizations
 

@@ -7,7 +7,7 @@ description: Use when needing to fixup, squash, drop, reword, reorder, or edit c
 
 This skill outlines how agents can edit previous commits. Agents can't use `git rebase -i` directly, which requires a TTY. This skill provides helper scripts instead.
 
-REQUIRED: Always reference commits by SHA, not by HEAD-relative notation like `HEAD~3`.
+Reference commits by SHA, not by HEAD-relative notation like `HEAD~3`.
 
 ## Inspect Commits First
 

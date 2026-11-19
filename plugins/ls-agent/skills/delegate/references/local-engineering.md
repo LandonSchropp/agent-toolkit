@@ -4,7 +4,7 @@ Local Engineering runs in Claude Code inside herdr, on the user's Mac. Each work
 
 ## Choosing the Target
 
-Default to a fresh worktree so the work lands on its own branch. **REQUIRED:** Use the `ls-agent:open-workspace` skill; it returns the workspace id.
+Default to a fresh worktree so the work lands on its own branch. Use the `ls-agent:open-workspace` skill; it returns the workspace id.
 
 Send to an already-running agent only when the user asks, or when the task needs that session's state. Find its workspace with `herdr agent list`, matching an agent's `cwd`: the project path for its main checkout, or `~/.herdr/worktrees/<project>/` for a worktree, whose last segment is the branch name slugified. When the task names the workspace by its project, find it in `herdr workspace list` by its `tokens.project` instead. Look the workspace up each time, since workspace IDs change.
 

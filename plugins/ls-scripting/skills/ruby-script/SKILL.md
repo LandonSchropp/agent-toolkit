@@ -3,7 +3,7 @@ name: ruby-script
 description: Use when writing a Ruby script. Covers the template, conventions, and required patterns.
 ---
 
-**REQUIRED:** Read [Testing](references/testing.md).
+Before writing the script, read [Testing](references/testing.md).
 
 ## Template
 

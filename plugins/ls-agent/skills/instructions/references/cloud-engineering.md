@@ -12,7 +12,7 @@ The user reviews once, on the stack's pull requests. Unlike Local Engineering, n
 
 1. Build the work following [Commits](commits.md), but in a different order for each commit: create the commit, push it, then run its pre-review, and amend the commit with any fixes before pushing again with `--force-with-lease`.
 2. Push the feature branch and open the stack's pull requests as drafts.
-3. Once the user approves the pull requests, **REQUIRED:** invoke the `ls-git:ready-for-review` skill.
+3. Once the user approves the pull requests, invoke the `ls-git:ready-for-review` skill.
 
 ## Subagents
 
@@ -24,7 +24,7 @@ One session owns one stack. A stack is a single pull request, or several that ha
 
 When the work needs more than one stack, this session coordinates and doesn't implement any of it:
 
-1. **REQUIRED:** Invoke the `ls-agent:parallelize` skill to sort the work into stages, treating each chain of pull requests that must land in order as a single task: one stack.
+1. Invoke the `ls-agent:parallelize` skill to sort the work into stages, treating each chain of pull requests that must land in order as a single task: one stack.
 2. Start a child session for every ready stack in the stage at once, giving each its part of the plan as its prompt, without planning again.
 3. Wait for the children to archive. A child archiving means its stack merged. Until then, stay quiet: don't message the user as children start, progress or report back, unless one is blocked on a decision only the user can make.
 4. Once a stage's children have all archived, start the next stage, and tell its children what the earlier stages landed.

@@ -7,7 +7,7 @@ description: Use when creating a note, document, script or project that shouldn'
 
 Time-boxed work leaves debris behind. A self-destruct records what to delete, when, and why, where an agent will actually read it.
 
-**REQUIRED:** Invoke the `ls-code:project-conventions` skill for `AGENTS.local.md` and `CLAUDE.local.md`.
+Invoke the `ls-code:project-conventions` skill for `AGENTS.local.md` and `CLAUDE.local.md`.
 
 ## Work In The Main Worktree
 

@@ -24,7 +24,7 @@ Never duplicate content between `README.md` and `AGENTS.md`. If something is use
 Because of that split, `AGENTS.md` MUST open by requiring the agent to read `README.md`:
 
 ```markdown
-**REQUIRED:** Read `README.md` before doing anything else. It documents the project's purpose, setup, and commands.
+Read `README.md` before doing anything else. It documents the project's purpose, setup, and commands.
 ```
 
 ## Mise En Place

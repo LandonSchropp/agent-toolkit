@@ -7,11 +7,11 @@ description: Use when the user wants flash cards, a spaced-repetition deck, or a
 
 Cards are only worth reviewing if they cover the source completely and ask one thing at a time. So: audit, build, prune, package.
 
-**REQUIRED:** Invoke the `ls-notes:note` skill first.
+Invoke the `ls-notes:note` skill first.
 
 ## 1. Audit
 
-**REQUIRED:** Before writing a single card, enumerate every claim in the source in a scratch file, mapping each to the card that will cover it.
+Before writing a single card, enumerate every claim in the source in a scratch file, mapping each to the card that will cover it.
 
 | Claim in the note                                                      | Card                          |
 | ---------------------------------------------------------------------- | ----------------------------- |
@@ -28,7 +28,7 @@ Read [Card Design](references/card-design.md) and follow it exactly.
 
 ## 3. Prune
 
-Present every trivial card to the user and let the user choose what to keep. **REQUIRED:** Invoke the `ls-interactivity:interactive-edit` skill with the candidates as a bulleted list. **The lines the user deletes are the cards to remove from the deck**, and anything left behind stays. Say so in the file itself.
+Present every trivial card to the user and let the user choose what to keep. Invoke the `ls-interactivity:interactive-edit` skill with the candidates as a bulleted list. **The lines the user deletes are the cards to remove from the deck**, and anything left behind stays. Say so in the file itself.
 
 ## 4. Package
 

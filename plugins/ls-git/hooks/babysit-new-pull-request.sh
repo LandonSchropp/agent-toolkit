@@ -16,6 +16,6 @@ urls=$(jq --raw-output '[.tool_response.stdout // "" | scan("https://github\\.co
 jq --null-input --compact-output --arg urls "$urls" '{
   hookSpecificOutput: {
     hookEventName: "PostToolUse",
-    additionalContext: "REQUIRED: Invoke the `ls-git:babysit` skill on \($urls) now, before replying to the user."
+    additionalContext: "Invoke the `ls-git:babysit` skill on \($urls) now, before replying to the user."
   }
 }'

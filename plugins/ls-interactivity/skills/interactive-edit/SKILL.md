@@ -16,7 +16,7 @@ The file being open in Neovim is not a lock. If the user asks for a change while
 
 ## Closing the Edit
 
-**REQUIRED:** Use the `ls-interactivity:interactive-command` skill, which covers when a tab gets closed and how.
+Use the `ls-interactivity:interactive-command` skill, which covers when a tab gets closed and how.
 
 NEVER ask the user to close the tab for you. Always close it yourself.
 

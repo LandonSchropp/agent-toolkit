@@ -76,4 +76,4 @@ EOF
 | "I'll introduce the message"       | NO introductory text whatsoever   |
 | "This simple change needs context" | Simple changes rarely need bodies |
 
-**REQUIRED:** See [references/examples.md](references/examples.md) for correct formatting.
+Read [Examples](references/examples.md) before writing the commit message.

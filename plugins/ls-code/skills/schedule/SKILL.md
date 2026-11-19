@@ -40,7 +40,7 @@ description: Use when creating or editing a macOS LaunchAgent for a recurring or
 </plist>
 ```
 
-**REQUIRED:** `ProgramArguments` MUST run the command through `/bin/zsh -lc "COMMAND"`, never bare. launchd jobs skip the login shell, so `PATH` is missing `~/.local/bin` and everything rcup manages. `-lc` sources the login profile, putting commands like `sync-repositories` on `PATH`.
+Run the command in `ProgramArguments` through `/bin/zsh -lc "COMMAND"`. launchd jobs skip the login shell, so `PATH` is missing `~/.local/bin` and everything rcup manages. `-lc` sources the login profile, putting commands like `sync-repositories` on `PATH`.
 
 ## Multiple trigger times
 

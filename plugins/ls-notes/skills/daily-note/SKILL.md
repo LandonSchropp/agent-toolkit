@@ -5,7 +5,7 @@ description: Use when the user mentions a daily note, asks to add a task to toda
 
 # Daily Note
 
-**REQUIRED:** Invoke the `ls-notes:note` skill first. Vault structure, conventions, icons, templates, and obsidian CLI guidance there all apply to daily notes.
+Invoke the `ls-notes:note` skill first. Vault structure, conventions, icons, templates, and obsidian CLI guidance there all apply to daily notes.
 
 ## Location
 

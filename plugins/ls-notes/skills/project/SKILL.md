@@ -5,7 +5,7 @@ description: Use when reading or writing files under ~/Notes/Projects/, starting
 
 # Project
 
-**REQUIRED:** Invoke the `ls-notes:note` skill first. Vault structure, conventions, icons, templates, and obsidian CLI guidance there all apply to projects.
+Invoke the `ls-notes:note` skill first. Vault structure, conventions, icons, templates, and obsidian CLI guidance there all apply to projects.
 
 ## Layout
 
@@ -22,7 +22,7 @@ Supporting notes and assets are siblings of the board file. Don't nest them in s
 
 ## The Board File
 
-The board file is a kanban board. **REQUIRED:** Read [Kanban Boards](references/kanban.md). Its rules apply to every board file in the vault, including the ones outside `Projects/`.
+The board file is a kanban board. Read [Kanban Boards](references/kanban.md). Its rules apply to every board file in the vault, including the ones outside `Projects/`.
 
 Frontmatter:
 

@@ -14,7 +14,7 @@ Two forms, two jobs:
 
 Read the reference for whichever form the diff touches. Read both when it touches both.
 
-**REQUIRED:** Both forms must follow the communication principles of the `ls-agent:instructions` skill, especially its rule to describe what's there, not what isn't. Every sentence that breaks it gets cut or rewritten.
+Make both forms follow the communication principles of the `ls-agent:instructions` skill, especially its rule to describe what's there, not what isn't. Every sentence that breaks it gets cut or rewritten.
 
 ## The Procedure
 

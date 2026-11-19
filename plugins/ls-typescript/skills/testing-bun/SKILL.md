@@ -5,7 +5,7 @@ description: Use when writing or modifying tests in a Bun project
 
 # Testing with Bun
 
-REQUIRED: fetch the [Bun mocks documentation](https://bun.com/docs/test/mocks.md) before writing or modifying tests.
+Fetch the [Bun mocks documentation](https://bun.com/docs/test/mocks.md) before writing or modifying tests.
 
 ## Running the suite
 

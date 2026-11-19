@@ -5,7 +5,7 @@ description: Use when the user says "plan my day" or "plan my morning", or wants
 
 # Plan Day
 
-**REQUIRED:** Invoke the `ls-notes:daily-note` skill NOW for vault context and file path conventions.
+Invoke the `ls-notes:daily-note` skill first, for vault context and file path conventions.
 
 The planning happens in `plan-day`, a terminal app on the user's `PATH` that writes the results into the daily notes itself. It also carries tasks forward from earlier daily notes. Let it, and don't carry tasks into today's note by hand unless `plan-day` has already run today.
 
@@ -90,17 +90,17 @@ Mark the parent `[>]` when a subtask is `[>]` or `[<]`, and `[x]` otherwise.
 
 ## Standup
 
-After filling in the pull requests and before opening `plan-day`, draft the user's standup reply. **REQUIRED:** Invoke the `ls-writing:standup` skill. Skip this on a Friday or a weekend, since there's no standup then, or when the `plan-day` draft exists.
+After filling in the pull requests and before opening `plan-day`, draft the user's standup reply. Invoke the `ls-writing:standup` skill. Skip this on a Friday or a weekend, since there's no standup then, or when the `plan-day` draft exists.
 
 ## Planning
 
-**REQUIRED:** Invoke the `ls-interactivity:interactive-command` skill with `plan-day > /tmp/plan-day-<date>.md 2> /tmp/plan-day-<date>.log` as the command, where `<date>` is today's ISO date, and `plan-day` as the tab name. With its output redirected, `plan-day` draws on the terminal and prints only a summary to the file.
+Invoke the `ls-interactivity:interactive-command` skill with `plan-day > /tmp/plan-day-<date>.md 2> /tmp/plan-day-<date>.log` as the command, where `<date>` is today's ISO date, and `plan-day` as the tab name. With its output redirected, `plan-day` draws on the terminal and prints only a summary to the file.
 
 When the tab closes, read the summary and the log.
 
 **Never edit a daily note while the `plan-day` tab is open.** `plan-day` holds back any planned change that conflicts with an edit made after it read the note, so an edit made mid-session can undo what the user planned. This covers every daily note, not just today's, and every edit, even a one-character typo fix the user asked for. Tell the user each edit is queued, hold it until the tab closes, then apply it along with the comments.
 
-The one exception is a session the user hasn't started. `plan-day` saves a draft to `${XDG_STATE_HOME:-$HOME/.local/state}/plan-day/draft.json` the first time the user turns a page or clicks a tab. While that file doesn't exist, close the tab (**REQUIRED:** follow the `ls-interactivity:interactive-command` skill's rules for closing a tab), do what the user asked, then open `plan-day` again as above. Once the draft exists, queue the edit, even if the user has gone back to the first page: a reopened session resumes from the draft and still holds back the conflicting changes.
+The one exception is a session the user hasn't started. `plan-day` saves a draft to `${XDG_STATE_HOME:-$HOME/.local/state}/plan-day/draft.json` the first time the user turns a page or clicks a tab. While that file doesn't exist, close the tab (follow the `ls-interactivity:interactive-command` skill's rules for closing a tab), do what the user asked, then open `plan-day` again as above. Once the draft exists, queue the edit, even if the user has gone back to the first page: a reopened session resumes from the draft and still holds back the conflicting changes.
 
 ## Errors
 
@@ -114,6 +114,6 @@ Each comment is an instruction about its task. Carry out every one, editing the 
 
 Once every comment is carried out, ask the user whether there are any other tasks they'd like to add to today's daily note, and add them.
 
-Once the user has no more tasks to add, tell the agent in the Orchestrate workspace that today's tasks are queued up in the daily note. **REQUIRED:** Use the `ls-agent:delegate` skill to send it to the workspace whose project is `orchestrate`.
+Once the user has no more tasks to add, tell the agent in the Orchestrate workspace that today's tasks are queued up in the daily note. Use the `ls-agent:delegate` skill to send it to the workspace whose project is `orchestrate`.
 
-Then **REQUIRED:** use the `ls-agent:close-workspace` skill to close this workspace.
+Then use the `ls-agent:close-workspace` skill to close this workspace.
