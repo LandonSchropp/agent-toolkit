@@ -1,5 +1,5 @@
 {
-  "description": "Autocorrects edited Ruby files with RuboCop.",
+  "description": "Autocorrects edited Ruby files with Standard or RuboCop.",
   "hooks": {
     "PostToolUse": [
       {
