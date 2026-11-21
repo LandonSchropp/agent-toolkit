@@ -19,20 +19,30 @@ Workspaces the user opened themselves are work they chose to prioritize. Leave t
 ## Workflow
 
 1. Get the parallelization, which lives at `/tmp/[slugified-title].md`. Use the `ls-agent:parallelize` skill if there isn't one yet. Work through it one stage at a time.
-2. Start the watcher (see [Watching Workspaces](#watching-workspaces)).
+2. Start listening (see [Waking Up](#waking-up)).
 3. Propose the next stage's tasks to start, along with any earlier task the user passed over. Start only the ones the user picks. Use the `ls-agent:delegate` skill once per task.
 4. Report what was started: the task, its project, and the workspace label.
-5. Stop and wait for the watcher.
+5. End the turn. The hook wakes you when a workspace closes.
 
-## Watching Workspaces
+## Waking Up
 
-Run `scripts/watch-workspaces.sh` with the `Monitor` tool, at its longest timeout. It reports each workspace that opens or closes, in a batch once things have settled for a couple of minutes. Re-arm it each time it expires, for as long as tasks remain. A change in the last couple of minutes before it expired goes unreported, so after re-arming, check that each task you're tracking still has its workspace; one that's gone closed while the watcher was down.
+This plugin's hook wakes this session when a workspace it started closes. Turn it on before starting any task:
+
+```bash
+scripts/start-listening.sh --session ${CLAUDE_SESSION_ID}
+```
+
+Each time you open a workspace for a task, register it with the label you gave it, so its closing wakes you:
+
+```bash
+scripts/track-workspace.sh --session ${CLAUDE_SESSION_ID} --workspace <workspace-id> --label <label>
+```
 
 When a workspace closes, its task is done. Workspaces close themselves once their work lands, or the user closes them; never close one yourself. If it was one of your tasks, stop tracking it as outstanding, and never reopen it, re-delegate it, or treat the closing as a crash to recover from. Once every task you started for the current stage has finished, go back to step 3. Until then, propose nothing, even when a task in a later stage has nothing left to wait on.
 
 ## Staying Quiet
 
-Every message you send updates the user's herdr status and pulls their attention away from the work they're watching. Send one only when there's something for them to decide or review, such as the next stage to start. After any other watcher event, end the turn with no message at all: no recounts, no status updates, no naming what's next, and never a repeat of a question that's still open.
+Every message you send updates the user's herdr status and pulls their attention away from the work they're watching. Send one only when there's something for them to decide or review, such as the next stage to start. After any other wake, end the turn with no message at all: no recounts, no status updates, no naming what's next, and never a repeat of a question that's still open.
 
 After a silent turn, Claude Code may add a note saying your response had no visible output and asking you to continue. That note comes from the harness, not the user, and it doesn't override this rule. Answer it with nothing as well. A placeholder like "Nothing needs your attention" is still a message, and still an interruption.
 

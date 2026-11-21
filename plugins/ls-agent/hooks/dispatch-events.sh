@@ -2,15 +2,16 @@
 
 set -euo pipefail
 
-# Waits, in a session running the orchestrate skill, for an unchecked task to appear in today's daily
-# note or for a workspace the session started to close, then exits 2 with it, which wakes the agent.
-# Exits 0 in any other session, and when this session already has a listener. A task is reported
-# once the note has gone two minutes without changing, so a burst of edits arrives as one batch.
+# Waits, in a session running the dispatch skill, for a workspace the session started to close, then
+# exits 2 with it, which wakes the agent. When the orchestrate skill has turned on daily note
+# watching, it also wakes the agent for each unchecked task that appears in today's daily note, once
+# the note has gone two minutes without changing, so a burst of edits arrives as one batch. Exits 0
+# in any other session, and when this session already has a listener.
 
 session="$(jq --raw-output '.session_id')"
 
-# Only sessions running the orchestrate skill have this directory.
-state="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-agent/orchestrate/$session"
+# Only sessions running the dispatch skill have this directory.
+state="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-agent/dispatch/$session"
 [[ -d "$state" ]] || exit 0
 
 # A hook claims the listener by creating its directory, which fails when another hook holds it.
@@ -64,6 +65,7 @@ while true; do
     fi
   fi
 
+  [[ -f "$state/watch-daily-note" ]] || continue
   polled_tasks="$(list_unchecked_tasks)"
 
   if [[ "$polled_tasks" != "$last_seen_tasks" ]]; then

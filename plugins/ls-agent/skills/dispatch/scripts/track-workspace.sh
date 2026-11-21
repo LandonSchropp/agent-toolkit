@@ -5,7 +5,7 @@ set -euo pipefail
 function print_help() {
   echo "Usage: track-workspace.sh --session <id> --workspace <id> --label <label>"
   echo
-  echo "Registers a herdr workspace with the plugin's orchestrate-events hook, which wakes the"
+  echo "Registers a herdr workspace with the plugin's dispatch-events hook, which wakes the"
   echo "session once when the workspace closes. Run start-listening.sh for the session first."
   echo
   echo "Options:"
@@ -68,7 +68,7 @@ if [[ -z "$label" ]]; then
   exit 1
 fi
 
-state="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-agent/orchestrate/$session"
+state="${XDG_STATE_HOME:-$HOME/.local/state}/agent-toolkit/ls-agent/dispatch/$session"
 
 if [[ ! -d "$state" ]]; then
   echo "Error: The session isn't listening. Run start-listening.sh first." >&2

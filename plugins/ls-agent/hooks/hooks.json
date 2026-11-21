@@ -1,12 +1,12 @@
 {
-  "description": "Wakes a session running the orchestrate skill when a task joins today's daily note or a workspace it started closes.",
+  "description": "Wakes a session running the dispatch skill when a workspace it started closes, and, under the orchestrate skill, when a task joins today's daily note.",
   "hooks": {
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/orchestrate-events.sh",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/dispatch-events.sh",
             "asyncRewake": true,
             "timeout": 604800
           }
