@@ -21,9 +21,23 @@ Today's unchecked tasks are the queue. Skip `dispatch`'s parallelization step: t
 
 Leave out tasks no agent can do, such as errands. Those stay with the user. Your goal is to be _helpful_, not intrusive or annoying.
 
-The queue grows as the user adds to the note. Alongside `dispatch`'s watcher, run `scripts/watch-daily-note.sh` with the `Monitor` tool, at its longest timeout, and re-arm it each time it expires. It prints a line for each unchecked task that appears in today's note, including the whole new note when the day rolls over. A task added in the last couple of minutes before it expired goes unreported, so after re-arming, read the note for unchecked tasks you haven't queued yet.
+The queue grows as the user adds to the note. Propose each new task as it joins the queue. Ignore the tasks you added yourself, and any that already have a workspace or are queued, since editing a task reports it again.
 
-Propose each new task as it joins the queue. Ignore the tasks you added yourself, and any that already have a workspace or are queued, since editing a task reports it again.
+## Waking Up
+
+This plugin's hook takes the place of `dispatch`'s watcher. It wakes this session when an unchecked task appears in today's note, which includes every task in a new day's note, and when a workspace this session started closes. Turn it on before you read the note, so a task added while you read it still wakes you:
+
+```bash
+scripts/start-listening.sh --session ${CLAUDE_SESSION_ID}
+```
+
+Each time you open a workspace for a task, register it with the label you gave it, so its closing wakes you:
+
+```bash
+scripts/track-workspace.sh --session ${CLAUDE_SESSION_ID} --workspace <workspace-id> --label <label>
+```
+
+Skip `dispatch`'s step that starts the watcher. Where it says to wait for the watcher, end the turn.
 
 ## Pull Requests to Merge
 
