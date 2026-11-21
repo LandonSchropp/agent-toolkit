@@ -18,7 +18,7 @@ SKILLS = {
     plugins/ls-notes/skills/project
   ],
   File.expand_path("~/Development/personal-agent-toolkit") => %w[
-    plugins/ls-assistant/skills/*
+    plugins/ls-triage/skills/*
     plugins/ls-health/skills/*
     plugins/ls-scheduling/skills/*
     plugins/ls-ynab/skills/*
