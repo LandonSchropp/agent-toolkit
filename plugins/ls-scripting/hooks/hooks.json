@@ -1,5 +1,5 @@
 {
-  "description": "Formats edited shell scripts with shfmt.",
+  "description": "Formats edited shell scripts with shfmt and lints them with ShellCheck.",
   "hooks": {
     "PostToolUse": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/shfmt.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/shell-script.sh"
           }
         ]
       }

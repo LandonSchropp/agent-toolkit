@@ -20,7 +20,6 @@ Two templates cover the two kinds of scripts. Copy the right one exactly and fil
 - Call other commands with their long flags (`--session=main`, not `-s main`), so the call reads without knowing the command
 - Exit `0` for success, `1` for errors
 - stdout for primary output, stderr for errors/warnings/progress messages
-- Run `shellcheck` on the script when you finish editing it, not after every change
 - Let a call fail and exit via `set -euo pipefail` instead of wrapping it in `if ! cmd; then`. Only add an explicit check when the failure is actually likely or **needs** a clearer message than the default crash (most don't).
 
 ## Required patterns
