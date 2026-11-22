@@ -7,7 +7,7 @@ description: Use when the user says "plan my day" or "plan my morning", or wants
 
 Invoke the `ls-notes:daily-note` skill first, for vault context and file path conventions.
 
-The planning happens in `plan-day`, a terminal app on the user's `PATH` that writes the results into the daily notes itself. It also carries tasks forward from earlier daily notes. Let it, and don't carry tasks into today's note by hand unless `plan-day` has already run today.
+The planning happens in `plan-day`, an app on the user's `PATH` that writes the results into the daily notes itself. It also carries tasks forward from earlier daily notes. Let it, and don't carry tasks into today's note by hand unless `plan-day` has already run today.
 
 ## Open Pull Requests
 
@@ -94,13 +94,15 @@ After filling in the pull requests and before opening `plan-day`, draft the user
 
 ## Planning
 
-Invoke the `ls-interactivity:interactive-command` skill with `plan-day > /tmp/plan-day-<date>.md 2> /tmp/plan-day-<date>.log` as the command, where `<date>` is today's ISO date, and `plan-day` as the tab name. With its output redirected, `plan-day` draws on the terminal and prints only a summary to the file.
+Run `plan-day > /tmp/plan-day-<date>.md 2> /tmp/plan-day-<date>.log` with the Bash tool's `run_in_background`, where `<date>` is today's ISO date. `plan-day` opens its planning page in a Sheprd browser tab in this workspace, writes the page's address to the log, and keeps running until the user closes the page, either from its saved screen or by closing the tab. Then it writes a summary to the `.md` file and exits, and you're notified.
 
-When the tab closes, read the summary and the log.
+When it exits, read the summary and the log.
 
-**Never edit a daily note while the `plan-day` tab is open.** `plan-day` holds back any planned change that conflicts with an edit made after it read the note, so an edit made mid-session can undo what the user planned. This covers every daily note, not just today's, and every edit, even a one-character typo fix the user asked for. Tell the user each edit is queued, hold it until the tab closes, then apply it along with the comments.
+Leave the page to the one tab `plan-day` opened. Opening its address in a second tab puts two pages on one session, and each overwrites the other's changes.
 
-The one exception is a session the user hasn't started. `plan-day` saves a draft to `${XDG_STATE_HOME:-$HOME/.local/state}/plan-day/draft.json` the first time the user turns a page or clicks a tab. While that file doesn't exist, close the tab (follow the `ls-interactivity:interactive-command` skill's rules for closing a tab), do what the user asked, then open `plan-day` again as above. Once the draft exists, queue the edit, even if the user has gone back to the first page: a reopened session resumes from the draft and still holds back the conflicting changes.
+**Never edit a daily note while `plan-day` is running.** `plan-day` holds back any planned change that conflicts with an edit made after it read the note, so an edit made mid-session can undo what the user planned. This covers every daily note, not just today's, and every edit, even a one-character typo fix the user asked for. Tell the user each edit is queued, hold it until `plan-day` exits, then apply it along with the comments.
+
+The one exception is a session the user hasn't started. `plan-day` saves a draft to `${XDG_STATE_HOME:-$HOME/.local/state}/plan-day/draft.json` the first time the user turns a page or clicks a tab. While that file doesn't exist, close the page with `curl -X POST <address>api/close`, using the address from the log, and wait for `plan-day` to exit. Then do what the user asked and run `plan-day` again as above. Once the draft exists, queue the edit, even if the user has gone back to the first page: a reopened session resumes from the draft and still holds back the conflicting changes.
 
 ## Errors
 
@@ -110,10 +112,8 @@ Before carrying out any comment, resolve every problem the summary or the log re
 
 Each comment is an instruction about its task. Carry out every one, editing the notes directly; ask the user only when a comment is ambiguous or needs a decision from them.
 
-## More Tasks
+## Finishing
 
-Once every comment is carried out, ask the user whether there are any other tasks they'd like to add to today's daily note, and add them.
-
-Once the user has no more tasks to add, tell the agent in the Orchestrate workspace that today's tasks are queued up in the daily note. Use the `ls-agent:delegate` skill to send it to the workspace whose project is `orchestrate`.
+Once every comment is carried out, tell the agent in the Orchestrate workspace that today's tasks are queued up in the daily note. Use the `ls-agent:delegate` skill to send it to the workspace whose project is `orchestrate`.
 
 Then use the `ls-agent:close-workspace` skill to close this workspace.
