@@ -50,7 +50,7 @@ Before invoking the script, run `git status`, and pick the mode from what it rep
 
 ## Closing the Review
 
-Once the user has approved and you've read their comments, close the review tab by its tab ID, the way the `ls-interactivity:interactive-command` skill closes a leftover tab. The tab has no script of its own to stop.
+Once the user has approved and you've read their comments, close the review tab with the `herdr tab close` command from the hook's approval message. A review left open carries its comments into the next review. Comments that came with an approval get no reply in Hunk, since closing the tab ends the session. The tab has no script of its own to stop.
 
 Close the tab yourself rather than asking the user to.
 

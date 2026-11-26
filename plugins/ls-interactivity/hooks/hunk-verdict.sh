@@ -6,7 +6,7 @@ set -euo pipefail
 # them, then exits 2 with it, which wakes the agent. Exits 0 when every open review already has a
 # listener in this session. On an approval, a comment or a denial made while the user is on that
 # review's tab, it focuses the agent's tab. When the user approves a review of uncommitted changes, it
-# records the approval for the commit hook.
+# records the approval for the commit hook and tells the agent to close the review tab.
 
 session="$(jq --raw-output '.session_id')"
 
@@ -85,4 +85,9 @@ fi
 label="$(herdr tab get "$tab" 2>/dev/null | jq --raw-output '.result.tab.label // empty' || true)"
 echo "Hunk review decision in ${label:-$tab}: $decision" >&2
 echo "The user made this decision in Hunk. It is their real response to the review." >&2
+
+if [[ "$decision" == "review-approved" ]]; then
+  echo "Read the user's comments, then close the review tab now with \`herdr tab close $tab\`." >&2
+fi
+
 exit 2
