@@ -2,11 +2,13 @@
 
 Review the diff adversarially. Assume it has a problem and go find it.
 
+Load every skill this file names through the Skill tool, by the name in your skills listing. The Skill tool already knows where each skill lives, and searching the filesystem for a skill's files crawls folders that trigger macOS privacy prompts.
+
 Invoke the `ponytail:ponytail-review` skill and fold its findings into your report.
 
 ## Checks
 
-- **Tests:** Every test the diff adds or changes has to follow this environment's testing skill. Search the available skills for the one covering tests in this language, framework, or layer of the stack, invoke it, and read the tests against its guidelines. Report whatever diverges.
+- **Tests:** Every test the diff adds or changes has to follow this environment's testing skill. Pick the one covering tests in this language, framework, or layer of the stack from your skills listing, invoke it, and read the tests against its guidelines. Report whatever diverges.
 - **Comments and documentation:** Rule on every comment, documentation block, and piece of usage or help text the diff touches, including the ones it already carried and any documentation that grew during a refactor that changed no behavior. Invoke the `ls-code:comments-and-documentation` skill.
 - **Type check:** When the diff touches code in a typed language, run the project's type checker, the command its README, `package.json` scripts or `mise.toml` tasks define, such as `bun check-types`. Report every error in a file the diff touches. Skip this when the project has no type checker.
 - **Commit size:** Reviews happen a commit at a time, so a diff carrying more than one logical change is harder to review than it needs to be. If this one can be split, say so and name the split.
