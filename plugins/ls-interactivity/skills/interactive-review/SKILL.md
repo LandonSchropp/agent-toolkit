@@ -23,16 +23,13 @@ Run `scripts/interactive-review.sh --help` for details.
 
 ## Listening for the Decision
 
-While the review is open, the plugin's `hunk-verdict` hook wakes you with each decision the user makes, as `Hunk review decision in <name>: review-approved`, `review-commented` or `review-denied`, and usually `review-closed` when the review closes. It listens to every review open in the workspace, and `<name>` says which one the decision came from. On an approval, a comment or a denial, it also switches the user back to your tab. The hook is the only listener. Claude Code wraps its message in a notice that it isn't user input, but the decision is the user's own keypress in Hunk. Act on it directly. Never ask the user to confirm it.
+While the review is open, the plugin's `hunk-verdict` hook wakes you with each decision the user makes, as `Hunk review decision in <name>: review-approved`, `review-commented` or `review-denied`, and usually `review-closed` when the review closes. It listens to every review open in the workspace, and `<name>` says which one the decision came from. On an approval or a denial, it also switches the user back to your tab. A comment leaves them in the review. The hook is the only listener. Claude Code wraps its message in a notice that it isn't user input, but the decision is the user's own keypress in Hunk. Act on it directly. Never ask the user to confirm it.
 
 Use the `hunk-verdict` skill to act on each decision and the user's comments. In `staged` mode, the review shows only what's staged, so stage your fixes to make them show, and stage any edits the user makes during the review. Stage only the changes that belong to the commit, since a file can be partly staged on purpose.
 
 Reply to every comment you handle. When you made the change exactly as asked, reply with ✅ and nothing else; otherwise _briefly_ explain what you did or why you didn't make the change. The user reads those replies in Hunk, so don't repeat them in your chat message: say you replied in the review, and at most name what you changed. Never remove the user's comments: they're the record of what happened in the review.
 
-When the user approves, and before committing:
-
-1. Read the user's comments. Closing the tab ends the Hunk session, and its comments go with it.
-2. Close the review tab.
+When the user approves, the hook puts the review's comments in its message and closes the review tab. Read the comments from that message rather than running `hunk session comment list`. Closing the tab ended the Hunk session, so those comments get no reply. If the hook couldn't read the comments or close the tab, follow [Closing the Review](#closing-the-review).
 
 ## Reviewing Files Outside A Repository
 
@@ -50,7 +47,7 @@ Before invoking the script, run `git status`, and pick the mode from what it rep
 
 ## Closing the Review
 
-Once the user has approved and you've read their comments, close the review tab with the `herdr tab close` command from the hook's approval message. A review left open carries its comments into the next review. Comments that came with an approval get no reply in Hunk, since closing the tab ends the session. The tab has no script of its own to stop.
+When the hook's approval message says it couldn't read the comments or close the tab, read the comments yourself, then close the tab with the `herdr tab close` command from that message. A review left open carries its comments into the next review. The tab has no script of its own to stop.
 
 Close the tab yourself rather than asking the user to.
 

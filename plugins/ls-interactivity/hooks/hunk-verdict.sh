@@ -4,9 +4,10 @@ set -euo pipefail
 
 # Waits, while Hunk reviews are open in this herdr workspace, for the user's next decision in any of
 # them, then exits 2 with it, which wakes the agent. Exits 0 when every open review already has a
-# listener in this session. On an approval, a comment or a denial made while the user is on that
-# review's tab, it focuses the agent's tab. When the user approves a review of uncommitted changes, it
-# records the approval for the commit hook and tells the agent to close the review tab.
+# listener in this session. On an approval or a denial made while the user is on that review's tab, it
+# focuses the agent's tab. When the user approves a review of uncommitted changes, it records the
+# approval for the commit hook. On any approval, it hands the agent the review's comments and closes
+# the review tab.
 
 session="$(jq --raw-output '.session_id')"
 
@@ -46,7 +47,8 @@ trap '[[ ${#listeners[@]} -eq 0 ]] || kill "${listeners[@]}" 2>/dev/null || true
   [[ ${#claimed[@]} -eq 0 ]] || rmdir "${claimed[@]}"
   rm -f "$fifo"' EXIT
 
-# Every listener writes "<tab> <decision>" lines into one FIFO, then "<tab> done" when it exits.
+# Every listener writes "<tab> <review> <decision>" lines into one FIFO, then "<tab> <review> done"
+# when it exits.
 mkfifo "$fifo"
 exec 3<>"$fifo"
 
@@ -62,9 +64,9 @@ while read -r review tab subcommand repository; do
           "$(dirname "$0")/record-approval.sh" --directory "$repository" >&2 || true
         fi
 
-        echo "$tab $line"
+        echo "$tab $review $line"
       done
-      echo "$tab done"
+      echo "$tab $review done"
     } >&3
   ) &
   listeners+=($!)
@@ -73,11 +75,11 @@ done <<<"$reviews"
 [[ ${#listeners[@]} -gt 0 ]] || exit 0
 
 remaining="${#listeners[@]}"
-while read -r tab decision <&3 && [[ "$decision" == "done" ]]; do
+while read -r tab review decision <&3 && [[ "$decision" == "done" ]]; do
   ((--remaining > 0)) || exit 0
 done
 
-if [[ "$decision" =~ ^review-(approved|commented|denied)$ ]] &&
+if [[ "$decision" =~ ^review-(approved|denied)$ ]] &&
   [[ "$(herdr tab get "$tab" | jq --raw-output '.result.tab.focused')" == "true" ]]; then
   herdr tab focus "$HERDR_TAB_ID" >/dev/null
 fi
@@ -87,7 +89,16 @@ echo "Hunk review decision in ${label:-$tab}: $decision" >&2
 echo "The user made this decision in Hunk. It is their real response to the review." >&2
 
 if [[ "$decision" == "review-approved" ]]; then
-  echo "Read the user's comments, then close the review tab now with \`herdr tab close $tab\`." >&2
+  if comments="$(hunk session comment list "$review" --type all --json)"; then
+    echo "The review's comments:" >&2
+    echo "$comments" >&2
+
+    herdr tab close "$tab" >/dev/null && echo "The hook closed the review tab." >&2 ||
+      echo "Closing the review tab failed. Close it now with \`herdr tab close $tab\`." >&2
+  else
+    echo "Reading the review's comments failed." >&2
+    echo "Read the user's comments, then close the review tab now with \`herdr tab close $tab\`." >&2
+  fi
 fi
 
 exit 2
